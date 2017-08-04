@@ -32,15 +32,15 @@
             </MenuBar>
             <ToolBar maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
               <items>
-                  <Button mnemonicParsing="false" text="Add Project" />
-                  <Button mnemonicParsing="false" text="Add File" />
+                  <Button mnemonicParsing="false" onAction="#btnAddProject" text="Add Project" />
+                  <Button fx:id="btnAddFile" mnemonicParsing="false" onAction="#btnAddFile" text="Add File" />
                   <Separator orientation="VERTICAL" />
-                  <TextField />
-                <Button mnemonicParsing="false" text="Search" />
+                  <TextField fx:id="txtSearch" onKeyTyped="#refineSearch" />
+                <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#btnSearch" text="Search" />
                   <Separator orientation="VERTICAL" />
                   <Pane HBox.hgrow="ALWAYS" />
                   <Separator orientation="VERTICAL" />
-                  <CheckBox mnemonicParsing="false" text="Trail Follow" />
+                  <CheckBox fx:id="chckTrailFollow" mnemonicParsing="false" onAction="#chckTrailFollow" text="Trail Follow" />
               </items>
             </ToolBar>
             <SplitPane dividerPositions="0.7054409005628518" orientation="VERTICAL" VBox.vgrow="ALWAYS">
@@ -48,7 +48,7 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
-                        <TextArea editable="false" layoutX="98.0" layoutY="-29.0" prefHeight="154.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <TextArea fx:id="txtLineDescription" editable="false" layoutX="98.0" layoutY="-29.0" prefHeight="154.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
               </items>

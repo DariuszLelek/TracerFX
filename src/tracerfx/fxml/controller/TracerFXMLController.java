@@ -18,7 +18,17 @@ package tracerfx.fxml.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import tracerfx.tab.manager.ManagerFactory;
+import tracerfx.tab.FileTab;
+import tracerfx.tab.ProjectTab;
 
 /**
  * FXML Controller class
@@ -27,12 +37,64 @@ import javafx.fxml.Initializable;
  */
 public class TracerFXMLController implements Initializable {
 
+    @FXML
+    private TextField txtSearch;
+    @FXML
+    private TextArea txtLineDescription;
+    @FXML
+    private Button btnAddFile;
+    @FXML
+    private CheckBox chckTrailFollow;
+    @FXML
+    private Button btnSearch;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        prepareBindings();
+
     }    
     
+    @FXML
+    public void refineSearch(){
+    
+    }
+
+    @FXML
+    private void btnAddProject(ActionEvent event) {
+        // just for test
+        ManagerFactory.getManager(ManagerFactory.TYPE.PROJECT).addItem(new ProjectTab());
+    }
+
+    @FXML
+    private void btnAddFile(ActionEvent event) {
+        // just for test
+        ManagerFactory.getManager(ManagerFactory.TYPE.FILE).addItem(new FileTab());
+    }
+
+    @FXML
+    private void btnSearch(ActionEvent event) {
+    }
+
+    @FXML
+    private void chckTrailFollow(ActionEvent event) {
+    }
+
+    private void prepareBindings() {
+        ReadOnlyBooleanProperty anyFileProperty = ManagerFactory.getFileTabManager().getCollectionProperty().emptyProperty();
+        ReadOnlyBooleanProperty anyProjectProperty = ManagerFactory.getProjectTabManager().getCollectionProperty().emptyProperty();
+        
+        // add file
+        btnAddFile.disableProperty().bind(anyProjectProperty);
+
+        // line description
+        txtLineDescription.textProperty().bind(ManagerFactory.getFileTabManager().getSelectedLineProperty());
+        
+        // file tab controls
+        chckTrailFollow.disableProperty().bind(anyFileProperty);
+        txtSearch.disableProperty().bind(anyFileProperty);
+        btnSearch.disableProperty().bind(anyFileProperty);  
+    }
 }
