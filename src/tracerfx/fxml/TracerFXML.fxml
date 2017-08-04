@@ -7,6 +7,53 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" stylesheets="@../css/tracerfxml.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tracerfx.fxml.controller.TracerFXMLController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" styleClass="mainFxmlClass" stylesheets="@../css/tracerfxml.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tracerfx.fxml.controller.TracerFXMLController">
+   <children>
+      <VBox layoutX="102.0" layoutY="110.0" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <MenuBar>
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Delete" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <ToolBar maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+              <items>
+                  <Button mnemonicParsing="false" text="Add Project" />
+                  <Button mnemonicParsing="false" text="Add File" />
+                  <Separator orientation="VERTICAL" />
+                  <TextField />
+                <Button mnemonicParsing="false" text="Search" />
+                  <Separator orientation="VERTICAL" />
+                  <Pane HBox.hgrow="ALWAYS" />
+                  <Separator orientation="VERTICAL" />
+                  <CheckBox mnemonicParsing="false" text="Trail Follow" />
+              </items>
+            </ToolBar>
+            <SplitPane dividerPositions="0.7054409005628518" orientation="VERTICAL" VBox.vgrow="ALWAYS">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                     <children>
+                        <TextArea editable="false" layoutX="98.0" layoutY="-29.0" prefHeight="154.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+         </children>
+      </VBox>
+   </children>
 </AnchorPane>
