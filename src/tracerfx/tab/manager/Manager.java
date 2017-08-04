@@ -24,7 +24,7 @@ import javafx.collections.ObservableList;
  *
  * @author Dariusz Lelek
  */
-public class Manager<T>{
+public abstract class Manager<T>{
     protected final ObservableList<T> itemList; 
     protected final SimpleListProperty<T> itemListProperty; 
     protected T activeItem;
@@ -38,9 +38,7 @@ public class Manager<T>{
         return itemList;
     }
 
-    public T getActiveItem() {
-        return activeItem;
-    }
+    public abstract T getActiveItem(); 
 
     public void addItem(T item) {
         itemList.add(item);

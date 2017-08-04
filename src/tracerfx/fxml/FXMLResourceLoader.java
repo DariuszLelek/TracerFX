@@ -17,7 +17,6 @@
 package tracerfx.fxml;
 
 import java.io.IOException;
-import java.net.URL;
 import javafx.fxml.FXMLLoader;
 
 /**
@@ -26,11 +25,11 @@ import javafx.fxml.FXMLLoader;
  */
 public class FXMLResourceLoader {
     
-    public static <T> T getResource(URL url){
+    public static <T> T getResource(ClassLoader classLoader, String resourceName){
         T resource = null;
         
         try {
-            resource = FXMLLoader.load(url);
+            resource = FXMLLoader.load(classLoader.getResource(resourceName));
         } catch (IOException e) {
             // TODO logger
             e.printStackTrace();

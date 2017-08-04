@@ -36,4 +36,9 @@ public class FileTabManager<FileTab> extends Manager{
     public StringProperty getSelectedLineProperty() {
         return selectedLineProperty;
     }
+
+    @Override
+    public Object getActiveItem() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

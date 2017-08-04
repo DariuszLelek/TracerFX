@@ -17,7 +17,6 @@
 package tracerfx;
 
 import java.io.IOException;
-import java.net.URL;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -29,38 +28,25 @@ import tracerfx.fxml.FXMLResourceLoader;
  * @author Dariusz Lelek
  */
 public class TracerFX extends Application {
-    private static Parent root;
-    private static URL resource;
-    
     private final static String TITLE = "TracerFX";
     private final static String FXML = "tracerfx/fxml/TracerFXML.fxml";
     
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        prepare();
-        
+    public void start(Stage primaryStage) throws IOException {
         primaryStage.setTitle(TITLE);
         primaryStage.setScene(getScene());
         primaryStage.show();
     }
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         launch(args);
     }
     
-    private void prepare() throws IOException{
-        ClassLoader classLoader = getClass().getClassLoader();
-        resource = classLoader.getResource(FXML);
-        root = FXMLResourceLoader.getResource(resource);
+    private Parent getParent() throws IOException{
+        return FXMLResourceLoader.getResource(getClass().getClassLoader(), FXML);
     }
     
-    private Scene getScene() throws NullPointerException{
-        if(root == null){
-            throw new NullPointerException();
-        }
-        return new Scene(root);
+    private Scene getScene() throws IOException{
+        return new Scene(getParent());
     } 
 }

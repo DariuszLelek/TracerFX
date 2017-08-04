@@ -15,10 +15,6 @@
  */
 package tracerfx.tab.manager;
 
-import tracerfx.tab.manager.Manager;
-import tracerfx.tab.manager.FileTabManager;
-import tracerfx.tab.manager.ProjectTabManager;
-
 /**
  *
  * @author Dariusz Lelek
@@ -43,7 +39,7 @@ public class ManagerFactory {
             case PROJECT:
                 return projectTabManager;
             default:
-                return new Manager();
+                return null;
         }
     }
 

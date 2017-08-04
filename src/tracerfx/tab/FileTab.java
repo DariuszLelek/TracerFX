@@ -15,10 +15,18 @@
  */
 package tracerfx.tab;
 
+import javafx.scene.Node;
+
 /**
  *
  * @author Dariusz Lelek
  */
-public class FileTab {
+public class FileTab extends CustomTab{
+    private ProjectTab project;
+
+    public FileTab(ProjectTab projectTab, String title, Node content) {
+        super(title, content);
+        this.project = projectTab;
+    }
     
 }

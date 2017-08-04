@@ -15,6 +15,9 @@
  */
 package tracerfx.tab.manager;
 
+import javafx.scene.Node;
+import javafx.scene.control.TabPane;
+import tracerfx.fxml.FXMLResourceLoader;
 import tracerfx.tab.ProjectTab;
 
 /**
@@ -22,5 +25,36 @@ import tracerfx.tab.ProjectTab;
  * @author Dariusz Lelek
  */
 public class ProjectTabManager extends Manager<ProjectTab>{
+    private final String FXML = "tracerfx/fxml/ProjectTabFXML.fxml";
+    private TabPane projectTabPane;
 
+
+    public void setProjectTabPane(TabPane projectTabPane) {
+        this.projectTabPane = projectTabPane;
+    }
+    
+    public void addNewProject(String title){
+        ProjectTab projectTab = new ProjectTab(title, FXMLResourceLoader.getResource(getClass().getClassLoader(), FXML));
+        projectTabPane.getTabs().add(projectTab.getTab());
+        addItem(projectTab);
+    }
+    
+    public boolean projectExists(String title){
+        return getAllItems().stream().anyMatch(x -> x.getTitle().equals(title));
+    }
+    
+    public void removeProject(final Node root){
+        ProjectTab projectTabToRemove = getAllItems().stream()
+                .filter(x -> x.getRoot().equals(root))
+                .findFirst().orElse(ProjectTab.DEFAULT);
+
+        projectTabPane.getTabs().remove(projectTabToRemove.getTab());
+        removeItem(projectTabToRemove);
+    }
+
+    @Override
+    public ProjectTab getActiveItem() {
+        //return 
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -16,18 +16,40 @@
 package tracerfx.tab;
 
 import javafx.scene.Node;
+import javafx.scene.control.Tab;
 
 /**
  *
  * @author Dariusz Lelek
  */
-public class ProjectTab extends CustomTab {
-    public static final ProjectTab DEFAULT = new ProjectTab();
-    
-    private ProjectTab(){
+public abstract class CustomTab {
+    protected String title;
+    private Node root;
+    private final Tab tab;
+
+    public CustomTab() {
+        tab = new Tab();
     }
-    
-    public ProjectTab(String title, Node root) {
-        super(title, root);
+
+    public CustomTab(String title, Node root) {
+        this.title = title;
+        this.root = root;
+        
+        tab = new Tab(title, root);
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Node getRoot() {
+        return root;
+    }
+
+    public Tab getTab() {
+        return tab;
+    }
+
+    
+    
 }

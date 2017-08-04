@@ -24,11 +24,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import tracerfx.tab.manager.FileTabManager;
 import tracerfx.tab.manager.ManagerFactory;
-import tracerfx.tab.FileTab;
-import tracerfx.tab.ProjectTab;
+import tracerfx.tab.manager.ProjectTabManager;
 
 /**
  * FXML Controller class
@@ -47,6 +48,11 @@ public class TracerFXMLController implements Initializable {
     private CheckBox chckTrailFollow;
     @FXML
     private Button btnSearch;
+    @FXML
+    private TabPane projectTabPane;
+    
+    private final ProjectTabManager projectTabManager = ManagerFactory.getProjectTabManager();
+    private final FileTabManager fileTabManager = ManagerFactory.getFileTabManager();
 
     /**
      * Initializes the controller class.
@@ -54,7 +60,7 @@ public class TracerFXMLController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         prepareBindings();
-
+        updateManagers();
     }    
     
     @FXML
@@ -64,14 +70,17 @@ public class TracerFXMLController implements Initializable {
 
     @FXML
     private void btnAddProject(ActionEvent event) {
-        // just for test
-        ManagerFactory.getManager(ManagerFactory.TYPE.PROJECT).addItem(new ProjectTab());
+       // if(!projectTabManager.projectExists("some title")){
+            projectTabManager.addNewProject("some title");
+      //  }
     }
 
     @FXML
     private void btnAddFile(ActionEvent event) {
+        
+        
         // just for test
-        ManagerFactory.getManager(ManagerFactory.TYPE.FILE).addItem(new FileTab());
+        //ManagerFactory.getManager(ManagerFactory.TYPE.FILE).addItem(new Object());
     }
 
     @FXML
@@ -83,18 +92,22 @@ public class TracerFXMLController implements Initializable {
     }
 
     private void prepareBindings() {
-        ReadOnlyBooleanProperty anyFileProperty = ManagerFactory.getFileTabManager().getCollectionProperty().emptyProperty();
-        ReadOnlyBooleanProperty anyProjectProperty = ManagerFactory.getProjectTabManager().getCollectionProperty().emptyProperty();
+        ReadOnlyBooleanProperty anyFileProperty = fileTabManager.getCollectionProperty().emptyProperty();
+        ReadOnlyBooleanProperty anyProjectProperty = projectTabManager.getCollectionProperty().emptyProperty();
         
         // add file
         btnAddFile.disableProperty().bind(anyProjectProperty);
 
         // line description
-        txtLineDescription.textProperty().bind(ManagerFactory.getFileTabManager().getSelectedLineProperty());
+        txtLineDescription.textProperty().bind(fileTabManager.getSelectedLineProperty());
         
         // file tab controls
         chckTrailFollow.disableProperty().bind(anyFileProperty);
         txtSearch.disableProperty().bind(anyFileProperty);
         btnSearch.disableProperty().bind(anyFileProperty);  
+    }
+    
+    private void updateManagers(){
+        projectTabManager.setProjectTabPane(projectTabPane);
     }
 }
