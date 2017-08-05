@@ -23,7 +23,8 @@ import javafx.scene.Node;
  */
 public class ProjectTab extends CustomTab {
     public static final ProjectTab DEFAULT = new ProjectTab();
-    
+ 
+    // dummy projectTab
     private ProjectTab(){
     }
     

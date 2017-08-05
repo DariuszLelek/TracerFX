@@ -13,45 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tracerfx.tab;
-
-import javafx.scene.Node;
-import javafx.scene.control.Tab;
-import javafx.scene.layout.Pane;
+package tracerfx.fxml.controller;
 
 /**
  *
  * @author Dariusz Lelek
  */
-public abstract class CustomTab {
-    protected String title;
-    private final Node root;
-    private final Tab tab;
-
-    public CustomTab() {
-        tab = new Tab();
-        root = new Pane();
-    }
-
-    public CustomTab(String title, Node root) {
-        this.title = title;
-        this.root = root;
-        
-        tab = new Tab(title, root);
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Node getRoot() {
-        return root;
-    }
+public enum StringsFXML {
+    NEW_PROJECT_DIALOG_TITLE("Project Name"),  
+    NEW_PROJECT_DIALOG_HEADER("Enter new project name"),
     
-    public Tab getTab() {
-        return tab;
+    STATUS_PROJECT_NAME_EMPTY("No project name entered."),
+    STATUS_PROJECT_NAME_EXISTS("Project with given name already exists.");
+
+    private String value;
+
+    private StringsFXML(String value) {
+        this.value = value;
     }
 
-    
-    
+    public String get(){
+        return value;
+    }
 }

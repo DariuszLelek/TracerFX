@@ -16,6 +16,7 @@
 package tracerfx.tab.manager;
 
 import javafx.scene.Node;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import tracerfx.fxml.FXMLResourceLoader;
 import tracerfx.tab.ProjectTab;
@@ -34,17 +35,17 @@ public class ProjectTabManager extends Manager<ProjectTab>{
     }
     
     public void addNewProject(String title){
-        ProjectTab projectTab = new ProjectTab(title, FXMLResourceLoader.getResource(getClass().getClassLoader(), FXML));
+        final ProjectTab projectTab = new ProjectTab(title, FXMLResourceLoader.getResource(getClass().getClassLoader(), FXML));
         projectTabPane.getTabs().add(projectTab.getTab());
         addItem(projectTab);
     }
     
     public boolean projectExists(String title){
-        return getAllItems().stream().anyMatch(x -> x.getTitle().equals(title));
+        return getAllItems().stream().anyMatch(x -> title.equals(x.getTitle()));
     }
     
     public void removeProject(final Node root){
-        ProjectTab projectTabToRemove = getAllItems().stream()
+        final ProjectTab projectTabToRemove = getAllItems().stream()
                 .filter(x -> x.getRoot().equals(root))
                 .findFirst().orElse(ProjectTab.DEFAULT);
 
@@ -54,7 +55,7 @@ public class ProjectTabManager extends Manager<ProjectTab>{
 
     @Override
     public ProjectTab getActiveItem() {
-        //return 
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final Tab selectedTab = projectTabPane.getSelectionModel().getSelectedItem();
+        return getAllItems().stream().filter(x -> x.getTab().equals(selectedTab)).findFirst().orElse(ProjectTab.DEFAULT);
     }
 }

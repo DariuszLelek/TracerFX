@@ -56,6 +56,11 @@
                   </AnchorPane>
               </items>
             </SplitPane>
+            <ToolBar nodeOrientation="LEFT_TO_RIGHT" VBox.vgrow="NEVER">
+               <items>
+                  <Label fx:id="txtStatus" />
+               </items>
+            </ToolBar>
          </children>
       </VBox>
    </children>

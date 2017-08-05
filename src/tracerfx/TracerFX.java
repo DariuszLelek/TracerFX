@@ -22,6 +22,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import tracerfx.fxml.FXMLResourceLoader;
+import tracerfx.task.TaskManager;
 
 /**
  *
@@ -36,6 +37,10 @@ public class TracerFX extends Application {
         primaryStage.setTitle(TITLE);
         primaryStage.setScene(getScene());
         primaryStage.show();
+        
+        primaryStage.setOnCloseRequest(event -> {
+            TaskManager.stopTaskManager();
+        });
     }
 
     public static void main(String[] args) {

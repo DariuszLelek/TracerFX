@@ -17,6 +17,7 @@
 package tracerfx.fxml.controller;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.event.ActionEvent;
@@ -24,9 +25,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import tracerfx.tab.manager.FileTabManager;
 import tracerfx.tab.manager.ManagerFactory;
 import tracerfx.tab.manager.ProjectTabManager;
@@ -50,9 +53,14 @@ public class TracerFXMLController implements Initializable {
     private Button btnSearch;
     @FXML
     private TabPane projectTabPane;
+    @FXML
+    private Label txtStatus;
     
     private final ProjectTabManager projectTabManager = ManagerFactory.getProjectTabManager();
-    private final FileTabManager fileTabManager = ManagerFactory.getFileTabManager();
+    private final FileTabManager fileTabManager = ManagerFactory.getFileTabManager();    
+    
+    private StatusController statusController;
+
 
     /**
      * Initializes the controller class.
@@ -70,15 +78,25 @@ public class TracerFXMLController implements Initializable {
 
     @FXML
     private void btnAddProject(ActionEvent event) {
-       // if(!projectTabManager.projectExists("some title")){
-            projectTabManager.addNewProject("some title");
-      //  }
+        Optional<String> projectTitle = getProjectNameDialog().showAndWait();
+        String title = projectTitle.isPresent() ? projectTitle.get() : "";
+        tryAddProject(title);
     }
 
+    private void tryAddProject(String title) {
+        if (!title.isEmpty()) {
+            if (!projectTabManager.projectExists(title)) {
+                projectTabManager.addNewProject(title);
+            } else {
+                getStatusController().setStatus(StringsFXML.STATUS_PROJECT_NAME_EXISTS.get());
+            }
+        } else {
+            getStatusController().setStatus(StringsFXML.STATUS_PROJECT_NAME_EMPTY.get());
+        }
+    }
+    
     @FXML
     private void btnAddFile(ActionEvent event) {
-        
-        
         // just for test
         //ManagerFactory.getManager(ManagerFactory.TYPE.FILE).addItem(new Object());
     }
@@ -92,8 +110,8 @@ public class TracerFXMLController implements Initializable {
     }
 
     private void prepareBindings() {
-        ReadOnlyBooleanProperty anyFileProperty = fileTabManager.getCollectionProperty().emptyProperty();
-        ReadOnlyBooleanProperty anyProjectProperty = projectTabManager.getCollectionProperty().emptyProperty();
+        final ReadOnlyBooleanProperty anyFileProperty = fileTabManager.getCollectionProperty().emptyProperty();
+        final ReadOnlyBooleanProperty anyProjectProperty = projectTabManager.getCollectionProperty().emptyProperty();
         
         // add file
         btnAddFile.disableProperty().bind(anyProjectProperty);
@@ -109,5 +127,19 @@ public class TracerFXMLController implements Initializable {
     
     private void updateManagers(){
         projectTabManager.setProjectTabPane(projectTabPane);
+    }
+    
+    private TextInputDialog getProjectNameDialog(){
+        final TextInputDialog textInputDialog = new TextInputDialog("enter");
+        textInputDialog.setTitle(StringsFXML.NEW_PROJECT_DIALOG_TITLE.get());
+        textInputDialog.setHeaderText(StringsFXML.NEW_PROJECT_DIALOG_HEADER.get());
+        return textInputDialog;
+    }
+    
+    private StatusController getStatusController(){
+        if(statusController == null){
+            statusController = new StatusController(txtStatus);
+        }
+        return statusController;
     }
 }
