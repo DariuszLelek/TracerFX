@@ -17,6 +17,7 @@ package tracerfx.tab;
 
 import java.io.File;
 import javafx.scene.Node;
+import javafx.scene.control.ListView;
 
 /**
  *
@@ -28,6 +29,7 @@ public class FileTab extends CustomTab{
     private boolean followTrail = false;
     private final File file;
     private int totalFileLines;
+    private ListView listView;
     
     private FileTab(){
         file = null;
@@ -54,5 +56,12 @@ public class FileTab extends CustomTab{
     public int getTotalFileLines() {
         return totalFileLines;
     }
-    
+
+    public ListView getListView() {
+        return listView;
+    }
+
+    public void setListView(ListView listView) {
+        this.listView = listView;
+    }
 }

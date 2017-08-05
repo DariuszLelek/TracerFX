@@ -16,6 +16,10 @@
 package tracerfx.util;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -23,6 +27,22 @@ import java.io.File;
  */
 public class FileManager {
     private File activeFile;
+    private final Map<File, Collection<String>> filesContent = new HashMap<>();
+
+    public Collection<String> getActiveFileContent(){
+        return filesContent.containsKey(activeFile) ? filesContent.get(activeFile) : new ArrayList<>();
+    }
+
+    public void setActiveFile(final File activeFile) {
+        insertFile(activeFile);
+        this.activeFile = activeFile;
+    }
+    
+    private void insertFile(final File file){
+        if(!filesContent.containsKey(file)){
+            filesContent.put(file, FileUtility.getFileLines(file));
+        }
+    }
     
     
     

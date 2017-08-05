@@ -16,11 +16,13 @@
 package tracerfx.tab.manager;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.stream.Collectors;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import tracerfx.tab.FileTab;
 import tracerfx.tab.ProjectTab;
+import tracerfx.util.FileManager;
 
 /**
  *
@@ -29,17 +31,22 @@ import tracerfx.tab.ProjectTab;
 public class FileTabManager extends Manager<FileTab>{
     private final String FXML = "tracerfx/fxml/FileTabFXML.fxml";
     private TextArea txtLineDescription;
-    private File activeFile;
+    private final FileManager fileManager = new FileManager();
+   
      
     public void addNewFileToProject(File file, ProjectTab projectTab){
-        activeFile = file;
+        fileManager.setActiveFile(file);
         FileTab fileTab = new FileTab(file, getParent(FXML));
         projectTab.getFileTabPane().getTabs().add(fileTab.getTab());
         addItem(fileTab);
     }
 
-    public File getActiveFile() {
-        return activeFile;
+    public TextArea getTxtLineDescription() {
+        return txtLineDescription;
+    }
+    
+    public Collection<String> getActiveFileContent() {
+        return fileManager.getActiveFileContent();
     }
     
     public void tryToRemoveFilesFromProject(ProjectTab projectTab){

@@ -16,6 +16,9 @@
 
 package tracerfx.fxml.controller;
 
+import tracerfx.control.DescriptionController;
+import tracerfx.control.StatusController;
+import tracerfx.util.StringsFXML;
 import java.io.File;
 import java.net.URL;
 import java.util.Optional;
@@ -80,6 +83,8 @@ public class TracerFXMLController implements Initializable {
         prepareBindings();
         
         statusController = new StatusController(txtStatus);
+        
+        projectTabPane.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_TAB_SWITCH);
     }    
     
     @FXML
@@ -124,6 +129,9 @@ public class TracerFXMLController implements Initializable {
 
     @FXML
     private void btnSearch(ActionEvent event) {
+        //TODO add validation
+        
+        ManagerFactory.getFileTabManager().getTxtLineDescription().setText("");
     }
 
     private void chckTrailFollow(ActionEvent event) {

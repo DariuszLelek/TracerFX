@@ -15,8 +15,9 @@
  */
 package tracerfx.fxml.controller;
 
+import tracerfx.control.DescriptionController;
 import java.net.URL;
-import java.util.List;
+import java.util.Collection;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,7 +27,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import tracerfx.tab.manager.ManagerFactory;
-import tracerfx.util.FileUtility;
 
 /**
  * FXML Controller class
@@ -50,14 +50,15 @@ public class FileTabFXMLController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {   
-        List list = FileUtility.getFileLines(ManagerFactory.getFileTabManager().getActiveFile());
+    public void initialize(URL url, ResourceBundle rb) {
+        Collection collection = ManagerFactory.getFileTabManager().getActiveFileContent();
+        String linesNum = collection.size() + "";
         
-        listView.getItems().addAll(list);
-
-        String linesNum = list.size() + "";
         lblTotalLines.setText(linesNum);
         lblLines.setText(linesNum);
+        
+        listView.getItems().addAll(collection);
+        listView.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_LINE_CHANGE);
     }    
 
     @FXML
