@@ -34,9 +34,6 @@ public class FileUtility {
         try {
             lnr = new LineNumberReader(new FileReader(file));
             lnr.skip(Long.MAX_VALUE);
-        } catch (FileNotFoundException ex) {
-            // TODO logger
-            Logger.getLogger(FileUtility.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             // TODO logger
             Logger.getLogger(FileUtility.class.getName()).log(Level.SEVERE, null, ex);
