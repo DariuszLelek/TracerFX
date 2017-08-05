@@ -16,12 +16,14 @@
 package tracerfx.fxml.controller;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import tracerfx.tab.manager.ManagerFactory;
 import tracerfx.util.FileUtility;
@@ -41,13 +43,21 @@ public class FileTabFXMLController implements Initializable {
     private Label lblTotalLines;
     @FXML
     private CheckBox chckFollowTrail;
+    @FXML
+    private ListView<String> listView;
     
     /**
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        lblTotalLines.setText(FileUtility.getFileLineNumber(ManagerFactory.getFileTabManager().getActiveFile()) + "");
+    public void initialize(URL url, ResourceBundle rb) {   
+        List list = FileUtility.getFileLines(ManagerFactory.getFileTabManager().getActiveFile());
+        
+        listView.getItems().addAll(list);
+
+        String linesNum = list.size() + "";
+        lblTotalLines.setText(linesNum);
+        lblLines.setText(linesNum);
     }    
 
     @FXML

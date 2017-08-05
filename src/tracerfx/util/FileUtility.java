@@ -15,11 +15,15 @@
  */
 package tracerfx.util;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,6 +32,8 @@ import java.util.logging.Logger;
  * @author Dariusz Lelek
  */
 public class FileUtility {
+    
+    private final static int[] excludedASCII = {0};
     
     public static int getFileLineNumber(File file) {
         LineNumberReader lnr = null;
@@ -39,6 +45,37 @@ public class FileUtility {
             Logger.getLogger(FileUtility.class.getName()).log(Level.SEVERE, null, ex);
         }
         return lnr != null ? lnr.getLineNumber() + 1 : 0;
+    }
+
+    public static List<String> getFileLines(File file) {
+        List<String> content = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),"utf-8"))) {
+            for (String line = null; (line = br.readLine()) != null;) {
+                if(validLine(line)){
+                    content.add(line);
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(FileUtility.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return content;
+    }
+
+    private static boolean validLine(String line){      
+        if(line.isEmpty()){
+            return false;
+        }
+        
+        return !(line.length() == 1 && containsExcludedASCII(line));
+    }
+    
+    private static boolean containsExcludedASCII(String line){
+        for(int i = 0; i < excludedASCII.length; i++){
+            if((int) line.charAt(0) == excludedASCII[i]){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

@@ -27,6 +27,7 @@ public class FileTab extends CustomTab{
     
     private boolean followTrail = false;
     private final File file;
+    private int totalFileLines;
     
     private FileTab(){
         file = null;
@@ -50,5 +51,8 @@ public class FileTab extends CustomTab{
         this.followTrail = followTrail;
     }
 
+    public int getTotalFileLines() {
+        return totalFileLines;
+    }
     
 }
