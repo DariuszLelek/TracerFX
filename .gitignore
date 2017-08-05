@@ -10,6 +10,10 @@ build
 dist
 nbproject
 
+# IntelliJ
+.idea/
+out/
+
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
