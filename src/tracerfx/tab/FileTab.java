@@ -15,6 +15,7 @@
  */
 package tracerfx.tab;
 
+import java.io.File;
 import javafx.scene.Node;
 
 /**
@@ -22,11 +23,12 @@ import javafx.scene.Node;
  * @author Dariusz Lelek
  */
 public class FileTab extends CustomTab{
-    private ProjectTab project;
+    private final File file;
 
-    public FileTab(ProjectTab projectTab, String title, Node content) {
-        super(title, content);
-        this.project = projectTab;
+    public FileTab(File file, Node content) {
+        super(file.getName(), content);
+        
+        this.file = file;
     }
     
 }

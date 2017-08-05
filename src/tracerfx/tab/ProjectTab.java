@@ -15,7 +15,9 @@
  */
 package tracerfx.tab;
 
-import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 
 /**
  *
@@ -23,12 +25,33 @@ import javafx.scene.Node;
  */
 public class ProjectTab extends CustomTab {
     public static final ProjectTab DEFAULT = new ProjectTab();
+    private final TabPane fileTabPane;
  
     // dummy projectTab
     private ProjectTab(){
+        fileTabPane = new TabPane();
     }
     
-    public ProjectTab(String title, Node root) {
+    public ProjectTab(String title, Parent root) {
         super(title, root);
+        
+        fileTabPane = findTabPaneForNode(root);
     }
+    
+    public boolean isValidTab(){
+        return !title.isEmpty();
+    }
+
+    public TabPane getFileTabPane() {
+        return fileTabPane;
+    }
+    
+    public Tab getActiveFileTab(){
+        return fileTabPane.getSelectionModel().getSelectedItem();
+    }
+
+    private TabPane findTabPaneForNode(Parent parent) {
+        return (TabPane) parent.getChildrenUnmodifiable().stream().filter(n -> n instanceof TabPane).findFirst().orElse(new TabPane());
+    }
+
 }

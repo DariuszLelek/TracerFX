@@ -7,7 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" styleClass="mainFxmlClass" stylesheets="@../css/tracerfxml.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tracerfx.fxml.controller.TracerFXMLController">
+<AnchorPane id="AnchorPane" fx:id="root" prefHeight="600.0" prefWidth="800.0" styleClass="mainFxmlClass" stylesheets="@../css/tracerfxml.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tracerfx.fxml.controller.TracerFXMLController">
    <children>
       <VBox layoutX="102.0" layoutY="110.0" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -45,20 +45,20 @@
             </ToolBar>
             <SplitPane dividerPositions="0.7054409005628518" orientation="VERTICAL" VBox.vgrow="ALWAYS">
               <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                <AnchorPane>
                      <children>
-                        <TabPane fx:id="projectTabPane" layoutX="91.0" layoutY="73.0" prefHeight="377.0" prefWidth="798.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <TabPane fx:id="projectTabPane" layoutX="91.0" layoutY="73.0" prefHeight="357.0" prefWidth="798.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children></AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                <AnchorPane>
                      <children>
-                        <TextArea fx:id="txtLineDescription" editable="false" layoutX="98.0" layoutY="-29.0" prefHeight="154.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <TextArea fx:id="txtLineDescription" editable="false" layoutX="98.0" layoutY="-29.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
               </items>
             </SplitPane>
             <ToolBar nodeOrientation="LEFT_TO_RIGHT" VBox.vgrow="NEVER">
                <items>
-                  <Label fx:id="txtStatus" />
+                  <Label fx:id="txtStatus" HBox.hgrow="ALWAYS" />
                </items>
             </ToolBar>
          </children>

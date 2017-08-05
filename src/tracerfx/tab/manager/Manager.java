@@ -15,10 +15,13 @@
  */
 package tracerfx.tab.manager;
 
+import java.io.IOException;
 import java.util.Collection;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 
 /**
  *
@@ -34,17 +37,17 @@ public abstract class Manager<T>{
         itemListProperty = new SimpleListProperty<>(itemList);
     } 
 
-    public Collection<T> getAllItems() {
+    protected Collection<T> getAllItems() {
         return itemList;
     }
 
-    public abstract T getActiveItem(); 
+    protected abstract T getActiveItem(); 
 
-    public void addItem(T item) {
+    protected void addItem(T item) {
         itemList.add(item);
     }
 
-    public void removeItem(T item) {
+    protected void removeItem(T item) {
         if(itemList.contains(item)){
             itemList.remove(item);
         }
@@ -52,5 +55,15 @@ public abstract class Manager<T>{
 
     public SimpleListProperty<T> getCollectionProperty() {
         return itemListProperty;
+    }
+    
+    protected Parent getParent(String fxml){
+        try {
+            return FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
+        } catch (IOException ex) {
+            // TODO logger / refactor
+            throw new NullPointerException();
+            //return new Pane();
+        }
     }
 }

@@ -48,6 +48,9 @@ public class TracerFX extends Application {
     }
     
     private Parent getParent() throws IOException{
+        
+        
+        final String FXML2 = "tracerfx/fxml/FileTabFXML.fxml";
         return FXMLLoader.load(getClass().getClassLoader().getResource(FXML));
     }
     

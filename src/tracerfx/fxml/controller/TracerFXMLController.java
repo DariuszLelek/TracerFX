@@ -16,6 +16,7 @@
 
 package tracerfx.fxml.controller;
 
+import java.io.File;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -30,6 +31,9 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
+import tracerfx.tab.ProjectTab;
 import tracerfx.tab.manager.FileTabManager;
 import tracerfx.tab.manager.ManagerFactory;
 import tracerfx.tab.manager.ProjectTabManager;
@@ -60,6 +64,8 @@ public class TracerFXMLController implements Initializable {
     private final FileTabManager fileTabManager = ManagerFactory.getFileTabManager();    
     
     private StatusController statusController;
+    @FXML
+    private AnchorPane root;
 
 
     /**
@@ -88,17 +94,21 @@ public class TracerFXMLController implements Initializable {
             if (!projectTabManager.projectExists(title)) {
                 projectTabManager.addNewProject(title);
             } else {
-                getStatusController().setStatus(StringsFXML.STATUS_PROJECT_NAME_EXISTS.get());
+                getStatusController().setStatus(StringsFXML.STATUS_PROJECT_NAME_EXISTS.toString());
             }
         } else {
-            getStatusController().setStatus(StringsFXML.STATUS_PROJECT_NAME_EMPTY.get());
+            getStatusController().setStatus(StringsFXML.STATUS_PROJECT_NAME_EMPTY.toString());
         }
     }
     
     @FXML
     private void btnAddFile(ActionEvent event) {
-        // just for test
-        //ManagerFactory.getManager(ManagerFactory.TYPE.FILE).addItem(new Object());
+        ProjectTab activeProjectTab = projectTabManager.getActiveItem();
+        
+        if(activeProjectTab.isValidTab()){
+            File file = getFileChooserDialog().showOpenDialog(root.getScene().getWindow());
+            fileTabManager.addNewFileToProject(file, activeProjectTab);
+        }
     }
 
     @FXML
@@ -117,7 +127,7 @@ public class TracerFXMLController implements Initializable {
         btnAddFile.disableProperty().bind(anyProjectProperty);
 
         // line description
-        txtLineDescription.textProperty().bind(fileTabManager.getSelectedLineProperty());
+        //txtLineDescription.textProperty().bind(fileTabManager.getSelectedLineProperty());
         
         // file tab controls
         chckTrailFollow.disableProperty().bind(anyFileProperty);
@@ -131,9 +141,15 @@ public class TracerFXMLController implements Initializable {
     
     private TextInputDialog getProjectNameDialog(){
         final TextInputDialog textInputDialog = new TextInputDialog("enter");
-        textInputDialog.setTitle(StringsFXML.NEW_PROJECT_DIALOG_TITLE.get());
-        textInputDialog.setHeaderText(StringsFXML.NEW_PROJECT_DIALOG_HEADER.get());
+        textInputDialog.setTitle(StringsFXML.NEW_PROJECT_DIALOG_TITLE.toString());
+        textInputDialog.setHeaderText(StringsFXML.NEW_PROJECT_DIALOG_HEADER.toString());
         return textInputDialog;
+    }
+    
+    private FileChooser getFileChooserDialog(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(StringsFXML.NEW_FILE_DIALOG_TITLE.toString());
+        return fileChooser;
     }
     
     private StatusController getStatusController(){

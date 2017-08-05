@@ -15,30 +15,28 @@
  */
 package tracerfx.tab.manager;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import java.io.File;
+import javafx.scene.control.Tab;
+import tracerfx.tab.FileTab;
+import tracerfx.tab.ProjectTab;
 
 /**
  *
  * @author Dariusz Lelek
  */
-public class FileTabManager<FileTab> extends Manager{
-    private final StringProperty selectedLineProperty;
-
-    public FileTabManager() {
-        selectedLineProperty = new SimpleStringProperty("");
-    }    
-
-    public void setActiveTab(FileTab activeTab) {
-        this.activeItem = activeTab;
-    }
-    
-    public StringProperty getSelectedLineProperty() {
-        return selectedLineProperty;
+public class FileTabManager extends Manager<FileTab>{
+    private final String FXML = "tracerfx/fxml/FileTabFXML.fxml";
+     
+    public void addNewFileToProject(File file, ProjectTab projectTab){
+        FileTab fileTab = new FileTab(file, getParent(FXML));
+        projectTab.getFileTabPane().getTabs().add(fileTab.getTab());
+        addItem(fileTab);
     }
 
     @Override
-    public Object getActiveItem() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected FileTab getActiveItem() {
+        final Tab selectedTab = ManagerFactory.getProjectTabManager().getActiveItem().getActiveFileTab();
+        return getAllItems().stream().filter(x -> x.getTab().equals(selectedTab)).findFirst().orElse(null);  
     }
+
 }

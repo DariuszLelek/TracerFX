@@ -23,16 +23,19 @@ public enum StringsFXML {
     NEW_PROJECT_DIALOG_TITLE("Project Name"),  
     NEW_PROJECT_DIALOG_HEADER("Enter new project name"),
     
+    NEW_FILE_DIALOG_TITLE("Open new file"),
+    
     STATUS_PROJECT_NAME_EMPTY("No project name entered."),
     STATUS_PROJECT_NAME_EXISTS("Project with given name already exists.");
 
-    private String value;
+    private final String value;
 
     private StringsFXML(String value) {
         this.value = value;
     }
 
-    public String get(){
+    @Override
+    public String toString(){
         return value;
     }
 }
