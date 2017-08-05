@@ -18,10 +18,10 @@ package tracerfx;
 
 import java.io.IOException;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import tracerfx.fxml.FXMLResourceLoader;
 import tracerfx.task.TaskManager;
 
 /**
@@ -48,7 +48,7 @@ public class TracerFX extends Application {
     }
     
     private Parent getParent() throws IOException{
-        return FXMLResourceLoader.getResource(getClass().getClassLoader(), FXML);
+        return FXMLLoader.load(getClass().getClassLoader().getResource(FXML));
     }
     
     private Scene getScene() throws IOException{

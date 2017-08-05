@@ -15,10 +15,11 @@
  */
 package tracerfx.tab.manager;
 
+import java.io.IOException;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import tracerfx.fxml.FXMLResourceLoader;
 import tracerfx.tab.ProjectTab;
 
 /**
@@ -34,8 +35,8 @@ public class ProjectTabManager extends Manager<ProjectTab>{
         this.projectTabPane = projectTabPane;
     }
     
-    public void addNewProject(String title){
-        final ProjectTab projectTab = new ProjectTab(title, FXMLResourceLoader.getResource(getClass().getClassLoader(), FXML));
+    public void addNewProject(String title) throws IOException{
+        final ProjectTab projectTab = new ProjectTab(title, FXMLLoader.load(getClass().getClassLoader().getResource(FXML)));
         projectTabPane.getTabs().add(projectTab.getTab());
         addItem(projectTab);
     }
