@@ -51,7 +51,6 @@ public class TracerFXMLController implements Initializable {
     private TextArea txtLineDescription;
     @FXML
     private Button btnAddFile;
-    @FXML
     private CheckBox chckTrailFollow;
     @FXML
     private Button btnSearch;
@@ -66,6 +65,10 @@ public class TracerFXMLController implements Initializable {
     private StatusController statusController;
     @FXML
     private AnchorPane root;
+    @FXML
+    private Button btnRemoveProject;
+    @FXML
+    private Button btnRemoveFile;
 
 
     /**
@@ -73,8 +76,10 @@ public class TracerFXMLController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        prepareManagers();
         prepareBindings();
-        updateManagers();
+        
+        statusController = new StatusController(txtStatus);
     }    
     
     @FXML
@@ -93,21 +98,27 @@ public class TracerFXMLController implements Initializable {
         if (!title.isEmpty()) {
             if (!projectTabManager.projectExists(title)) {
                 projectTabManager.addNewProject(title);
+                statusController.setStatus(StringsFXML.STATUS_PROJECT_ADDED.toString());
             } else {
-                getStatusController().setStatus(StringsFXML.STATUS_PROJECT_NAME_EXISTS.toString());
+                statusController.setStatus(StringsFXML.STATUS_PROJECT_NAME_EXISTS.toString());
             }
         } else {
-            getStatusController().setStatus(StringsFXML.STATUS_PROJECT_NAME_EMPTY.toString());
+            statusController.setStatus(StringsFXML.STATUS_FAILED_ADD_PROJECT.toString());
         }
     }
     
     @FXML
     private void btnAddFile(ActionEvent event) {
         ProjectTab activeProjectTab = projectTabManager.getActiveItem();
-        
-        if(activeProjectTab.isValidTab()){
+        tryAddFile(activeProjectTab);
+
+    }
+    
+    private void tryAddFile(ProjectTab activeProjectTab) {
+        if (activeProjectTab.isNotDummy()) {
             File file = getFileChooserDialog().showOpenDialog(root.getScene().getWindow());
             fileTabManager.addNewFileToProject(file, activeProjectTab);
+            statusController.setStatus(StringsFXML.STATUS_FILE_ADDED.toString());
         }
     }
 
@@ -115,32 +126,38 @@ public class TracerFXMLController implements Initializable {
     private void btnSearch(ActionEvent event) {
     }
 
-    @FXML
     private void chckTrailFollow(ActionEvent event) {
+        fileTabManager.getActiveItem().setFollowTrail(chckTrailFollow.isSelected());
     }
 
     private void prepareBindings() {
         final ReadOnlyBooleanProperty anyFileProperty = fileTabManager.getCollectionProperty().emptyProperty();
         final ReadOnlyBooleanProperty anyProjectProperty = projectTabManager.getCollectionProperty().emptyProperty();
         
-        // add file
+        // file
         btnAddFile.disableProperty().bind(anyProjectProperty);
+        btnRemoveFile.disableProperty().bind(anyFileProperty);
+        
+        // project
+        btnRemoveProject.disableProperty().bind(anyProjectProperty);
 
         // line description
         //txtLineDescription.textProperty().bind(fileTabManager.getSelectedLineProperty());
         
         // file tab controls
-        chckTrailFollow.disableProperty().bind(anyFileProperty);
+        //chckTrailFollow.disableProperty().bind(anyFileProperty);
+        //chckTrailFollow.selectedProperty().bind(followTrailProperty);
         txtSearch.disableProperty().bind(anyFileProperty);
         btnSearch.disableProperty().bind(anyFileProperty);  
     }
     
-    private void updateManagers(){
+    private void prepareManagers(){
         projectTabManager.setProjectTabPane(projectTabPane);
+        fileTabManager.setTxtLineDescription(txtLineDescription);
     }
     
     private TextInputDialog getProjectNameDialog(){
-        final TextInputDialog textInputDialog = new TextInputDialog("enter");
+        final TextInputDialog textInputDialog = new TextInputDialog(StringsFXML.NEW_PROJECT_DIALOG_PROJECT_NAME.toString());
         textInputDialog.setTitle(StringsFXML.NEW_PROJECT_DIALOG_TITLE.toString());
         textInputDialog.setHeaderText(StringsFXML.NEW_PROJECT_DIALOG_HEADER.toString());
         return textInputDialog;
@@ -151,11 +168,22 @@ public class TracerFXMLController implements Initializable {
         fileChooser.setTitle(StringsFXML.NEW_FILE_DIALOG_TITLE.toString());
         return fileChooser;
     }
-    
-    private StatusController getStatusController(){
-        if(statusController == null){
-            statusController = new StatusController(txtStatus);
+
+    @FXML
+    private void removeProject(ActionEvent event) {
+        if (projectTabManager.tryToRemoveActiveProject()) {
+            statusController.setStatus(StringsFXML.STATUS_REMOVE_PROJECT.toString());
+        } else {
+            statusController.setStatus(StringsFXML.STATUS_FAILED_REMOVE_PROJECT.toString());
         }
-        return statusController;
+    }
+
+    @FXML
+    private void removeFile(ActionEvent event) {
+        if(fileTabManager.tryToRemoveFileFromActiveProject()){
+            statusController.setStatus(StringsFXML.STATUS_REMOVE_FILE.toString());
+        }else{
+            statusController.setStatus(StringsFXML.STATUS_FAILED_REMOVE_FILE.toString());
+        }
     }
 }

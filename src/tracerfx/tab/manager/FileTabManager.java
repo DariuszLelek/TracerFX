@@ -16,7 +16,9 @@
 package tracerfx.tab.manager;
 
 import java.io.File;
+import java.util.stream.Collectors;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TextArea;
 import tracerfx.tab.FileTab;
 import tracerfx.tab.ProjectTab;
 
@@ -26,17 +28,47 @@ import tracerfx.tab.ProjectTab;
  */
 public class FileTabManager extends Manager<FileTab>{
     private final String FXML = "tracerfx/fxml/FileTabFXML.fxml";
+    private TextArea txtLineDescription;
+    private File activeFile;
      
     public void addNewFileToProject(File file, ProjectTab projectTab){
+        activeFile = file;
         FileTab fileTab = new FileTab(file, getParent(FXML));
         projectTab.getFileTabPane().getTabs().add(fileTab.getTab());
         addItem(fileTab);
     }
 
+    public File getActiveFile() {
+        return activeFile;
+    }
+    
+    public void tryToRemoveFilesFromProject(ProjectTab projectTab){
+        removeItems(getAllItems().stream()
+                .filter(x -> projectTab.getFileTabPane().getTabs().contains(x.getTab()))
+                .collect(Collectors.toList()));        
+    }
+   
+    public boolean tryToRemoveFileFromActiveProject() {
+        FileTab activeFileTab = getActiveItem();
+        
+        // In situation when project has not files - getActiveItem will return dummy if other project have files
+        if (activeFileTab.isNotDummy()) {
+            ProjectTab activeProjectTab = ManagerFactory.getProjectTabManager().getActiveItem();
+            activeProjectTab.getFileTabPane().getTabs().remove(activeFileTab.getTab());
+            removeItem(activeFileTab);
+            return true;
+        }
+        return false;
+    }
+
+    public void setTxtLineDescription(TextArea txtLineDescription) {
+        this.txtLineDescription = txtLineDescription;
+    }
+
     @Override
-    protected FileTab getActiveItem() {
+    public FileTab getActiveItem() {
         final Tab selectedTab = ManagerFactory.getProjectTabManager().getActiveItem().getActiveFileTab();
-        return getAllItems().stream().filter(x -> x.getTab().equals(selectedTab)).findFirst().orElse(null);  
+        return getAllItems().stream().filter(x -> x.getTab().equals(selectedTab)).findFirst().orElse(FileTab.DUMMY);  
     }
 
 }

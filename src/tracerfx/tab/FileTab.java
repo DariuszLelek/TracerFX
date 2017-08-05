@@ -23,12 +23,32 @@ import javafx.scene.Node;
  * @author Dariusz Lelek
  */
 public class FileTab extends CustomTab{
+    public final static FileTab DUMMY = new FileTab();
+    
+    private boolean followTrail = false;
     private final File file;
+    
+    private FileTab(){
+        file = null;
+    }
 
     public FileTab(File file, Node content) {
         super(file.getName(), content);
         
         this.file = file;
     }
+    
+    public boolean isNotDummy(){
+        return !this.equals(DUMMY);
+    }
+
+    public boolean isFollowTrail() {
+        return followTrail;
+    }
+
+    public void setFollowTrail(boolean followTrail) {
+        this.followTrail = followTrail;
+    }
+
     
 }

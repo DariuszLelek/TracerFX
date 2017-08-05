@@ -15,7 +15,6 @@
  */
 package tracerfx.tab.manager;
 
-import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import tracerfx.tab.ProjectTab;
@@ -43,19 +42,21 @@ public class ProjectTabManager extends Manager<ProjectTab>{
         return getAllItems().stream().anyMatch(x -> title.equals(x.getTitle()));
     }
     
-    public void removeProject(final Node root){
-        final ProjectTab projectTabToRemove = getAllItems().stream()
-                .filter(x -> x.getRoot().equals(root))
-                .findFirst().orElse(ProjectTab.DEFAULT);
-
-        projectTabPane.getTabs().remove(projectTabToRemove.getTab());
-        removeItem(projectTabToRemove);
+    public boolean tryToRemoveActiveProject(){
+        ProjectTab activeProjectTab = getActiveItem();
+        if(activeProjectTab.isNotDummy()){
+            projectTabPane.getTabs().remove(activeProjectTab.getTab());
+            removeItem(activeProjectTab);
+            ManagerFactory.getFileTabManager().tryToRemoveFilesFromProject(activeProjectTab);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public ProjectTab getActiveItem() {
         final Tab selectedTab = projectTabPane.getSelectionModel().getSelectedItem();
-        return getAllItems().stream().filter(x -> x.getTab().equals(selectedTab)).findFirst().orElse(ProjectTab.DEFAULT);
+        return getAllItems().stream().filter(x -> x.getTab().equals(selectedTab)).findFirst().orElse(ProjectTab.DUMMY);   
     }
     
     

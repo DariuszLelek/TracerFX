@@ -16,15 +16,15 @@
 package tracerfx.fxml.controller;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListView;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import tracerfx.tab.manager.ManagerFactory;
+import tracerfx.util.FileUtility;
 
 /**
  * FXML Controller class
@@ -36,27 +36,23 @@ public class FileTabFXMLController implements Initializable {
     @FXML
     private AnchorPane root;
     @FXML
-    private ListView<String> listView;
+    private Label lblLines;
+    @FXML
+    private Label lblTotalLines;
+    @FXML
+    private CheckBox chckFollowTrail;
     
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       
-        ObservableList<String> someList = FXCollections.observableArrayList();
-        List<String> aaa = new ArrayList();
-        
-        // tests
-        for(int i=0; i<1000000; i++){
-            aaa.add(i+ " asasasasasasdfgggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggas");
-        }
-
-        listView.getItems().addAll(aaa);
-        
-        //textFlow.getChildren().add(root);
-       // appendEngine.loadContent(sb.toString());
-        
+        lblTotalLines.setText(FileUtility.getFileLineNumber(ManagerFactory.getFileTabManager().getActiveFile()) + "");
     }    
+
+    @FXML
+    private void followTrail(ActionEvent event) {
+        ManagerFactory.getFileTabManager().getActiveItem().setFollowTrail(chckFollowTrail.isSelected());
+    }
     
 }

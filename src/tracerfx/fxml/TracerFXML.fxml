@@ -38,9 +38,10 @@
                   <TextField fx:id="txtSearch" onKeyTyped="#refineSearch" />
                 <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#btnSearch" text="Search" />
                   <Separator orientation="VERTICAL" />
+                  <Button fx:id="btnRemoveProject" mnemonicParsing="false" onAction="#removeProject" text="Remove Project" />
+                  <Button fx:id="btnRemoveFile" mnemonicParsing="false" onAction="#removeFile" text="Remove File" />
                   <Pane HBox.hgrow="ALWAYS" />
                   <Separator orientation="VERTICAL" />
-                  <CheckBox fx:id="chckTrailFollow" mnemonicParsing="false" onAction="#chckTrailFollow" text="Trail Follow" />
               </items>
             </ToolBar>
             <SplitPane dividerPositions="0.7054409005628518" orientation="VERTICAL" VBox.vgrow="ALWAYS">

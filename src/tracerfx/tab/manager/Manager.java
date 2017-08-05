@@ -52,6 +52,10 @@ public abstract class Manager<T>{
             itemList.remove(item);
         }
     }
+    
+    protected void removeItems(Collection<T> items){
+        items.stream().forEach(this::removeItem);
+    }
 
     public SimpleListProperty<T> getCollectionProperty() {
         return itemListProperty;

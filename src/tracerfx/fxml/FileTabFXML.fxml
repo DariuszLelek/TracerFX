@@ -9,11 +9,28 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" fx:id="root" prefHeight="18.0" prefWidth="247.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="tracerfx.fxml.controller.FileTabFXMLController">
+<AnchorPane id="AnchorPane" fx:id="root" prefHeight="28.0" prefWidth="295.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tracerfx.fxml.controller.FileTabFXMLController">
     <stylesheets>
         <URL value="@/tracerfx/css/filetabfxml.css" />
     </stylesheets>
    <children>
-      <ListView fx:id="listView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ListView VBox.vgrow="ALWAYS" />
+            <ToolBar>
+               <items>
+                  <Label text="Lines:" />
+                  <Label fx:id="lblLines" text="0" />
+                  <Separator orientation="VERTICAL" />
+                  <Label text="Total Lines:" />
+                  <Label fx:id="lblTotalLines" text="0" />
+                  <Separator orientation="VERTICAL" />
+                  <Pane HBox.hgrow="ALWAYS" />
+                  <CheckBox mnemonicParsing="false" text="Notify" />
+                  <CheckBox fx:id="chckFollowTrail" mnemonicParsing="false" onAction="#followTrail" text="Follow Trail" />
+               </items>
+            </ToolBar>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

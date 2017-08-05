@@ -22,11 +22,18 @@ package tracerfx.fxml.controller;
 public enum StringsFXML {
     NEW_PROJECT_DIALOG_TITLE("Project Name"),  
     NEW_PROJECT_DIALOG_HEADER("Enter new project name"),
+    NEW_PROJECT_DIALOG_PROJECT_NAME("New Project"),
     
     NEW_FILE_DIALOG_TITLE("Open new file"),
     
-    STATUS_PROJECT_NAME_EMPTY("No project name entered."),
-    STATUS_PROJECT_NAME_EXISTS("Project with given name already exists.");
+    STATUS_FILE_ADDED("File added to the project."),
+    STATUS_PROJECT_ADDED("New project added."),
+    STATUS_FAILED_ADD_PROJECT("Failed to add project."),
+    STATUS_PROJECT_NAME_EXISTS("Project with given name already exists."),
+    STATUS_FAILED_REMOVE_FILE("Failed to remove a file from the project."),
+    STATUS_FAILED_REMOVE_PROJECT("Failed to remove a project."),
+    STATUS_REMOVE_FILE("File removed from the project."),
+    STATUS_REMOVE_PROJECT("Project removed.");
 
     private final String value;
 

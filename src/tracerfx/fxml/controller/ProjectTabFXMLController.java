@@ -17,12 +17,10 @@ package tracerfx.fxml.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
-import tracerfx.tab.manager.ManagerFactory;
 
 /**
  * FXML Controller class
@@ -44,10 +42,4 @@ public class ProjectTabFXMLController implements Initializable {
         // TODO
     }    
 
-    private void remove(ActionEvent event) {
-        ManagerFactory.getProjectTabManager().removeProject(root);
-    }
-    
-    
-    
 }
