@@ -47,7 +47,7 @@ public class ProjectTabManager extends Manager<ProjectTab>{
     
     public boolean tryToRemoveActiveProject(){
         ProjectTab activeProjectTab = getActiveItem();
-        if(activeProjectTab.isNotDummy()){
+        if(activeProjectTab.isNotEmpty()){
             projectTabPane.getTabs().remove(activeProjectTab.getTab());
             removeItem(activeProjectTab);
             ManagerFactory.getFileTabManager().tryToRemoveFilesFromProject(activeProjectTab);
@@ -71,6 +71,4 @@ public class ProjectTabManager extends Manager<ProjectTab>{
         final Tab selectedTab = projectTabPane.getSelectionModel().getSelectedItem();
         return getAllItems().stream().filter(x -> x.getTab().equals(selectedTab)).findFirst().orElse(ProjectTab.EMPTY);   
     }
-    
-    
 }

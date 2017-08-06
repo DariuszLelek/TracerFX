@@ -19,6 +19,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
+import tracerfx.tab.manager.ManagerFactory;
 
 /**
  *
@@ -33,7 +34,8 @@ public class ProjectTab extends CustomTab {
         fileTabPane = findTabPaneForNode(root);
     }
     
-    public boolean isNotDummy(){
+    @Override
+    public boolean isNotEmpty(){
         return !this.equals(EMPTY);
     }
 
@@ -43,6 +45,11 @@ public class ProjectTab extends CustomTab {
     
     public Tab getActiveFileTab(){
         return fileTabPane.getSelectionModel().getSelectedItem();
+    }
+    
+    @Override
+    protected void processModified(){
+        this.tab.setStyle(ManagerFactory.getProjectTabManager().hasAnyChildTabModified(this) ? modifiedStyle : "");
     }
 
     private TabPane findTabPaneForNode(Parent parent) {

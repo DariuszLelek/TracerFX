@@ -16,9 +16,7 @@
 package tracerfx.tab;
 
 import javafx.scene.Node;
-import javafx.scene.control.ListView;
 import tracerfx.control.FileContent.FileContent;
-import tracerfx.tab.manager.ManagerFactory;
 
 /**
  *
@@ -28,7 +26,6 @@ public class FileTab extends CustomTab{
     public final static FileTab EMPTY = new FileTab();
     
     private final FileContent fileContent;
-    private ListView listView;
     private final ProjectTab projectTab;
     private boolean modified = false;
     
@@ -48,7 +45,8 @@ public class FileTab extends CustomTab{
         return fileContent;
     }
     
-    public boolean isNotDummy(){
+    @Override
+    public boolean isNotEmpty(){
         return !this.equals(EMPTY);
     }
 
@@ -64,22 +62,19 @@ public class FileTab extends CustomTab{
         this.fileContent.setFollowTrail(followTrail);
     }
 
-    public ListView getListView() {
-        return listView;
-    }
-
-    public void setListView(ListView listView) {
-        this.listView = listView;
-    }
-
-    public boolean isModified() {
+    public synchronized boolean isModified() {
         return modified;
     }
     
-    public void processModified(boolean modified) {
+    @Override
+    protected void processModified(){
+        tab.setStyle(this.modified ? modifiedStyle : "");
+    }
+    
+    public synchronized void processModified(boolean modified) {
         this.modified = modified;
         
-        tab.setStyle(modified ? modifiedStyle : "");
-        projectTab.getTab().setStyle(ManagerFactory.getProjectTabManager().hasAnyChildTabModified(projectTab) ? modifiedStyle : "");
+        this.processModified();
+        projectTab.processModified();
     }
 }

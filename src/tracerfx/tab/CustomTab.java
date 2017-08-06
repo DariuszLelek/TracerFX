@@ -29,13 +29,12 @@ public abstract class CustomTab {
     protected final String modifiedStyle = "-fx-background-color: #b3f984;";
 
     public CustomTab() {
-        tab = new Tab();
+        this.tab = new Tab();
     }
 
     public CustomTab(String title, Node root) {
         this.title = title;
-        
-        tab = new Tab(title, root);
+        this.tab = new Tab(title, root);
     }
 
     public String getTitle() {
@@ -45,4 +44,7 @@ public abstract class CustomTab {
     public Tab getTab() {
         return tab;
     }
+    
+    public abstract boolean isNotEmpty();   
+    protected abstract void processModified();
 }

@@ -21,7 +21,6 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.AnchorPane;
 
 /**
  * FXML Controller class
@@ -30,8 +29,6 @@ import javafx.scene.layout.AnchorPane;
  */
 public class ProjectTabFXMLController implements Initializable {
 
-    @FXML
-    private AnchorPane root;
     @FXML
     private TabPane fileTabPane;
 
@@ -42,5 +39,4 @@ public class ProjectTabFXMLController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         fileTabPane.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_TAB_SWITCH);
     }
-
 }

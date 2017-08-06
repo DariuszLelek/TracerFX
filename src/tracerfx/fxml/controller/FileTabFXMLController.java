@@ -30,7 +30,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import tracerfx.control.FileContent.FileContentProperty;
 import tracerfx.control.StatusManager;
 import tracerfx.tab.manager.ManagerFactory;
@@ -44,8 +43,6 @@ import tracerfx.util.StringsFXML;
 public class FileTabFXMLController implements Initializable {
 
     @FXML
-    private AnchorPane root;
-    @FXML
     private Label lblLines;
     @FXML
     private Label lblTotalLines;
@@ -57,11 +54,11 @@ public class FileTabFXMLController implements Initializable {
     private CheckBox chckFilter;
     @FXML
     private TextField txtFilter;
-    
-    private final StatusManager statusManager = ManagerFactory.getStatusManager();
     @FXML
     private Label lblLastSearch;
-    
+
+    private final StatusManager statusManager = ManagerFactory.getStatusManager();
+
     /**
      * Initializes the controller class.
      */
@@ -69,8 +66,27 @@ public class FileTabFXMLController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         prepareListeners();
         prepareProperties();
-    }    
+    }
 
+    @FXML
+    private void chckFilter(ActionEvent event) {
+        if(!chckFilter.isSelected()){
+            txtFilter.setText("");
+        }
+        applyFilter(txtFilter.getText());
+    }
+
+
+    @FXML
+    private void chckFollowTrail(ActionEvent event) {
+        ManagerFactory.getFileTabManager().getActiveItem().setFollowTrail(chckFollowTrail.isSelected());
+    }
+
+    @FXML
+    private void checkModified(MouseEvent event) {
+        ManagerFactory.getFileTabManager().getActiveItem().processModified(false);
+    }
+    
     private void prepareProperties() {
         final FileContentProperty fcp = ManagerFactory.getFileTabManager().getFileContentProperty();
 
@@ -91,8 +107,19 @@ public class FileTabFXMLController implements Initializable {
     
     private void prepareListeners(){
         listView.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_LINE_CHANGE);
-        
+
         listView.setOnKeyPressed((KeyEvent ke) -> {
+            if (ke.getCode().equals(KeyCode.T)) {
+                listView.scrollTo(0);
+            }
+            
+            if (ke.getCode().equals(KeyCode.E)) {
+                final int size = listView.getItems().size();
+                if (size > 0) {
+                    listView.scrollTo(size - 1);
+                }
+            }
+            
             if (ke.getCode().equals(KeyCode.ESCAPE))
             {
                 listView.getSelectionModel().clearSelection();
@@ -117,24 +144,4 @@ public class FileTabFXMLController implements Initializable {
         
         ManagerFactory.getFileTabManager().getActiveItem().getFileContent().setFilter(filter);
     }
-
-    @FXML
-    private void chckFilter(ActionEvent event) {
-        if(!chckFilter.isSelected()){
-            txtFilter.setText("");
-        }
-        applyFilter(txtFilter.getText());
-    }
-
-
-    @FXML
-    private void chckFollowTrail(ActionEvent event) {
-        ManagerFactory.getFileTabManager().getActiveItem().setFollowTrail(chckFollowTrail.isSelected());
-    }
-
-    @FXML
-    private void checkModified(MouseEvent event) {
-        ManagerFactory.getFileTabManager().getActiveItem().processModified(false);
-    }
-    
 }

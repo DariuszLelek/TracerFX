@@ -67,7 +67,6 @@ public abstract class Manager<T>{
         } catch (IOException ex) {
             // TODO logger / refactor
             throw new NullPointerException();
-            //return new Pane();
         }
     }
 }

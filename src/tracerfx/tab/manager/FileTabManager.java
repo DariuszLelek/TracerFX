@@ -50,7 +50,6 @@ public class FileTabManager extends Manager<FileTab>{
         return fileManager.getMonitoredFilesIntProperty();
     }
     
-    
     public FileContentProperty getFileContentProperty(){
         return fileManager.getFileContentProperty();
     }
@@ -69,7 +68,7 @@ public class FileTabManager extends Manager<FileTab>{
         FileTab activeFileTab = getActiveItem();
         
         // In situation when project has no files - getActiveItem will return dummy if other project have files
-        if (activeFileTab.isNotDummy()) {
+        if (activeFileTab.isNotEmpty()) {
             ProjectTab activeProjectTab = ManagerFactory.getProjectTabManager().getActiveItem();
             activeProjectTab.getFileTabPane().getTabs().remove(activeFileTab.getTab());
             removeItem(activeFileTab);

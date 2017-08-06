@@ -176,14 +176,6 @@ public class FileContent {
         if (!Objects.equals(this.file, other.file)) {
             return false;
         }
-        if (!Objects.equals(this.addTime, other.addTime)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.addTime, other.addTime);
     }
-
-    
-    
-    
-    
 }

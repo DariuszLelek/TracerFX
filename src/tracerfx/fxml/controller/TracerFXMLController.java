@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package tracerfx.fxml.controller;
 
 import tracerfx.control.DescriptionController;
@@ -23,12 +22,12 @@ import java.io.File;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
@@ -43,6 +42,7 @@ import tracerfx.tab.ProjectTab;
 import tracerfx.tab.manager.FileTabManager;
 import tracerfx.tab.manager.ManagerFactory;
 import tracerfx.tab.manager.ProjectTabManager;
+import tracerfx.task.TaskManager;
 
 /**
  * FXML Controller class
@@ -57,18 +57,12 @@ public class TracerFXMLController implements Initializable {
     private TextArea txtLineDescription;
     @FXML
     private Button btnAddFile;
-    private CheckBox chckTrailFollow;
     @FXML
     private Button btnSearch;
     @FXML
     private TabPane projectTabPane;
     @FXML
     private Label txtStatus;
-    
-    private final ProjectTabManager projectTabManager = ManagerFactory.getProjectTabManager();
-    private final FileTabManager fileTabManager = ManagerFactory.getFileTabManager();    
-    private final StatusManager statusManager = ManagerFactory.getStatusManager();
-    
     @FXML
     private AnchorPane root;
     @FXML
@@ -80,6 +74,9 @@ public class TracerFXMLController implements Initializable {
     @FXML
     private ToggleButton toggleExact;
 
+    private final ProjectTabManager projectTabManager = ManagerFactory.getProjectTabManager();
+    private final FileTabManager fileTabManager = ManagerFactory.getFileTabManager();
+    private final StatusManager statusManager = ManagerFactory.getStatusManager();
 
     /**
      * Initializes the controller class.
@@ -89,10 +86,6 @@ public class TracerFXMLController implements Initializable {
         prepareManagers();
         prepareBindings();
         prepareListeners();
-    }    
-    
-    public void refineSearch(){
-    
     }
 
     @FXML
@@ -100,6 +93,106 @@ public class TracerFXMLController implements Initializable {
         Optional<String> projectTitle = getProjectNameDialog().showAndWait();
         String title = projectTitle.isPresent() ? projectTitle.get() : "";
         tryAddProject(title);
+    }
+
+    @FXML
+    private void btnAddFile(ActionEvent event) {
+        ProjectTab activeProjectTab = projectTabManager.getActiveItem();
+        tryAddFile(activeProjectTab);
+    }
+
+    @FXML
+    private void btnSearch(ActionEvent event) {
+        trySearch();
+    }
+
+    @FXML
+    private void removeProject(ActionEvent event) {
+        if (projectTabManager.tryToRemoveActiveProject()) {
+            statusManager.setStatus(StringsFXML.STATUS_REMOVE_PROJECT.toString());
+        } else {
+            statusManager.setStatus(StringsFXML.STATUS_FAILED_REMOVE_PROJECT.toString());
+        }
+    }
+
+    @FXML
+    private void removeFile(ActionEvent event) {
+        if (fileTabManager.tryToRemoveFileFromActiveProject()) {
+            statusManager.setStatus(StringsFXML.STATUS_REMOVE_FILE.toString());
+        } else {
+            statusManager.setStatus(StringsFXML.STATUS_FAILED_REMOVE_FILE.toString());
+        }
+    }
+
+    @FXML
+    private void closeWindow(ActionEvent event) {
+        TaskManager.stopTaskManager();
+        Platform.exit();
+    }
+
+    private void trySearch() {
+        final String searchString = txtSearch.getText();
+
+        if (fileTabManager.getActiveItem().isNotEmpty()) {
+            fileTabManager.processSearch(searchString, toggleExact.isSelected());
+            fileTabManager.getTxtLineDescription().setText("");
+
+            statusManager.setStatus(searchString.isEmpty()
+                    ? StringsFXML.STATUS_SEARCH_RESTORE.toString()
+                    : StringsFXML.STATUS_SEARCH_FOR.toString() + searchString);
+        } else {
+            statusManager.setStatus(StringsFXML.STATUS_SEARCH_NO_FILE.toString());
+        }
+    }
+
+    private void prepareBindings() {
+        final ReadOnlyBooleanProperty anyFileProperty = fileTabManager.getCollectionProperty().emptyProperty();
+        final ReadOnlyBooleanProperty anyProjectProperty = projectTabManager.getCollectionProperty().emptyProperty();
+
+        btnAddFile.disableProperty().bind(anyProjectProperty);
+        btnRemoveFile.disableProperty().bind(anyFileProperty);
+        btnRemoveProject.disableProperty().bind(anyProjectProperty);
+        txtSearch.disableProperty().bind(anyFileProperty);
+        btnSearch.disableProperty().bind(anyFileProperty);
+        toggleExact.disableProperty().bind(anyFileProperty);
+
+        lblFileMonitor.textProperty().bind(fileTabManager.getMonitoredFilesIntProperty().asString());
+    }
+
+    private void prepareListeners() {
+        txtSearch.setOnKeyPressed((KeyEvent ke) -> {
+            if (ke.getCode().equals(KeyCode.ENTER)) {
+                trySearch();
+            }
+        });
+
+        projectTabPane.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_TAB_SWITCH);
+
+        root.setOnKeyPressed(e -> {
+            if (e.isControlDown() && e.getCode() == KeyCode.F) {
+                txtSearch.requestFocus();
+            }
+        });
+
+    }
+
+    private void prepareManagers() {
+        projectTabManager.setProjectTabPane(projectTabPane);
+        fileTabManager.setTxtLineDescription(txtLineDescription);
+        statusManager.setStatusLabel(txtStatus);
+    }
+
+    private TextInputDialog getProjectNameDialog() {
+        final TextInputDialog textInputDialog = new TextInputDialog(StringsFXML.NEW_PROJECT_DIALOG_PROJECT_NAME.toString());
+        textInputDialog.setTitle(StringsFXML.NEW_PROJECT_DIALOG_TITLE.toString());
+        textInputDialog.setHeaderText(StringsFXML.NEW_PROJECT_DIALOG_HEADER.toString());
+        return textInputDialog;
+    }
+
+    private FileChooser getFileChooserDialog() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(StringsFXML.NEW_FILE_DIALOG_TITLE.toString());
+        return fileChooser;
     }
 
     private void tryAddProject(String title) {
@@ -114,112 +207,14 @@ public class TracerFXMLController implements Initializable {
             statusManager.setStatus(StringsFXML.STATUS_FAILED_ADD_PROJECT.toString());
         }
     }
-    
-    @FXML
-    private void btnAddFile(ActionEvent event) {
-        ProjectTab activeProjectTab = projectTabManager.getActiveItem();
-        tryAddFile(activeProjectTab);
-    }
-    
+
     private void tryAddFile(ProjectTab activeProjectTab) {
-        if (activeProjectTab.isNotDummy()) {
+        if (activeProjectTab.isNotEmpty()) {
             File file = getFileChooserDialog().showOpenDialog(root.getScene().getWindow());
             if (file != null) {
                 fileTabManager.addNewFileToProject(file, activeProjectTab);
                 statusManager.setStatus(StringsFXML.STATUS_FILE_ADDED.toString());
             }
-        }
-    }
-
-    @FXML
-    private void btnSearch(ActionEvent event) {
-        trySearch();
-    }
-
-    private void trySearch() {
-        final String searchString = txtSearch.getText();
-
-        if (fileTabManager.getActiveItem().isNotDummy()) {
-            fileTabManager.processSearch(searchString, toggleExact.isSelected());
-            fileTabManager.getTxtLineDescription().setText("");
-
-            statusManager.setStatus(searchString.isEmpty()
-                    ? StringsFXML.STATUS_SEARCH_RESTORE.toString()
-                    : StringsFXML.STATUS_SEARCH_FOR.toString() + searchString);
-        } else {
-            statusManager.setStatus(StringsFXML.STATUS_SEARCH_NO_FILE.toString());
-        }
-    }
-
-    private void chckTrailFollow(ActionEvent event) {
-        fileTabManager.getActiveItem().setFollowTrail(chckTrailFollow.isSelected());
-    }
-
-    private void prepareBindings() {
-        final ReadOnlyBooleanProperty anyFileProperty = fileTabManager.getCollectionProperty().emptyProperty();
-        final ReadOnlyBooleanProperty anyProjectProperty = projectTabManager.getCollectionProperty().emptyProperty();
-        
-        btnAddFile.disableProperty().bind(anyProjectProperty);
-        btnRemoveFile.disableProperty().bind(anyFileProperty);
-        btnRemoveProject.disableProperty().bind(anyProjectProperty);
-        txtSearch.disableProperty().bind(anyFileProperty);
-        btnSearch.disableProperty().bind(anyFileProperty);
-        toggleExact.disableProperty().bind(anyFileProperty);
-        
-        lblFileMonitor.textProperty().bind(fileTabManager.getMonitoredFilesIntProperty().asString());
-    }
-
-    private void prepareListeners() {
-        txtSearch.setOnKeyPressed((KeyEvent ke) -> {
-            if (ke.getCode().equals(KeyCode.ENTER)) {
-                trySearch();
-            }
-        });
-
-        projectTabPane.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_TAB_SWITCH);
-        
-        root.setOnKeyPressed(e -> {
-            if(e.isControlDown() && e.getCode() == KeyCode.F){
-                txtSearch.requestFocus();
-            }
-        });
-        
-    }
-    
-    private void prepareManagers(){
-        projectTabManager.setProjectTabPane(projectTabPane);
-        fileTabManager.setTxtLineDescription(txtLineDescription);
-        statusManager.setStatusLabel(txtStatus);
-    }
-    
-    private TextInputDialog getProjectNameDialog(){
-        final TextInputDialog textInputDialog = new TextInputDialog(StringsFXML.NEW_PROJECT_DIALOG_PROJECT_NAME.toString());
-        textInputDialog.setTitle(StringsFXML.NEW_PROJECT_DIALOG_TITLE.toString());
-        textInputDialog.setHeaderText(StringsFXML.NEW_PROJECT_DIALOG_HEADER.toString());
-        return textInputDialog;
-    }
-    
-    private FileChooser getFileChooserDialog(){
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(StringsFXML.NEW_FILE_DIALOG_TITLE.toString());
-        return fileChooser;
-    }
-
-    @FXML
-    private void removeProject(ActionEvent event) {
-        if (projectTabManager.tryToRemoveActiveProject()) {
-            statusManager.setStatus(StringsFXML.STATUS_REMOVE_PROJECT.toString());
-        } else {
-            statusManager.setStatus(StringsFXML.STATUS_FAILED_REMOVE_PROJECT.toString());
-        }
-    }
-
-    @FXML
-    private void removeFile(ActionEvent event) {
-        if(fileTabManager.tryToRemoveFileFromActiveProject()){
-            statusManager.setStatus(StringsFXML.STATUS_REMOVE_FILE.toString());
-        }else{
-            statusManager.setStatus(StringsFXML.STATUS_FAILED_REMOVE_FILE.toString());
         }
     }
 }

@@ -31,10 +31,10 @@ import tracerfx.task.TaskManager;
  * @author Dariusz Lelek
  */
 public class FileContentManager {
+
     private FileContentProperty fileContentProperty;
     private final List<FileContent> filesContent = new ArrayList<>();
     private final IntegerProperty monitoredFilesIntProperty = new SimpleIntegerProperty(0);
-    
     private final int fileCheckDelaySeconds = 5;
 
     public FileContentManager() {
@@ -44,30 +44,30 @@ public class FileContentManager {
     public IntegerProperty getMonitoredFilesIntProperty() {
         return monitoredFilesIntProperty;
     }
-    
+
     public FileContentProperty getFileContentProperty() {
         return fileContentProperty;
     }
 
-    public FileContent getFileContent(final File activeFile){
+    public FileContent getFileContent(final File activeFile) {
         FileContent fileContent = new FileContent(activeFile);
         fileContentProperty = new FileContentProperty(fileContent);
         addFileContent(fileContent);
         return fileContent;
     }
-    
-    private synchronized void addFileContent(FileContent fileContent){
-        filesContent.add(fileContent);
-    }
-    
-    public synchronized List<FileContent> getFilesContent(){
+
+    public synchronized List<FileContent> getFilesContent() {
         return filesContent;
     }
-    
-    private void updateMonitoredFilesIntProperty(){
+
+    private synchronized void addFileContent(FileContent fileContent) {
+        filesContent.add(fileContent);
+    }
+
+    private void updateMonitoredFilesIntProperty() {
         monitoredFilesIntProperty.set(filesContent.stream().filter(f -> f.isFollowTrail()).collect(Collectors.toList()).size());
     }
-    
+
     private void runUpdateContentThread() {
         Runnable updateRunnable = () -> {
             Platform.runLater(() -> {
