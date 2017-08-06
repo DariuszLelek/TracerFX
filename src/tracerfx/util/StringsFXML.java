@@ -33,8 +33,10 @@ public enum StringsFXML {
     STATUS_FAILED_REMOVE_FILE("Failed to remove a file from the project."),
     STATUS_FAILED_REMOVE_PROJECT("Failed to remove a project."),
     STATUS_REMOVE_FILE("File removed from the project."),
-    STATUS_REMOVE_PROJECT("Project removed.");
-
+    STATUS_REMOVE_PROJECT("Project removed."),
+    STATUS_SEARCH_EMPTY("Enter search string."),
+    STATUS_SEARCH_NO_FILE("No file to search.");
+    
     private final String value;
 
     private StringsFXML(String value) {

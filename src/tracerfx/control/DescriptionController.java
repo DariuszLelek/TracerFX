@@ -29,7 +29,11 @@ public class DescriptionController {
         ManagerFactory.getFileTabManager().getTxtLineDescription().setText("");
     };
 
-    public static final ChangeListener CHANGE_LISTENER_LINE_CHANGE = (ChangeListener) (ObservableValue observable, Object oldValue, Object newValue) -> {
-        ManagerFactory.getFileTabManager().getTxtLineDescription().setText(newValue.toString());
+    public static final ChangeListener CHANGE_LISTENER_LINE_CHANGE = (ChangeListener) new ChangeListener() {
+        @Override
+        public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+            final String text = newValue != null ? newValue.toString() : "";
+            ManagerFactory.getFileTabManager().getTxtLineDescription().setText(text);
+        }
     };
 }

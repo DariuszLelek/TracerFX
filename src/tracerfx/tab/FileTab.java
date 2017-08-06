@@ -15,9 +15,9 @@
  */
 package tracerfx.tab;
 
-import java.io.File;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
+import tracerfx.control.FileContent.FileContent;
 
 /**
  *
@@ -27,18 +27,22 @@ public class FileTab extends CustomTab{
     public final static FileTab DUMMY = new FileTab();
     
     private boolean followTrail = false;
-    private final File file;
+    private final FileContent fileContent;
     private int totalFileLines;
     private ListView listView;
     
     private FileTab(){
-        file = null;
+        fileContent = new FileContent();
     }
 
-    public FileTab(File file, Node content) {
-        super(file.getName(), content);
+    public FileTab(FileContent fileContent, Node content) {
+        super(fileContent.getFile().getName(), content);
         
-        this.file = file;
+        this.fileContent = fileContent;
+    }
+
+    public FileContent getFileContent() {
+        return fileContent;
     }
     
     public boolean isNotDummy(){

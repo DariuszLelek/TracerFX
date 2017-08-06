@@ -83,8 +83,6 @@ public class TracerFXMLController implements Initializable {
         prepareBindings();
         
         statusController = new StatusController(txtStatus);
-        
-        projectTabPane.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_TAB_SWITCH);
     }    
     
     @FXML
@@ -116,22 +114,31 @@ public class TracerFXMLController implements Initializable {
     private void btnAddFile(ActionEvent event) {
         ProjectTab activeProjectTab = projectTabManager.getActiveItem();
         tryAddFile(activeProjectTab);
-
     }
     
     private void tryAddFile(ProjectTab activeProjectTab) {
         if (activeProjectTab.isNotDummy()) {
             File file = getFileChooserDialog().showOpenDialog(root.getScene().getWindow());
-            fileTabManager.addNewFileToProject(file, activeProjectTab);
-            statusController.setStatus(StringsFXML.STATUS_FILE_ADDED.toString());
+            if (file != null) {
+                fileTabManager.addNewFileToProject(file, activeProjectTab);
+                statusController.setStatus(StringsFXML.STATUS_FILE_ADDED.toString());
+            }
         }
     }
 
     @FXML
     private void btnSearch(ActionEvent event) {
-        //TODO add validation
-        
-        ManagerFactory.getFileTabManager().getTxtLineDescription().setText("");
+        final String searchString = txtSearch.getText();
+        if (!searchString.isEmpty()) {
+            if(fileTabManager.getActiveItem().isNotDummy()){
+                fileTabManager.search(txtSearch.getText());
+                fileTabManager.getTxtLineDescription().setText("");
+            }else{
+                statusController.setStatus(StringsFXML.STATUS_SEARCH_NO_FILE.toString());
+            }
+        }else{
+            statusController.setStatus(StringsFXML.STATUS_SEARCH_EMPTY.toString());
+        }
     }
 
     private void chckTrailFollow(ActionEvent event) {
@@ -142,21 +149,13 @@ public class TracerFXMLController implements Initializable {
         final ReadOnlyBooleanProperty anyFileProperty = fileTabManager.getCollectionProperty().emptyProperty();
         final ReadOnlyBooleanProperty anyProjectProperty = projectTabManager.getCollectionProperty().emptyProperty();
         
-        // file
         btnAddFile.disableProperty().bind(anyProjectProperty);
         btnRemoveFile.disableProperty().bind(anyFileProperty);
-        
-        // project
         btnRemoveProject.disableProperty().bind(anyProjectProperty);
-
-        // line description
-        //txtLineDescription.textProperty().bind(fileTabManager.getSelectedLineProperty());
-        
-        // file tab controls
-        //chckTrailFollow.disableProperty().bind(anyFileProperty);
-        //chckTrailFollow.selectedProperty().bind(followTrailProperty);
         txtSearch.disableProperty().bind(anyFileProperty);
-        btnSearch.disableProperty().bind(anyFileProperty);  
+        btnSearch.disableProperty().bind(anyFileProperty);
+        
+        projectTabPane.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_TAB_SWITCH);
     }
     
     private void prepareManagers(){

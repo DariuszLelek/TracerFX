@@ -16,13 +16,13 @@
 package tracerfx.tab.manager;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.stream.Collectors;
+import javafx.beans.property.ListProperty;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import tracerfx.tab.FileTab;
 import tracerfx.tab.ProjectTab;
-import tracerfx.util.FileManager;
+import tracerfx.control.FileContent.FileContentManager;
 
 /**
  *
@@ -31,12 +31,12 @@ import tracerfx.util.FileManager;
 public class FileTabManager extends Manager<FileTab>{
     private final String FXML = "tracerfx/fxml/FileTabFXML.fxml";
     private TextArea txtLineDescription;
-    private final FileManager fileManager = new FileManager();
+    private final FileContentManager fileManager = new FileContentManager();
    
      
     public void addNewFileToProject(File file, ProjectTab projectTab){
-        fileManager.setActiveFile(file);
-        FileTab fileTab = new FileTab(file, getParent(FXML));
+        FileTab fileTab = new FileTab(fileManager.getFileContent(file), getParent(FXML));
+        
         projectTab.getFileTabPane().getTabs().add(fileTab.getTab());
         addItem(fileTab);
     }
@@ -45,8 +45,14 @@ public class FileTabManager extends Manager<FileTab>{
         return txtLineDescription;
     }
     
-    public Collection<String> getActiveFileContent() {
-        return fileManager.getActiveFileContent();
+    public ListProperty<String> getNewFileListProperty(){
+        return fileManager.getNewFileListProperty();
+    }
+    
+    public void search(String searchString){
+        getActiveItem().getFileContent().updateContent();//search(searchString);
+        
+        
     }
     
     public void tryToRemoveFilesFromProject(ProjectTab projectTab){
