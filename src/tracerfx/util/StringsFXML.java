@@ -34,8 +34,9 @@ public enum StringsFXML {
     STATUS_FAILED_REMOVE_PROJECT("Failed to remove a project."),
     STATUS_REMOVE_FILE("File removed from the project."),
     STATUS_REMOVE_PROJECT("Project removed."),
-    STATUS_SEARCH_EMPTY("Enter search string."),
     STATUS_SEARCH_NO_FILE("No file to search."),
+    STATUS_SEARCH_FOR("Search for: "),
+    STATUS_SEARCH_RESTORE("No search string entered, restoring original view."),
     
     STATUS_FILTER_SET("Applying filter: "),
     STATUS_FILTER_EMPTY("Filter is empty.");

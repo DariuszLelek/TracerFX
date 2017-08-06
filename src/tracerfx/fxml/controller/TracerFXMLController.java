@@ -34,6 +34,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import tracerfx.tab.ProjectTab;
@@ -72,6 +74,10 @@ public class TracerFXMLController implements Initializable {
     private Button btnRemoveProject;
     @FXML
     private Button btnRemoveFile;
+    @FXML
+    private CheckBox chckExact;
+    @FXML
+    private Label lblFileMonitor;
 
 
     /**
@@ -81,6 +87,7 @@ public class TracerFXMLController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         prepareManagers();
         prepareBindings();
+        prepareListeners();
     }    
     
     @FXML
@@ -126,16 +133,21 @@ public class TracerFXMLController implements Initializable {
 
     @FXML
     private void btnSearch(ActionEvent event) {
+        trySearch();
+    }
+
+    private void trySearch() {
         final String searchString = txtSearch.getText();
-        if (!searchString.isEmpty()) {
-            if(fileTabManager.getActiveItem().isNotDummy()){
-                fileTabManager.processSearch(txtSearch.getText());
-                fileTabManager.getTxtLineDescription().setText("");
-            }else{
-                statusManager.setStatus(StringsFXML.STATUS_SEARCH_NO_FILE.toString());
-            }
-        }else{
-            statusManager.setStatus(StringsFXML.STATUS_SEARCH_EMPTY.toString());
+
+        if (fileTabManager.getActiveItem().isNotDummy()) {
+            fileTabManager.processSearch(searchString, chckExact.isSelected());
+            fileTabManager.getTxtLineDescription().setText("");
+
+            statusManager.setStatus(searchString.isEmpty()
+                    ? StringsFXML.STATUS_SEARCH_RESTORE.toString()
+                    : StringsFXML.STATUS_SEARCH_FOR.toString() + searchString);
+        } else {
+            statusManager.setStatus(StringsFXML.STATUS_SEARCH_NO_FILE.toString());
         }
     }
 
@@ -152,7 +164,16 @@ public class TracerFXMLController implements Initializable {
         btnRemoveProject.disableProperty().bind(anyProjectProperty);
         txtSearch.disableProperty().bind(anyFileProperty);
         btnSearch.disableProperty().bind(anyFileProperty);
-        
+        chckExact.disableProperty().bind(anyFileProperty);
+    }
+
+    private void prepareListeners() {
+        txtSearch.setOnKeyPressed((KeyEvent ke) -> {
+            if (ke.getCode().equals(KeyCode.ENTER)) {
+                trySearch();
+            }
+        });
+
         projectTabPane.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_TAB_SWITCH);
     }
     

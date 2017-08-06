@@ -25,6 +25,7 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import tracerfx.util.FileUtility;
 
@@ -77,13 +78,18 @@ public class FileContent {
     public void setFilter(String filter){
         if(filterChanged(filter)){
             this.filter = filter;
+            setLastSearch("");
             updateContent(filterOriginalContent(), contentObservable);
         }
     }
 
-    public void processSearch(String searchString) {
+    public void processSearch(String searchString, boolean exactMatch) {
         setLastSearch(searchString);
-        updateContent(getSearchResult(searchString, filterOriginalContent()), contentObservable);
+        if(searchString.isEmpty()){
+            updateContent(filterOriginalContent(), contentObservable);
+        }else{
+            updateContent(getSearchResult(searchString, filterOriginalContent(), exactMatch), contentObservable);
+        }
     }
     
     public void processFileModified(){
@@ -98,14 +104,15 @@ public class FileContent {
         return !this.filter.equals(newFilter);
     }
     
-    private List<String> getSearchResult(String searchString, List<String> content){
+    private List<String> getSearchResult(String searchString, List<String> content, boolean exactMatch){
         return content.stream()
-                .filter(x -> x.contains(searchString)).collect(Collectors.toList());
+                .filter(x -> exactMatch ? x.contains(searchString) : StringUtils.containsIgnoreCase(x, searchString))
+                .collect(Collectors.toList());
     }
         
     private List<String> filterOriginalContent(){
         if(!filter.isEmpty()){
-            return getSearchResult(filter, originalContent);
+            return getSearchResult(filter, originalContent, true);
         }
         return originalContent;
     }

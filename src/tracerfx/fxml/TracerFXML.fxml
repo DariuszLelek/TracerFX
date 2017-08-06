@@ -38,6 +38,7 @@
                   <Separator orientation="VERTICAL" />
                   <TextField fx:id="txtSearch" onKeyTyped="#refineSearch" />
                 <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#btnSearch" text="Search" />
+                  <CheckBox fx:id="chckExact" mnemonicParsing="false" text="Exact" />
                   <Separator orientation="VERTICAL" />
                   <Pane HBox.hgrow="ALWAYS" />
                   <Separator orientation="VERTICAL" />
@@ -64,6 +65,10 @@
             <ToolBar nodeOrientation="LEFT_TO_RIGHT" VBox.vgrow="NEVER">
                <items>
                   <Label fx:id="txtStatus" HBox.hgrow="ALWAYS" />
+                  <Pane HBox.hgrow="ALWAYS" />
+                  <Separator orientation="VERTICAL" />
+                  <Label text="File monitor:" />
+                  <Label fx:id="lblFileMonitor" text="0" />
                </items>
             </ToolBar>
          </children>
