@@ -9,3 +9,5 @@ Features:
 - Apply filter for displayed logs;
 - Search for string with applied filter;
 - File/Tab highlighted when file modified.
+
+Execultable jar available in /dist
