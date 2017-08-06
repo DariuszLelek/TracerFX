@@ -25,7 +25,7 @@ import javafx.scene.layout.Pane;
  * @author Dariusz Lelek
  */
 public class ProjectTab extends CustomTab {
-    public static final ProjectTab DUMMY = new ProjectTab("", new Pane());
+    public static final ProjectTab EMPTY = new ProjectTab("", new Pane());
     private final TabPane fileTabPane;
     
     public ProjectTab(String title, Parent root) {
@@ -34,7 +34,7 @@ public class ProjectTab extends CustomTab {
     }
     
     public boolean isNotDummy(){
-        return !this.equals(DUMMY);
+        return !this.equals(EMPTY);
     }
 
     public TabPane getFileTabPane() {

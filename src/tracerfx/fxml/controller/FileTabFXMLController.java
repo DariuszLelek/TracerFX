@@ -29,6 +29,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import tracerfx.control.FileContent.FileContentProperty;
 import tracerfx.control.StatusManager;
@@ -91,6 +92,13 @@ public class FileTabFXMLController implements Initializable {
     private void prepareListeners(){
         listView.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_LINE_CHANGE);
         
+        listView.setOnKeyPressed((KeyEvent ke) -> {
+            if (ke.getCode().equals(KeyCode.ESCAPE))
+            {
+                listView.getSelectionModel().clearSelection();
+            }
+        });
+        
         txtFilter.setOnKeyPressed((KeyEvent ke) -> {
             if (ke.getCode().equals(KeyCode.ENTER))
             {
@@ -122,6 +130,11 @@ public class FileTabFXMLController implements Initializable {
     @FXML
     private void chckFollowTrail(ActionEvent event) {
         ManagerFactory.getFileTabManager().getActiveItem().setFollowTrail(chckFollowTrail.isSelected());
+    }
+
+    @FXML
+    private void checkModified(MouseEvent event) {
+        ManagerFactory.getFileTabManager().getActiveItem().processModified(false);
     }
     
 }

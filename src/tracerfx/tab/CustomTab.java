@@ -24,7 +24,9 @@ import javafx.scene.control.Tab;
  */
 public abstract class CustomTab {
     protected String title;
-    private final Tab tab;
+    protected final Tab tab;
+    
+    protected final String modifiedStyle = "-fx-background-color: #b3f984;";
 
     public CustomTab() {
         tab = new Tab();
@@ -43,7 +45,4 @@ public abstract class CustomTab {
     public Tab getTab() {
         return tab;
     }
-
-    
-    
 }

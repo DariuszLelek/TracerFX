@@ -17,6 +17,7 @@ package tracerfx.tab.manager;
 
 import java.io.File;
 import java.util.stream.Collectors;
+import javafx.beans.property.IntegerProperty;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import tracerfx.tab.FileTab;
@@ -35,7 +36,7 @@ public class FileTabManager extends Manager<FileTab>{
    
      
     public void addNewFileToProject(File file, ProjectTab projectTab){
-        FileTab fileTab = new FileTab(fileManager.getFileContent(file), getParent(FXML));
+        FileTab fileTab = new FileTab(fileManager.getFileContent(file), getParent(FXML), projectTab);
         
         projectTab.getFileTabPane().getTabs().add(fileTab.getTab());
         addItem(fileTab);
@@ -44,6 +45,11 @@ public class FileTabManager extends Manager<FileTab>{
     public TextArea getTxtLineDescription() {
         return txtLineDescription;
     }
+    
+    public IntegerProperty getMonitoredFilesIntProperty() {
+        return fileManager.getMonitoredFilesIntProperty();
+    }
+    
     
     public FileContentProperty getFileContentProperty(){
         return fileManager.getFileContentProperty();
@@ -71,6 +77,12 @@ public class FileTabManager extends Manager<FileTab>{
         }
         return false;
     }
+    
+    public void markTabAsModified(File file){
+        getAllItems().stream().filter(x -> x.getFileContent().getFile().equals(file)).forEach(x -> {
+            x.processModified(true);
+        });
+    }
 
     public void setTxtLineDescription(TextArea txtLineDescription) {
         this.txtLineDescription = txtLineDescription;
@@ -79,7 +91,7 @@ public class FileTabManager extends Manager<FileTab>{
     @Override
     public FileTab getActiveItem() {
         final Tab selectedTab = ManagerFactory.getProjectTabManager().getActiveItem().getActiveFileTab();
-        return getAllItems().stream().filter(x -> x.getTab().equals(selectedTab)).findFirst().orElse(FileTab.DUMMY);  
+        return getAllItems().stream().filter(x -> x.getTab().equals(selectedTab)).findFirst().orElse(FileTab.EMPTY);  
     }
 
 }

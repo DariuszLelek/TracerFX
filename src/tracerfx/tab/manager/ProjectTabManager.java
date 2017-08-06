@@ -15,8 +15,11 @@
  */
 package tracerfx.tab.manager;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import tracerfx.tab.FileTab;
 import tracerfx.tab.ProjectTab;
 
 /**
@@ -53,10 +56,20 @@ public class ProjectTabManager extends Manager<ProjectTab>{
         return false;
     }
 
+    public boolean hasAnyChildTabModified(ProjectTab projectTab) {
+        return !getAllFileTabs(projectTab).stream().filter(x -> x.isModified()).collect(Collectors.toList()).isEmpty();
+    }
+    
+    public List<FileTab> getAllFileTabs(ProjectTab projectTab){
+        return ManagerFactory.getFileTabManager().getAllItems()
+                .stream().filter(x -> x.getProjectTab().equals(projectTab))
+                .collect(Collectors.toList());
+    }
+    
     @Override
     public ProjectTab getActiveItem() {
         final Tab selectedTab = projectTabPane.getSelectionModel().getSelectedItem();
-        return getAllItems().stream().filter(x -> x.getTab().equals(selectedTab)).findFirst().orElse(ProjectTab.DUMMY);   
+        return getAllItems().stream().filter(x -> x.getTab().equals(selectedTab)).findFirst().orElse(ProjectTab.EMPTY);   
     }
     
     

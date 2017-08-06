@@ -165,6 +165,8 @@ public class TracerFXMLController implements Initializable {
         txtSearch.disableProperty().bind(anyFileProperty);
         btnSearch.disableProperty().bind(anyFileProperty);
         toggleExact.disableProperty().bind(anyFileProperty);
+        
+        lblFileMonitor.textProperty().bind(fileTabManager.getMonitoredFilesIntProperty().asString());
     }
 
     private void prepareListeners() {

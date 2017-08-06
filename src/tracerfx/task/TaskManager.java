@@ -35,6 +35,6 @@ public class TaskManager {
     }
     
     public static void stopTaskManager(){
-        RUNNING_EXECUTORS.stream().forEach(x -> x.shutdown());
+        RUNNING_EXECUTORS.stream().forEach(x -> x.shutdownNow());
     }
 }

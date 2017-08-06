@@ -18,25 +18,29 @@ package tracerfx.tab;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import tracerfx.control.FileContent.FileContent;
+import tracerfx.tab.manager.ManagerFactory;
 
 /**
  *
  * @author Dariusz Lelek
  */
 public class FileTab extends CustomTab{
-    public final static FileTab DUMMY = new FileTab();
+    public final static FileTab EMPTY = new FileTab();
     
-    private boolean followTrail = false;
     private final FileContent fileContent;
     private ListView listView;
+    private final ProjectTab projectTab;
+    private boolean modified = false;
     
     private FileTab(){
         fileContent = new FileContent();
+        projectTab = ProjectTab.EMPTY;
     }
 
-    public FileTab(FileContent fileContent, Node content) {
+    public FileTab(FileContent fileContent, Node content, ProjectTab projectTab) {
         super(fileContent.getFile().getName(), content);
         
+        this.projectTab = projectTab;
         this.fileContent = fileContent;
     }
 
@@ -45,15 +49,19 @@ public class FileTab extends CustomTab{
     }
     
     public boolean isNotDummy(){
-        return !this.equals(DUMMY);
+        return !this.equals(EMPTY);
+    }
+
+    public ProjectTab getProjectTab() {
+        return projectTab;
     }
 
     public boolean isFollowTrail() {
-        return followTrail;
+        return fileContent.isFollowTrail();
     }
 
     public void setFollowTrail(boolean followTrail) {
-        this.followTrail = followTrail;
+        this.fileContent.setFollowTrail(followTrail);
     }
 
     public ListView getListView() {
@@ -62,5 +70,16 @@ public class FileTab extends CustomTab{
 
     public void setListView(ListView listView) {
         this.listView = listView;
+    }
+
+    public boolean isModified() {
+        return modified;
+    }
+    
+    public void processModified(boolean modified) {
+        this.modified = modified;
+        
+        tab.setStyle(modified ? modifiedStyle : "");
+        projectTab.getTab().setStyle(ManagerFactory.getProjectTabManager().hasAnyChildTabModified(projectTab) ? modifiedStyle : "");
     }
 }

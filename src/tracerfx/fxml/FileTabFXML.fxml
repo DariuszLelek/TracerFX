@@ -15,7 +15,7 @@
    <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ListView fx:id="listView" VBox.vgrow="ALWAYS" />
+            <ListView fx:id="listView" onMouseClicked="#checkModified" VBox.vgrow="ALWAYS" />
             <ToolBar>
                <items>
                   <Label text="Lines:" />
@@ -49,7 +49,7 @@
                   <CheckBox fx:id="chckFilter" mnemonicParsing="false" onAction="#chckFilter" text="Filter" />
                   <TextField fx:id="txtFilter" />
                   <Separator orientation="VERTICAL" />
-                  <CheckBox fx:id="chckFollowTrail" mnemonicParsing="false" onAction="#chckFollowTrail" text="Follow Trail" />
+                  <CheckBox fx:id="chckFollowTrail" mnemonicParsing="false" onAction="#chckFollowTrail" text="Monitor" />
                </items>
             </ToolBar>
          </children>

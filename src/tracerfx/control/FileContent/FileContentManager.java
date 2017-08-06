@@ -18,16 +18,33 @@ package tracerfx.control.FileContent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import tracerfx.tab.manager.ManagerFactory;
+import tracerfx.task.TaskManager;
 
 /**
  *
  * @author Dariusz Lelek
  */
 public class FileContentManager {
-    private FileContent newFileContent;
     private FileContentProperty fileContentProperty;
     private final List<FileContent> filesContent = new ArrayList<>();
+    private final IntegerProperty monitoredFilesIntProperty = new SimpleIntegerProperty(0);
+    
+    private final int fileCheckDelaySeconds = 5;
 
+    public FileContentManager() {
+        runUpdateContentThread();
+    }
+
+    public IntegerProperty getMonitoredFilesIntProperty() {
+        return monitoredFilesIntProperty;
+    }
+    
     public FileContentProperty getFileContentProperty() {
         return fileContentProperty;
     }
@@ -35,8 +52,36 @@ public class FileContentManager {
     public FileContent getFileContent(final File activeFile){
         FileContent fileContent = new FileContent(activeFile);
         fileContentProperty = new FileContentProperty(fileContent);
-        newFileContent = fileContent;
-        filesContent.add(fileContent);
+        addFileContent(fileContent);
         return fileContent;
+    }
+    
+    private synchronized void addFileContent(FileContent fileContent){
+        filesContent.add(fileContent);
+    }
+    
+    public synchronized List<FileContent> getFilesContent(){
+        return filesContent;
+    }
+    
+    private void updateMonitoredFilesIntProperty(){
+        monitoredFilesIntProperty.set(filesContent.stream().filter(f -> f.isFollowTrail()).collect(Collectors.toList()).size());
+    }
+    
+    private void runUpdateContentThread() {
+        Runnable updateRunnable = () -> {
+            Platform.runLater(() -> {
+                updateMonitoredFilesIntProperty();
+                getFilesContent().stream().forEach(f -> {
+                    if (f.isFollowTrail() && f.getLastModified() != f.getFile().lastModified()) {
+                        f.processFileModified();
+                        ManagerFactory.getFileTabManager().markTabAsModified(f.getFile());
+                    }
+                });
+            }
+            );
+        };
+
+        TaskManager.getScheduledExecutor().scheduleAtFixedRate(updateRunnable, fileCheckDelaySeconds, fileCheckDelaySeconds, TimeUnit.SECONDS);
     }
 }

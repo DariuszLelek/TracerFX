@@ -41,6 +41,6 @@ public class ProjectTabFXMLController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         fileTabPane.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_TAB_SWITCH);
-    }    
+    }
 
 }

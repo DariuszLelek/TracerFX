@@ -45,7 +45,8 @@ public class FileContent {
     private final SimpleStringProperty lastSearchProperty = new SimpleStringProperty("");
     private final DateTime addTime;
     
-    private DateTime lastModified;
+    private long lastModified;
+    private boolean followTrail;
     
     public FileContent(){
         this.file = null;
@@ -59,10 +60,26 @@ public class FileContent {
         readFileAndUpdate();
     }
 
+    public synchronized boolean isFollowTrail() {
+        return followTrail;
+    }
+
+    public synchronized void setFollowTrail(boolean followTrail) {
+        this.followTrail = followTrail;
+    }
+
     public File getFile() {
         return file;
     }
 
+    public synchronized long getLastModified() {
+        return lastModified;
+    }
+    
+    private synchronized void setLastModified(long thislastModified) {
+        this.lastModified = thislastModified;
+    }
+    
     public ListProperty<String> getOriginalContentListProperty() {
         return originalContentListProperty;
     }
@@ -92,7 +109,7 @@ public class FileContent {
         }
     }
     
-    public void processFileModified(){
+    public synchronized void processFileModified(){
         readFileAndUpdate();
     }
     
@@ -118,7 +135,8 @@ public class FileContent {
     }
 
     private void readFileAndUpdate() {
-        List<String> newContent = FileUtility.getFileLines(file);
+        final List<String> newContent = FileUtility.getFileLines(file);
+        setLastModified(file.lastModified());
         updateContents(newContent);
     }
     
