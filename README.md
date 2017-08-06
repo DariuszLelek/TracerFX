@@ -12,4 +12,4 @@ Features:
 
 Execultable jar available in /distJar
 
-![Alt text](/screen.png?raw=true "TrackerFX screenshot")
+![Alt text](/screen.png?raw=true "TracerFX screenshot")
