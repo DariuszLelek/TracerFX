@@ -17,13 +17,12 @@ package tracerfx.tab.manager;
 
 import java.io.File;
 import java.util.stream.Collectors;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import tracerfx.tab.FileTab;
 import tracerfx.tab.ProjectTab;
 import tracerfx.control.FileContent.FileContentManager;
+import tracerfx.control.FileContent.FileContentProperty;
 
 /**
  *
@@ -46,16 +45,8 @@ public class FileTabManager extends Manager<FileTab>{
         return txtLineDescription;
     }
     
-    public ListProperty<String> getContentProperty(){
-        return fileManager.getContentProperty();
-    }
-    
-    public ListProperty<String> getOriginalContentListProperty(){
-        return fileManager.getOriginalContentListProperty();
-    }
-    
-    public SimpleStringProperty getString(){
-        return fileManager.getString();
+    public FileContentProperty getFileContentProperty(){
+        return fileManager.getFileContentProperty();
     }
     
     public void processSearch(String searchString, boolean exactMatch){

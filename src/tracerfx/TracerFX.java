@@ -36,9 +36,10 @@ public class TracerFX extends Application {
     public void start(Stage primaryStage) throws IOException {
         primaryStage.setTitle(TITLE);
         primaryStage.setScene(getScene());
+        primaryStage.setMinWidth(700);
+        primaryStage.setMinHeight(300);
         primaryStage.show();
 
-        
         primaryStage.setOnCloseRequest(event -> {
             TaskManager.stopTaskManager();
         });
@@ -49,9 +50,6 @@ public class TracerFX extends Application {
     }
     
     private Parent getParent() throws IOException{
-
-        
-        final String FXML2 = "tracerfx/fxml/FileTabFXML.fxml";
         return FXMLLoader.load(getClass().getClassLoader().getResource(FXML));
     }
     

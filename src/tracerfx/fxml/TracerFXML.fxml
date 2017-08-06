@@ -36,9 +36,9 @@
                   <Button mnemonicParsing="false" onAction="#btnAddProject" text="Add Project" />
                   <Button fx:id="btnAddFile" mnemonicParsing="false" onAction="#btnAddFile" text="Add File" />
                   <Separator orientation="VERTICAL" />
-                  <TextField fx:id="txtSearch" onKeyTyped="#refineSearch" />
+                  <TextField fx:id="txtSearch" />
                 <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#btnSearch" text="Search" />
-                  <CheckBox fx:id="chckExact" mnemonicParsing="false" text="Exact" />
+                  <ToggleButton fx:id="toggleExact" mnemonicParsing="false" text="Exact" />
                   <Separator orientation="VERTICAL" />
                   <Pane HBox.hgrow="ALWAYS" />
                   <Separator orientation="VERTICAL" />
@@ -54,7 +54,7 @@
                      </children></AnchorPane>
                 <AnchorPane>
                      <children>
-                        <TextArea fx:id="txtLineDescription" layoutX="98.0" layoutY="-29.0" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TextArea fx:id="txtLineDescription" editable="false" layoutX="98.0" layoutY="-29.0" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <font>
                               <Font size="14.0" />
                            </font></TextArea>

@@ -30,6 +30,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import tracerfx.control.FileContent.FileContentProperty;
 import tracerfx.control.StatusManager;
 import tracerfx.tab.manager.ManagerFactory;
 import tracerfx.util.StringsFXML;
@@ -65,18 +66,21 @@ public class FileTabFXMLController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        bindSizeProperty(ManagerFactory.getFileTabManager().getContentProperty(), lblLines);
-        bindSizeProperty(ManagerFactory.getFileTabManager().getOriginalContentListProperty(), lblTotalLines);
-        
-        prepareTxtFilter();
-        
-        listView.setItems(ManagerFactory.getFileTabManager().getContentProperty());
-        listView.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_LINE_CHANGE);
-        
-        
-        lblLastSearch.textProperty().bind(ManagerFactory.getFileTabManager().getString());
-        
+        prepareListeners();
+        prepareProperties();
     }    
+
+    private void prepareProperties() {
+        final FileContentProperty fcp = ManagerFactory.getFileTabManager().getFileContentProperty();
+
+        bindSizeProperty(fcp.getContentProperty(), lblLines);
+        bindSizeProperty(fcp.getOriginalContentListProperty(), lblTotalLines);
+
+        txtFilter.disableProperty().bind(chckFilter.selectedProperty().not());
+        listView.setItems(fcp.getContentProperty());
+        lblLastSearch.textProperty().bind(fcp.getLastSearchProperty());
+        lblLastSearch.textProperty().bind(fcp.getLastSearchProperty());
+    }
     
     private void bindSizeProperty(ListProperty listProperty, Label label){
         SimpleIntegerProperty listSizeProperty = new SimpleIntegerProperty();
@@ -84,8 +88,9 @@ public class FileTabFXMLController implements Initializable {
         label.textProperty().bind(listSizeProperty.asString());
     }
     
-    private void prepareTxtFilter(){
-        txtFilter.disableProperty().bind(chckFilter.selectedProperty().not());
+    private void prepareListeners(){
+        listView.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_LINE_CHANGE);
+        
         txtFilter.setOnKeyPressed((KeyEvent ke) -> {
             if (ke.getCode().equals(KeyCode.ENTER))
             {
@@ -93,11 +98,6 @@ public class FileTabFXMLController implements Initializable {
                 listView.requestFocus();
             }
         });
-    }
-
-    private void followTrail(ActionEvent event) {
-        // to remove
-        //ManagerFactory.getFileTabManager().getActiveItem().setFollowTrail(chckFollowTrail.isSelected());
     }
 
     private void applyFilter(String filter) {
@@ -121,6 +121,7 @@ public class FileTabFXMLController implements Initializable {
 
     @FXML
     private void chckFollowTrail(ActionEvent event) {
+        ManagerFactory.getFileTabManager().getActiveItem().setFollowTrail(chckFollowTrail.isSelected());
     }
     
 }

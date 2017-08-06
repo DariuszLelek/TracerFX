@@ -34,6 +34,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -75,9 +76,9 @@ public class TracerFXMLController implements Initializable {
     @FXML
     private Button btnRemoveFile;
     @FXML
-    private CheckBox chckExact;
-    @FXML
     private Label lblFileMonitor;
+    @FXML
+    private ToggleButton toggleExact;
 
 
     /**
@@ -90,7 +91,6 @@ public class TracerFXMLController implements Initializable {
         prepareListeners();
     }    
     
-    @FXML
     public void refineSearch(){
     
     }
@@ -140,7 +140,7 @@ public class TracerFXMLController implements Initializable {
         final String searchString = txtSearch.getText();
 
         if (fileTabManager.getActiveItem().isNotDummy()) {
-            fileTabManager.processSearch(searchString, chckExact.isSelected());
+            fileTabManager.processSearch(searchString, toggleExact.isSelected());
             fileTabManager.getTxtLineDescription().setText("");
 
             statusManager.setStatus(searchString.isEmpty()
@@ -164,7 +164,7 @@ public class TracerFXMLController implements Initializable {
         btnRemoveProject.disableProperty().bind(anyProjectProperty);
         txtSearch.disableProperty().bind(anyFileProperty);
         btnSearch.disableProperty().bind(anyFileProperty);
-        chckExact.disableProperty().bind(anyFileProperty);
+        toggleExact.disableProperty().bind(anyFileProperty);
     }
 
     private void prepareListeners() {
@@ -175,6 +175,13 @@ public class TracerFXMLController implements Initializable {
         });
 
         projectTabPane.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_TAB_SWITCH);
+        
+        root.setOnKeyPressed(e -> {
+            if(e.isControlDown() && e.getCode() == KeyCode.F){
+                txtSearch.requestFocus();
+            }
+        });
+        
     }
     
     private void prepareManagers(){

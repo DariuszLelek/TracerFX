@@ -15,28 +15,30 @@
  */
 package tracerfx.control.FileContent;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 /**
  *
  * @author Dariusz Lelek
  */
-public class FileContentManager {
-    private FileContent newFileContent;
-    private FileContentProperty fileContentProperty;
-    private final List<FileContent> filesContent = new ArrayList<>();
+public class FileContentProperty {
 
-    public FileContentProperty getFileContentProperty() {
-        return fileContentProperty;
+    private final FileContent fileContent;
+
+    public FileContentProperty(FileContent fileContent) {
+        this.fileContent = fileContent;
     }
 
-    public FileContent getFileContent(final File activeFile){
-        FileContent fileContent = new FileContent(activeFile);
-        fileContentProperty = new FileContentProperty(fileContent);
-        newFileContent = fileContent;
-        filesContent.add(fileContent);
-        return fileContent;
+    public ListProperty<String> getContentProperty() {
+        return fileContent.getContentProperty();
+    }
+
+    public ListProperty<String> getOriginalContentListProperty() {
+        return fileContent.getOriginalContentListProperty();
+    }
+
+    public SimpleStringProperty getLastSearchProperty() {
+        return fileContent.getLastSearchProperty();
     }
 }
