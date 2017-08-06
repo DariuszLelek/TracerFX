@@ -52,12 +52,12 @@ public class FileTabFXMLController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        ListProperty listProperty = ManagerFactory.getFileTabManager().getNewFileListProperty();
+        ListProperty listProperty = ManagerFactory.getFileTabManager().getContentProperty();
         SimpleIntegerProperty listSizeProperty = new SimpleIntegerProperty();
 
         listSizeProperty.bind(listProperty.sizeProperty());
         
-        lblTotalLines.setText(listProperty.size() + "");
+        lblTotalLines.textProperty().bind(listSizeProperty.asString());
         lblLines.textProperty().bind(listSizeProperty.asString());
         listView.itemsProperty().bind(listProperty);
         listView.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_LINE_CHANGE);

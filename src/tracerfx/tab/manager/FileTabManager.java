@@ -45,12 +45,12 @@ public class FileTabManager extends Manager<FileTab>{
         return txtLineDescription;
     }
     
-    public ListProperty<String> getNewFileListProperty(){
-        return fileManager.getNewFileListProperty();
+    public ListProperty<String> getContentProperty(){
+        return fileManager.getContentProperty();
     }
     
     public void search(String searchString){
-        getActiveItem().getFileContent().updateContent();//search(searchString);
+        getActiveItem().getFileContent().processFileModified();//search(searchString);
         
         
     }

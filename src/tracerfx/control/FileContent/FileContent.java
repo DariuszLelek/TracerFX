@@ -33,66 +33,61 @@ import tracerfx.util.FileUtility;
  */
 public class FileContent {
     private final File file;
-    private final List<String> originalContent;
-    private final ObservableList<String> originalContentObservable;
-    private final ListProperty<String> contentProperty = new SimpleListProperty<>();
-    private final DateTime time;
+    private final List<String> originalContent = new ArrayList<>();
+    private final ObservableList<String> originalContentObservable = FXCollections.observableArrayList(originalContent);;
+    private final ListProperty<String> contentListProperty = new SimpleListProperty<>();
+    private final DateTime addTime;
+    private DateTime lastModified;
     
     public FileContent(){
         this.file = null;
-        this.time = new DateTime();
-        originalContent = new ArrayList<>();
-        originalContentObservable = FXCollections.observableArrayList(originalContent);
+        this.addTime = new DateTime();
     }
 
     public FileContent(File file) {
         this.file = file;
-        this.time = new DateTime();
+        this.addTime = new DateTime();
         
-        originalContent = FileUtility.getFileLines(file);
-        originalContentObservable = FXCollections.observableArrayList(originalContent);
-        contentProperty.set(originalContentObservable);
-    }
-
-    public void updateContent(){
-        originalContent.clear();
-        originalContent.addAll(FileUtility.getFileLines(file));
-        originalContentObservable.clear();
-        originalContentObservable.setAll(originalContent);
-        setOriginalContent();
+        readFileAndUpdate();
     }
     
     public File getFile() {
         return file;
     }
 
-    public void setOriginalContent(){
-        setContentProperty(originalContentObservable);
-    }
-
-    public void setSearchContent(String searchContent) {
+    public void setSearchResultContent(String searchString) {
+        // add mapper
         // check if can refactor
-        setContentProperty(
-                originalContent.stream().filter(x -> x.contains(searchContent)).collect(Collector.of(FXCollections::observableArrayList,
+        ObservableList<String> searchResultContent
+                = originalContent.stream().filter(x -> x.contains(searchString)).collect(Collector.of(FXCollections::observableArrayList,
                         ObservableList::add, (l1, l2) -> {
                             l1.addAll(l2);
                             return l1;
-                        })));
-    }
-    
-    private void setContentProperty(ObservableList<String> content){
-        contentProperty.set(content);
+                        }));
+        contentListProperty.set(searchResultContent);
     }
 
     public ListProperty<String> getContentProperty() {
-        return contentProperty;
+        return contentListProperty;
+    }
+    
+    public void processFileModified(){
+        readFileAndUpdate();
+    }
+
+    private void readFileAndUpdate() {
+        originalContent.clear();
+        originalContent.addAll(FileUtility.getFileLines(file));
+        originalContentObservable.clear();
+        originalContentObservable.setAll(originalContent);
+        contentListProperty.set(originalContentObservable);
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
         hash = 67 * hash + Objects.hashCode(this.file);
-        hash = 67 * hash + Objects.hashCode(this.time);
+        hash = 67 * hash + Objects.hashCode(this.addTime);
         return hash;
     }
 
@@ -111,7 +106,7 @@ public class FileContent {
         if (!Objects.equals(this.file, other.file)) {
             return false;
         }
-        if (!Objects.equals(this.time, other.time)) {
+        if (!Objects.equals(this.addTime, other.addTime)) {
             return false;
         }
         return true;

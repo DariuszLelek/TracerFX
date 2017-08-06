@@ -28,7 +28,7 @@ public class FileContentManager {
     private FileContent newFileContent;
     private final List<FileContent> filesContent = new ArrayList<>();
     
-    public ListProperty<String> getNewFileListProperty(){
+    public ListProperty<String> getContentProperty(){
         return newFileContent.getContentProperty();
     }
 
