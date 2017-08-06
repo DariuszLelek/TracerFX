@@ -26,8 +26,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import tracerfx.control.StatusManager;
 import tracerfx.tab.manager.ManagerFactory;
+import tracerfx.util.StringsFXML;
 
 /**
  * FXML Controller class
@@ -46,26 +51,76 @@ public class FileTabFXMLController implements Initializable {
     private CheckBox chckFollowTrail;
     @FXML
     private ListView<String> listView;
+    @FXML
+    private CheckBox chckFilter;
+    @FXML
+    private TextField txtFilter;
+    
+    private final StatusManager statusManager = ManagerFactory.getStatusManager();
+    @FXML
+    private Label lblLastSearch;
     
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        ListProperty listProperty = ManagerFactory.getFileTabManager().getContentProperty();
-        SimpleIntegerProperty listSizeProperty = new SimpleIntegerProperty();
-
-        listSizeProperty.bind(listProperty.sizeProperty());
+        bindSizeProperty(ManagerFactory.getFileTabManager().getContentProperty(), lblLines);
+        bindSizeProperty(ManagerFactory.getFileTabManager().getOriginalContentListProperty(), lblTotalLines);
         
-        lblTotalLines.textProperty().bind(listSizeProperty.asString());
-        lblLines.textProperty().bind(listSizeProperty.asString());
-        listView.itemsProperty().bind(listProperty);
+        prepareTxtFilter();
+        
+        listView.setItems(ManagerFactory.getFileTabManager().getContentProperty());
         listView.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_LINE_CHANGE);
+        
+        
+        lblLastSearch.textProperty().bind(ManagerFactory.getFileTabManager().getString());
+        
     }    
+    
+    private void bindSizeProperty(ListProperty listProperty, Label label){
+        SimpleIntegerProperty listSizeProperty = new SimpleIntegerProperty();
+        listSizeProperty.bind(listProperty.sizeProperty());
+        label.textProperty().bind(listSizeProperty.asString());
+    }
+    
+    private void prepareTxtFilter(){
+        txtFilter.disableProperty().bind(chckFilter.selectedProperty().not());
+        txtFilter.setOnKeyPressed((KeyEvent ke) -> {
+            if (ke.getCode().equals(KeyCode.ENTER))
+            {
+                applyFilter(txtFilter.getText());
+                listView.requestFocus();
+            }
+        });
+    }
+
+    private void followTrail(ActionEvent event) {
+        // to remove
+        //ManagerFactory.getFileTabManager().getActiveItem().setFollowTrail(chckFollowTrail.isSelected());
+    }
+
+    private void applyFilter(String filter) {
+        if (!filter.isEmpty()) {
+            statusManager.setStatus(StringsFXML.STATUS_FILTER_SET.toString() + filter);
+        } else {
+            statusManager.setStatus(StringsFXML.STATUS_FILTER_EMPTY.toString());
+        }
+        
+        ManagerFactory.getFileTabManager().getActiveItem().getFileContent().setFilter(filter);
+    }
 
     @FXML
-    private void followTrail(ActionEvent event) {
-        ManagerFactory.getFileTabManager().getActiveItem().setFollowTrail(chckFollowTrail.isSelected());
+    private void chckFilter(ActionEvent event) {
+        if(!chckFilter.isSelected()){
+            txtFilter.setText("");
+        }
+        applyFilter(txtFilter.getText());
+    }
+
+
+    @FXML
+    private void chckFollowTrail(ActionEvent event) {
     }
     
 }

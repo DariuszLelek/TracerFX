@@ -17,7 +17,6 @@ package tracerfx.tab;
 
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
-import javafx.scene.layout.Pane;
 
 /**
  *
@@ -25,27 +24,20 @@ import javafx.scene.layout.Pane;
  */
 public abstract class CustomTab {
     protected String title;
-    private final Node root;
     private final Tab tab;
 
     public CustomTab() {
         tab = new Tab();
-        root = new Pane();
     }
 
     public CustomTab(String title, Node root) {
         this.title = title;
-        this.root = root;
         
         tab = new Tab(title, root);
     }
 
     public String getTitle() {
         return title;
-    }
-
-    public Node getRoot() {
-        return root;
     }
     
     public Tab getTab() {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.net.*?>
@@ -7,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 
-<AnchorPane id="AnchorPane" fx:id="root" prefHeight="28.0" prefWidth="295.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tracerfx.fxml.controller.FileTabFXMLController">
+<AnchorPane id="AnchorPane" fx:id="root" prefHeight="37.0" prefWidth="574.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tracerfx.fxml.controller.FileTabFXMLController">
    <stylesheets>
       <URL value="@/tracerfx/css/filetabfxml.css" />
    </stylesheets>
@@ -23,17 +24,32 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Separator orientation="VERTICAL" />
-                  <Label text="Total Lines:" />
+                  <Label text=", all:" />
                   <Label fx:id="lblTotalLines" text="0">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
                   <Separator orientation="VERTICAL" />
+                  <HBox alignment="CENTER">
+                     <children>
+                        <Label text="Last search:" />
+                        <Label fx:id="lblLastSearch" text="Label">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="4.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
                   <Pane HBox.hgrow="ALWAYS" />
-                  <CheckBox mnemonicParsing="false" text="Notify" />
-                  <CheckBox fx:id="chckFollowTrail" mnemonicParsing="false" onAction="#followTrail" text="Follow Trail" />
+                  <Separator orientation="VERTICAL" />
+                  <CheckBox fx:id="chckFilter" mnemonicParsing="false" onAction="#chckFilter" text="Filter" />
+                  <TextField fx:id="txtFilter" />
+                  <Separator orientation="VERTICAL" />
+                  <CheckBox fx:id="chckFollowTrail" mnemonicParsing="false" onAction="#chckFollowTrail" text="Follow Trail" />
                </items>
             </ToolBar>
          </children>

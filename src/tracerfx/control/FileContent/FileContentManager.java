@@ -19,6 +19,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 /**
  *
@@ -30,6 +31,14 @@ public class FileContentManager {
     
     public ListProperty<String> getContentProperty(){
         return newFileContent.getContentProperty();
+    }
+    
+    public ListProperty<String> getOriginalContentListProperty(){
+        return newFileContent.getOriginalContentListProperty();
+    }
+    
+    public SimpleStringProperty getString(){
+        return newFileContent.getString();
     }
 
     public FileContent getFileContent(final File activeFile){

@@ -17,7 +17,7 @@
 package tracerfx.fxml.controller;
 
 import tracerfx.control.DescriptionController;
-import tracerfx.control.StatusController;
+import tracerfx.control.StatusManager;
 import tracerfx.util.StringsFXML;
 import java.io.File;
 import java.net.URL;
@@ -64,8 +64,8 @@ public class TracerFXMLController implements Initializable {
     
     private final ProjectTabManager projectTabManager = ManagerFactory.getProjectTabManager();
     private final FileTabManager fileTabManager = ManagerFactory.getFileTabManager();    
+    private final StatusManager statusManager = ManagerFactory.getStatusManager();
     
-    private StatusController statusController;
     @FXML
     private AnchorPane root;
     @FXML
@@ -81,8 +81,6 @@ public class TracerFXMLController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         prepareManagers();
         prepareBindings();
-        
-        statusController = new StatusController(txtStatus);
     }    
     
     @FXML
@@ -101,12 +99,12 @@ public class TracerFXMLController implements Initializable {
         if (!title.isEmpty()) {
             if (!projectTabManager.projectExists(title)) {
                 projectTabManager.addNewProject(title);
-                statusController.setStatus(StringsFXML.STATUS_PROJECT_ADDED.toString());
+                statusManager.setStatus(StringsFXML.STATUS_PROJECT_ADDED.toString());
             } else {
-                statusController.setStatus(StringsFXML.STATUS_PROJECT_NAME_EXISTS.toString());
+                statusManager.setStatus(StringsFXML.STATUS_PROJECT_NAME_EXISTS.toString());
             }
         } else {
-            statusController.setStatus(StringsFXML.STATUS_FAILED_ADD_PROJECT.toString());
+            statusManager.setStatus(StringsFXML.STATUS_FAILED_ADD_PROJECT.toString());
         }
     }
     
@@ -121,7 +119,7 @@ public class TracerFXMLController implements Initializable {
             File file = getFileChooserDialog().showOpenDialog(root.getScene().getWindow());
             if (file != null) {
                 fileTabManager.addNewFileToProject(file, activeProjectTab);
-                statusController.setStatus(StringsFXML.STATUS_FILE_ADDED.toString());
+                statusManager.setStatus(StringsFXML.STATUS_FILE_ADDED.toString());
             }
         }
     }
@@ -131,13 +129,13 @@ public class TracerFXMLController implements Initializable {
         final String searchString = txtSearch.getText();
         if (!searchString.isEmpty()) {
             if(fileTabManager.getActiveItem().isNotDummy()){
-                fileTabManager.search(txtSearch.getText());
+                fileTabManager.processSearch(txtSearch.getText());
                 fileTabManager.getTxtLineDescription().setText("");
             }else{
-                statusController.setStatus(StringsFXML.STATUS_SEARCH_NO_FILE.toString());
+                statusManager.setStatus(StringsFXML.STATUS_SEARCH_NO_FILE.toString());
             }
         }else{
-            statusController.setStatus(StringsFXML.STATUS_SEARCH_EMPTY.toString());
+            statusManager.setStatus(StringsFXML.STATUS_SEARCH_EMPTY.toString());
         }
     }
 
@@ -161,6 +159,7 @@ public class TracerFXMLController implements Initializable {
     private void prepareManagers(){
         projectTabManager.setProjectTabPane(projectTabPane);
         fileTabManager.setTxtLineDescription(txtLineDescription);
+        statusManager.setStatusLabel(txtStatus);
     }
     
     private TextInputDialog getProjectNameDialog(){
@@ -179,18 +178,18 @@ public class TracerFXMLController implements Initializable {
     @FXML
     private void removeProject(ActionEvent event) {
         if (projectTabManager.tryToRemoveActiveProject()) {
-            statusController.setStatus(StringsFXML.STATUS_REMOVE_PROJECT.toString());
+            statusManager.setStatus(StringsFXML.STATUS_REMOVE_PROJECT.toString());
         } else {
-            statusController.setStatus(StringsFXML.STATUS_FAILED_REMOVE_PROJECT.toString());
+            statusManager.setStatus(StringsFXML.STATUS_FAILED_REMOVE_PROJECT.toString());
         }
     }
 
     @FXML
     private void removeFile(ActionEvent event) {
         if(fileTabManager.tryToRemoveFileFromActiveProject()){
-            statusController.setStatus(StringsFXML.STATUS_REMOVE_FILE.toString());
+            statusManager.setStatus(StringsFXML.STATUS_REMOVE_FILE.toString());
         }else{
-            statusController.setStatus(StringsFXML.STATUS_FAILED_REMOVE_FILE.toString());
+            statusManager.setStatus(StringsFXML.STATUS_FAILED_REMOVE_FILE.toString());
         }
     }
 }

@@ -15,32 +15,26 @@
  */
 package tracerfx.tab.manager;
 
+import tracerfx.control.StatusManager;
+
 /**
  *
  * @author Dariusz Lelek
  */
-public class ManagerFactory {
-    public static enum TYPE{
-        FILE, PROJECT;
-    }
-    
+public class ManagerFactory { 
     private static final FileTabManager fileTabManager;
     private static final ProjectTabManager projectTabManager;
+    private static final StatusManager statusManager;
+    
 
     static{
         fileTabManager = new FileTabManager();
         projectTabManager = new ProjectTabManager();
+        statusManager = new StatusManager();
     }
-
-    public static Manager getManager(TYPE type){
-        switch(type){
-            case FILE:
-                return fileTabManager;
-            case PROJECT:
-                return projectTabManager;
-            default:
-                return null;
-        }
+    
+    public static StatusManager getStatusManager(){
+        return statusManager;
     }
 
     public static FileTabManager getFileTabManager() {

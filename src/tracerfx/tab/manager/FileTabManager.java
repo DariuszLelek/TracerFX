@@ -18,6 +18,7 @@ package tracerfx.tab.manager;
 import java.io.File;
 import java.util.stream.Collectors;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import tracerfx.tab.FileTab;
@@ -49,10 +50,16 @@ public class FileTabManager extends Manager<FileTab>{
         return fileManager.getContentProperty();
     }
     
-    public void search(String searchString){
-        getActiveItem().getFileContent().processFileModified();//search(searchString);
-        
-        
+    public ListProperty<String> getOriginalContentListProperty(){
+        return fileManager.getOriginalContentListProperty();
+    }
+    
+    public SimpleStringProperty getString(){
+        return fileManager.getString();
+    }
+    
+    public void processSearch(String searchString){
+        getActiveItem().getFileContent().processSearch(searchString);
     }
     
     public void tryToRemoveFilesFromProject(ProjectTab projectTab){
@@ -64,7 +71,7 @@ public class FileTabManager extends Manager<FileTab>{
     public boolean tryToRemoveFileFromActiveProject() {
         FileTab activeFileTab = getActiveItem();
         
-        // In situation when project has not files - getActiveItem will return dummy if other project have files
+        // In situation when project has no files - getActiveItem will return dummy if other project have files
         if (activeFileTab.isNotDummy()) {
             ProjectTab activeProjectTab = ManagerFactory.getProjectTabManager().getActiveItem();
             activeProjectTab.getFileTabPane().getTabs().remove(activeFileTab.getTab());

@@ -19,9 +19,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.joda.time.DateTime;
@@ -32,11 +33,17 @@ import tracerfx.util.FileUtility;
  * @author Dariusz Lelek
  */
 public class FileContent {
+    private String filter = "";
+    
     private final File file;
     private final List<String> originalContent = new ArrayList<>();
-    private final ObservableList<String> originalContentObservable = FXCollections.observableArrayList(originalContent);;
-    private final ListProperty<String> contentListProperty = new SimpleListProperty<>();
+    private final ObservableList<String> contentObservable = FXCollections.observableArrayList(originalContent);
+    private final ObservableList<String> originalContentObservable = FXCollections.observableArrayList(originalContent);
+    private final ListProperty<String> contentListProperty = new SimpleListProperty<>(contentObservable);
+    private final ListProperty<String> originalContentListProperty = new SimpleListProperty<>(originalContentObservable);
+    private final SimpleStringProperty lastSearchProperty = new SimpleStringProperty("");
     private final DateTime addTime;
+    
     private DateTime lastModified;
     
     public FileContent(){
@@ -50,37 +57,75 @@ public class FileContent {
         
         readFileAndUpdate();
     }
-    
+
     public File getFile() {
         return file;
     }
 
-    public void setSearchResultContent(String searchString) {
-        // add mapper
-        // check if can refactor
-        ObservableList<String> searchResultContent
-                = originalContent.stream().filter(x -> x.contains(searchString)).collect(Collector.of(FXCollections::observableArrayList,
-                        ObservableList::add, (l1, l2) -> {
-                            l1.addAll(l2);
-                            return l1;
-                        }));
-        contentListProperty.set(searchResultContent);
+    public ListProperty<String> getOriginalContentListProperty() {
+        return originalContentListProperty;
     }
 
     public ListProperty<String> getContentProperty() {
         return contentListProperty;
     }
     
+    public SimpleStringProperty getString(){
+        return lastSearchProperty;
+    }
+    
+    public void setFilter(String filter){
+        if(filterChanged(filter)){
+            this.filter = filter;
+            updateContent(filterOriginalContent(), contentObservable);
+        }
+    }
+
+    public void processSearch(String searchString) {
+        setLastSearch(searchString);
+        updateContent(getSearchResult(searchString, filterOriginalContent()), contentObservable);
+    }
+    
     public void processFileModified(){
         readFileAndUpdate();
     }
+    
+    private void setLastSearch(String lastsearch){
+        lastSearchProperty.set(lastsearch);
+    }
+    
+    private boolean filterChanged(String newFilter){
+        return !this.filter.equals(newFilter);
+    }
+    
+    private List<String> getSearchResult(String searchString, List<String> content){
+        return content.stream()
+                .filter(x -> x.contains(searchString)).collect(Collectors.toList());
+    }
+        
+    private List<String> filterOriginalContent(){
+        if(!filter.isEmpty()){
+            return getSearchResult(filter, originalContent);
+        }
+        return originalContent;
+    }
 
     private void readFileAndUpdate() {
+        List<String> newContent = FileUtility.getFileLines(file);
+        updateContents(newContent);
+    }
+    
+    private void updateContents(List<String> newContent){
         originalContent.clear();
-        originalContent.addAll(FileUtility.getFileLines(file));
-        originalContentObservable.clear();
-        originalContentObservable.setAll(originalContent);
-        contentListProperty.set(originalContentObservable);
+        originalContent.addAll(newContent);
+        
+        updateContent(filterOriginalContent(), contentObservable);
+        updateContent(newContent, originalContentObservable);
+    }
+    
+    private void updateContent(List<String> newContent, ObservableList observableList){
+        observableList.clear();
+        observableList.addAll(newContent);
     }
 
     @Override

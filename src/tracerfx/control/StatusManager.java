@@ -27,9 +27,9 @@ import tracerfx.task.TaskManager;
  *
  * @author Dariusz Lelek
  */
-public class StatusController {
+public class StatusManager {
     
-    private final Label statusLabel;
+    private Label statusLabel;
     private DateTime lastUpdateTime;
     
     private final long STATUS_CLEAR_DELAY_MS = 6 * 1000;
@@ -37,18 +37,21 @@ public class StatusController {
     private final String EMPTY_STATUS = "";
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(threadPool);
     
-    public StatusController(Label statusLabel){
-        this.statusLabel = statusLabel;
+    public void setStatusLabel(Label statusLabel){
+        this.statusLabel = statusLabel;       
         startClearingThread();
     }
     
     public synchronized void setStatus(String status){
         lastUpdateTime = new DateTime();
-        statusLabel.setText(status);
+        getStatusLabel().setText(status);
     }
     
-    public boolean statusLabelSet(){
-        return statusLabel != null;
+    public Label getStatusLabel(){
+        if(statusLabel == null){
+            throw new NullPointerException("Status label not set.");
+        }
+        return statusLabel;
     }
     
     public void shutDown(){
