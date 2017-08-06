@@ -27,6 +27,8 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
@@ -216,5 +218,16 @@ public class TracerFXMLController implements Initializable {
                 statusManager.setStatus(StringsFXML.STATUS_FILE_ADDED.toString());
             }
         }
+    }
+
+    @FXML
+    private void about(ActionEvent event) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("About");
+        alert.setHeaderText("TracerFX - Version 1.0");
+        String s ="JavaFX log tracer tool.\n\n"
+                + "created by: dariusz.lelek@gmail.com";
+        alert.setContentText(s);
+        alert.show();
     }
 }

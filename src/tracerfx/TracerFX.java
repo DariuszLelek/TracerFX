@@ -16,6 +16,7 @@
 
 package tracerfx;
 
+import javafx.scene.image.Image;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -31,6 +32,7 @@ import tracerfx.task.TaskManager;
 public class TracerFX extends Application {
     private final static String TITLE = "TracerFX";
     private final static String FXML = "tracerfx/fxml/TracerFXML.fxml";
+    private final static String IMAGE = "tracerfx/image.png";
     
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -38,6 +40,7 @@ public class TracerFX extends Application {
         primaryStage.setScene(getScene());
         primaryStage.setMinWidth(700);
         primaryStage.setMinHeight(300);
+        primaryStage.getIcons().add(new Image(IMAGE));
         primaryStage.show();
 
         primaryStage.setOnCloseRequest(event -> {
