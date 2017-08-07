@@ -66,6 +66,7 @@ public abstract class Manager<T>{
             return FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
         } catch (IOException ex) {
             // TODO logger / refactor
+            ex.printStackTrace();
             throw new NullPointerException();
         }
     }

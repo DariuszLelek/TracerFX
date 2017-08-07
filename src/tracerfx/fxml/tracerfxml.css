@@ -1,0 +1,16 @@
+
+.logFont{
+    -fx-font-family: "Consolas";
+}
+
+.listView .logFont{
+    -fx-font-size: 12px;
+}
+
+.descriptionView .logFont{
+    -fx-font-size: 14px;
+}
+
+.scrollBarInvisible .scroll-bar:vertical {
+    /* -fx-scale-x: 0;*/
+}

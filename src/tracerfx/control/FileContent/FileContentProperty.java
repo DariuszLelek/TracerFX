@@ -41,4 +41,12 @@ public class FileContentProperty {
     public SimpleStringProperty getLastSearchProperty() {
         return fileContent.getLastSearchProperty();
     }
+    
+    public ListProperty<Integer> getLineNumbersProperty() {
+        return fileContent.getLineNumbersProperty();
+    }
+    
+    public ListProperty<Integer> getSearchResultsProperty() {
+        return fileContent.getSearchResultsProperty();
+    }
 }

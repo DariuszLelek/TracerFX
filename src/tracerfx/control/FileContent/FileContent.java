@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -41,6 +42,8 @@ public class FileContent {
     private final ObservableList<String> contentObservable = FXCollections.observableArrayList(originalContent);
     private final ObservableList<String> originalContentObservable = FXCollections.observableArrayList(originalContent);
     private final ListProperty<String> contentListProperty = new SimpleListProperty<>(contentObservable);
+    private final ListProperty<Integer> lineNumbersProperty = new SimpleListProperty<>();
+    private final ListProperty<Integer> searchResultsProperty = new SimpleListProperty<>();
     private final ListProperty<String> originalContentListProperty = new SimpleListProperty<>(originalContentObservable);
     private final SimpleStringProperty lastSearchProperty = new SimpleStringProperty("");
     private final DateTime addTime;
@@ -92,22 +95,33 @@ public class FileContent {
         return lastSearchProperty;
     }
     
+    public ListProperty<Integer> getLineNumbersProperty() {
+        return lineNumbersProperty;
+    }
+    
+    public ListProperty<Integer> getSearchResultsProperty() {
+        return searchResultsProperty;
+    }
+    
     public void setFilter(String filter){
         if(filterChanged(filter)){
             this.filter = filter;
             setLastSearch("");
             updateContent(filterOriginalContent(), contentObservable);
+            updateLineNumbers();
         }
     }
 
     public void processSearch(String searchString, boolean exactMatch) {
         setLastSearch(searchString);
-        if(searchString.isEmpty()){
-            updateContent(filterOriginalContent(), contentObservable);
-        }else{
-            updateContent(getSearchResult(searchString, filterOriginalContent(), exactMatch), contentObservable);
-        }
-    }
+        searchResultsProperty.set(FXCollections.observableArrayList(getSearchResultIndexes(filterOriginalContent(), searchString, exactMatch)));
+        
+//        if(searchString.isEmpty()){
+//            updateContent(filterOriginalContent(), contentObservable);
+//        }else{
+//            updateContent(getSearchResult(searchString, filterOriginalContent(), exactMatch), contentObservable);
+//        }
+    } 
     
     public synchronized void processFileModified(){
         readFileAndUpdate();
@@ -115,6 +129,17 @@ public class FileContent {
     
     private void setLastSearch(String lastsearch){
         lastSearchProperty.set(lastsearch);
+    }
+
+    private List<Integer> getSearchResultIndexes(List<String> filteredContent, String searchString, boolean exactMatch) {
+        return IntStream.range(0, filteredContent.size()).filter(
+                x -> exactMatch ? filteredContent.get(x).contains(searchString) : StringUtils.containsIgnoreCase(filteredContent.get(x), searchString))
+                .boxed().collect(Collectors.toList());
+    }
+
+    private void updateLineNumbers(){   
+        lineNumbersProperty.set(FXCollections.observableArrayList(IntStream.range(1, contentListProperty.size() + 1).boxed()
+                .collect(Collectors.toList())));
     }
     
     private boolean filterChanged(String newFilter){
@@ -146,6 +171,8 @@ public class FileContent {
         
         updateContent(filterOriginalContent(), contentObservable);
         updateContent(newContent, originalContentObservable);
+        
+        updateLineNumbers();
     }
     
     private void updateContent(List<String> newContent, ObservableList observableList){

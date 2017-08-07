@@ -8,14 +8,32 @@
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 
-<AnchorPane id="AnchorPane" prefHeight="37.0" prefWidth="574.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tracerfx.fxml.controller.FileTabFXMLController">
-   <stylesheets>
-      <URL value="@/tracerfx/css/filetabfxml.css" />
-   </stylesheets>
+<AnchorPane prefHeight="37.0" prefWidth="574.0" stylesheets="@tracerfxml.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tracerfx.fxml.controller.FileTabFXMLController">
    <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ListView fx:id="listView" onMouseClicked="#checkModified" style="-fx-font-family: Consolas;" VBox.vgrow="ALWAYS" />
+            <HBox VBox.vgrow="ALWAYS">
+               <children>
+                  <StackPane alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                     <children>
+                        <ListView fx:id="numberListView" editable="true" maxWidth="100.0" minWidth="100.0">
+                           <styleClass>
+                              <String fx:value="scrollBarInvisible" />
+                              <String fx:value="listView" />
+                           </styleClass>
+                        </ListView>
+                        <ListView fx:id="contentListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#checkItemClick" styleClass="listView">
+                           <StackPane.margin>
+                              <Insets left="50.0" />
+                           </StackPane.margin>
+                        </ListView>
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </StackPane>
+               </children>
+            </HBox>
             <ToolBar>
                <items>
                   <Label text="Lines:" />

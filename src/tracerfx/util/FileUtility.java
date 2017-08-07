@@ -49,14 +49,16 @@ public class FileUtility {
 
     public static List<String> getFileLines(File file) {
         List<String> content = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),"utf-8"))) {
-            for (String line = null; (line = br.readLine()) != null;) {
-                if(validLine(line)){
-                    content.add(line);
+        if (file.exists()) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "utf-8"))) {
+                for (String line = null; (line = br.readLine()) != null;) {
+                    if (validLine(line)) {
+                        content.add(line);
+                    }
                 }
+            } catch (IOException ex) {
+                Logger.getLogger(FileUtility.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (IOException ex) {
-            Logger.getLogger(FileUtility.class.getName()).log(Level.SEVERE, null, ex);
         }
         return content;
     }
