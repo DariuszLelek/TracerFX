@@ -15,7 +15,7 @@
    <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ListView fx:id="listView" onMouseClicked="#checkModified" VBox.vgrow="ALWAYS" />
+            <ListView fx:id="listView" onMouseClicked="#checkModified" style="-fx-font-family: Consolas;" VBox.vgrow="ALWAYS" />
             <ToolBar>
                <items>
                   <Label text="Lines:" />
