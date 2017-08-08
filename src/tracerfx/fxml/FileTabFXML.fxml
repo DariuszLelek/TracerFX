@@ -20,12 +20,17 @@
                            <styleClass>
                               <String fx:value="scrollBarInvisible" />
                               <String fx:value="listView" />
+                              <String fx:value="logFont" />
                            </styleClass>
                         </ListView>
-                        <ListView fx:id="contentListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#checkItemClick" styleClass="listView">
+                        <ListView fx:id="contentListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onKeyPressed="#onKeyPressedContent" onMouseClicked="#onClick" onScroll="#onScroll" onScrollTo="#onScrollTo">
                            <StackPane.margin>
                               <Insets left="50.0" />
                            </StackPane.margin>
+                           <styleClass>
+                              <String fx:value="listView" />
+                              <String fx:value="logFont" />
+                           </styleClass>
                         </ListView>
                      </children>
                      <HBox.margin>
@@ -61,7 +66,7 @@
                   <Pane HBox.hgrow="ALWAYS" />
                   <Separator orientation="VERTICAL" />
                   <CheckBox fx:id="chckFilter" mnemonicParsing="false" onAction="#chckFilter" text="Filter" />
-                  <TextField fx:id="txtFilter" />
+                  <TextField fx:id="txtFilter" onKeyPressed="#onKeyPressedFilter" />
                   <Separator orientation="VERTICAL" />
                   <CheckBox fx:id="chckFollowTrail" mnemonicParsing="false" onAction="#chckFollowTrail" text="Monitor" />
                </items>

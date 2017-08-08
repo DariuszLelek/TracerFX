@@ -30,11 +30,13 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollToEvent;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import tracerfx.control.FileContent.FileContentProperty;
 import tracerfx.control.StatusManager;
 import tracerfx.tab.manager.ManagerFactory;
@@ -121,33 +123,6 @@ public class FileTabFXMLController implements Initializable {
     private void prepareListeners(){
         contentListView.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_LINE_CHANGE);
 
-        contentListView.setOnKeyPressed((KeyEvent ke) -> {
-            if (ke.getCode().equals(KeyCode.ESCAPE))
-            {
-                contentListView.getSelectionModel().clearSelection();
-                return;
-            }
-            
-            if (ke.isShiftDown()&& ke.getCode() == KeyCode.F3)
-            {
-                trySelectContent(searchResultsIndex - 1);
-                return;
-            }
-            
-            if (ke.getCode().equals(KeyCode.F3))
-            {
-                trySelectContent(searchResultsIndex + 1);
-            }
-        });
-        
-        txtFilter.setOnKeyPressed((KeyEvent ke) -> {
-            if (ke.getCode().equals(KeyCode.ENTER))
-            {
-                applyFilter(txtFilter.getText());
-                contentListView.requestFocus();
-            }
-        });
-
         searchResults.addListener((ListChangeListener.Change<? extends Integer> c) -> {
             contentListView.requestFocus();
             contentListView.getSelectionModel().clearSelection();
@@ -157,20 +132,17 @@ public class FileTabFXMLController implements Initializable {
             
             trySelectContent(0);
         });
-
-        contentListView.setOnScroll((event) -> {
-            bindScollWithOtherList();
-        });
     };
     
     private void trySelectContent(int searchResultIndex) {
         updateSearchResultIndex(searchResultIndex);
         
         if (!searchResults.isEmpty()) {
+            numberListView.scrollTo(searchResultIndex);
+            contentListView.scrollTo(searchResultIndex);
+            
             contentListView.getSelectionModel().select(searchResults.get(this.searchResultsIndex));
             contentListView.getFocusModel().focus(searchResults.get(this.searchResultsIndex));
-            // problematic for double scroll
-            // contentListView.scrollTo(searchResults.get(this.searchResultsIndex));
         }
     }
     
@@ -204,11 +176,49 @@ public class FileTabFXMLController implements Initializable {
         ManagerFactory.getFileTabManager().getActiveItem().getFileContent().setFilter(filter);
     }
 
+    @FXML
     private void onClick(MouseEvent event) {
         ManagerFactory.getFileTabManager().getActiveItem().processModified(false);
     }
 
     @FXML
-    private void checkItemClick(MouseEvent event) {
+    private void onScroll(ScrollEvent event) {
+        bindScollWithOtherList();
     }
+
+    @FXML
+    private void onScrollTo(ScrollToEvent event) {
+        bindScollWithOtherList();
+    }
+
+    @FXML
+    private void onKeyPressedContent(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.ESCAPE)) {
+            contentListView.getSelectionModel().clearSelection();
+            return;
+        }
+
+        if (event.isShiftDown() && event.getCode() == KeyCode.F3) {
+            trySelectContent(searchResultsIndex - 1);
+            return;
+        }
+
+        if (event.getCode().equals(KeyCode.F3)) {
+            trySelectContent(searchResultsIndex + 1);
+        }
+    }
+
+    @FXML
+    private void onKeyPressedFilter(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.ENTER)) {
+            applyFilter(txtFilter.getText());
+            contentListView.requestFocus();
+            return;
+        }
+
+        if (event.getCode().equals(KeyCode.ESCAPE)) {
+            contentListView.requestFocus();
+        }
+    }
+
 }

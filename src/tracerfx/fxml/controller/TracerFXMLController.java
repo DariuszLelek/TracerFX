@@ -162,20 +162,7 @@ public class TracerFXMLController implements Initializable {
     }
 
     private void prepareListeners() {
-        txtSearch.setOnKeyPressed((KeyEvent ke) -> {
-            if (ke.getCode().equals(KeyCode.ENTER)) {
-                trySearch();
-            }
-        });
-
         projectTabPane.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_TAB_SWITCH);
-
-        root.setOnKeyPressed(e -> {
-            if (e.isControlDown() && e.getCode() == KeyCode.F) {
-                txtSearch.requestFocus();
-            }
-        });
-
     }
 
     private void prepareManagers() {
@@ -229,5 +216,19 @@ public class TracerFXMLController implements Initializable {
                 + "created by: dariusz.lelek@gmail.com";
         alert.setContentText(s);
         alert.show();
+    }
+
+    @FXML
+    private void onKeyPressedTxtSearch(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.ENTER)) {
+            trySearch();
+        }
+    }
+
+    @FXML
+    private void onKeyPressedRoot(KeyEvent event) {
+        if (event.isControlDown() && event.getCode() == KeyCode.F) {
+            txtSearch.requestFocus();
+        }
     }
 }

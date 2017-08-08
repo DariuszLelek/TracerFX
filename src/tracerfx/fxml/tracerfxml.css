@@ -3,11 +3,11 @@
     -fx-font-family: "Consolas";
 }
 
-.listView .logFont{
+.listView{
     -fx-font-size: 12px;
 }
 
-.descriptionView .logFont{
+.descriptionView{
     -fx-font-size: 14px;
 }
 

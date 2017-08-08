@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" fx:id="root" prefHeight="600.0" prefWidth="800.0" stylesheets="@tracerfxml.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tracerfx.fxml.controller.TracerFXMLController">
+<AnchorPane id="AnchorPane" fx:id="root" onKeyPressed="#onKeyPressedRoot" prefHeight="600.0" prefWidth="800.0" stylesheets="@tracerfxml.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tracerfx.fxml.controller.TracerFXMLController">
    <children>
       <VBox layoutX="102.0" layoutY="110.0" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -33,7 +33,7 @@
                   <Button mnemonicParsing="false" onAction="#btnAddProject" text="Add Project" />
                   <Button fx:id="btnAddFile" mnemonicParsing="false" onAction="#btnAddFile" text="Add File" />
                   <Separator orientation="VERTICAL" />
-                  <TextField fx:id="txtSearch" />
+                  <TextField fx:id="txtSearch" onKeyPressed="#onKeyPressedTxtSearch" />
                 <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#btnSearch" text="Search">
                      <font>
                         <Font name="System Bold" size="12.0" />
@@ -54,10 +54,14 @@
                      </children></AnchorPane>
                 <AnchorPane>
                      <children>
-                        <TextArea fx:id="txtLineDescription" editable="false" layoutX="98.0" layoutY="-29.0" styleClass="descriptionView" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TextArea fx:id="txtLineDescription" editable="false" layoutX="98.0" layoutY="-29.0" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <font>
                               <Font name="Consolas" size="14.0" />
-                           </font></TextArea>
+                           </font>
+                           <styleClass>
+                              <String fx:value="descriptionView" />
+                              <String fx:value="logFont" />
+                           </styleClass></TextArea>
                      </children>
                   </AnchorPane>
               </items>
