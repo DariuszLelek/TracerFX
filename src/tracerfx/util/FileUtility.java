@@ -34,6 +34,7 @@ import java.util.logging.Logger;
 public class FileUtility {
     
     private final static int[] excludedASCII = {0};
+    private final int lastLineLength = 1000;
     
     public static int getFileLineNumber(File file) {
         LineNumberReader lnr = null;

@@ -15,9 +15,7 @@
     -fx-text-fill: #919191;
 }
 
-.invisibleHorizontalScroll .scroll-bar:horizontal {
-/*  
-    temporary to remove horizontal scrollbar
+.invisibleScroll .scroll-bar {
     -fx-opacity: 0;
-    -fx-padding: -10;*/
+    -fx-padding: -10;
 }

@@ -52,6 +52,9 @@ import tracerfx.task.TaskManager;
  * @author Dariusz Lelek
  */
 public class TracerFXMLController implements Initializable {
+    private final ProjectTabManager projectTabManager = ManagerFactory.getProjectTabManager();
+    private final FileTabManager fileTabManager = ManagerFactory.getFileTabManager();
+    private final StatusManager statusManager = ManagerFactory.getStatusManager();
 
     @FXML
     private TextField txtSearch;
@@ -75,10 +78,6 @@ public class TracerFXMLController implements Initializable {
     private Label lblFileMonitor;
     @FXML
     private ToggleButton toggleExact;
-
-    private final ProjectTabManager projectTabManager = ManagerFactory.getProjectTabManager();
-    private final FileTabManager fileTabManager = ManagerFactory.getFileTabManager();
-    private final StatusManager statusManager = ManagerFactory.getStatusManager();
 
     /**
      * Initializes the controller class.
@@ -230,6 +229,13 @@ public class TracerFXMLController implements Initializable {
     private void onKeyPressedRoot(KeyEvent event) {
         if (event.isControlDown() && event.getCode() == KeyCode.F) {
             txtSearch.requestFocus();
+            return;
+        }
+
+        if (event.isControlDown() && event.getCode() == KeyCode.E) {
+            if (!toggleExact.isDisabled()) {
+                toggleExact.setSelected(!toggleExact.isSelected());
+            }
         }
     }
 }

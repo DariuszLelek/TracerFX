@@ -8,36 +8,30 @@
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 
-<AnchorPane prefHeight="37.0" prefWidth="574.0" stylesheets="@tracerfxml.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tracerfx.fxml.controller.FileTabFXMLController">
+<AnchorPane stylesheets="@tracerfxml.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tracerfx.fxml.controller.FileTabFXMLController">
    <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox VBox.vgrow="ALWAYS">
+            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <children>
-                  <StackPane alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                  <VBox maxWidth="50.0" minWidth="50.0" prefWidth="50.0">
                      <children>
-                        <ListView fx:id="numberListView" editable="true" maxWidth="100.0" minWidth="100.0" StackPane.alignment="CENTER_LEFT">
+                        <ListView fx:id="numberListView" nodeOrientation="LEFT_TO_RIGHT" VBox.vgrow="ALWAYS">
                            <styleClass>
                               <String fx:value="listView" />
                               <String fx:value="logFont" />
-                              <String fx:value="invisibleHorizontalScroll" />
+                              <String fx:value="invisibleScroll" />
                            </styleClass>
                         </ListView>
-                        <ListView fx:id="contentListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onKeyPressed="#onKeyPressedContent" onMouseClicked="#onClick">
-                           <StackPane.margin>
-                              <Insets left="50.0" />
-                           </StackPane.margin>
-                           <styleClass>
-                              <String fx:value="listView" />
-                              <String fx:value="logFont" />
-                              <String fx:value="invisibleHorizontalScroll" />
-                           </styleClass>
-                        </ListView>
+                        <Pane maxHeight="14.0" minHeight="14.0" prefHeight="14.0" VBox.vgrow="NEVER" />
                      </children>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </StackPane>
+                  </VBox>
+                  <ListView fx:id="contentListView" minHeight="64.0" minWidth="100.0" onKeyPressed="#onKeyPressedContent" onMouseClicked="#onClick" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                     <styleClass>
+                        <String fx:value="logFont" />
+                        <String fx:value="listView" />
+                     </styleClass>
+                  </ListView>
                </children>
             </HBox>
             <ToolBar nodeOrientation="LEFT_TO_RIGHT">
@@ -55,7 +49,8 @@
                   <Label fx:id="lblTotalLines" text="0">
                      <padding>
                         <Insets left="2.0" right="2.0" />
-                     </padding></Label>
+                     </padding>
+                  </Label>
                   <Separator orientation="VERTICAL" />
                   <Label styleClass="infoFont" text="Found" />
                   <Label fx:id="lblLastSearchResultNum" text="0">

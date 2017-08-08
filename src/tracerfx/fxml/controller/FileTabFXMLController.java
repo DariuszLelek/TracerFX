@@ -26,6 +26,7 @@ import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -36,7 +37,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import tracerfx.control.FileContent.FileContentProperty;
 import tracerfx.control.StatusManager;
 import tracerfx.tab.manager.ManagerFactory;
@@ -70,8 +70,6 @@ public class FileTabFXMLController implements Initializable {
     private ListView<String> contentListView;
     @FXML
     private Label lblLastSearchResultNum;
-    @FXML
-    private Pane numberListPlaceHolder;
 
 
     /**
