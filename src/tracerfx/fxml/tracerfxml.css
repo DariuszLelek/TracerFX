@@ -11,6 +11,13 @@
     -fx-font-size: 14px;
 }
 
-.scrollBarInvisible .scroll-bar:vertical {
-    /* -fx-scale-x: 0;*/
+.infoFont{
+    -fx-text-fill: #919191;
+}
+
+.invisibleHorizontalScroll .scroll-bar:horizontal {
+/*  
+    temporary to remove horizontal scrollbar
+    -fx-opacity: 0;
+    -fx-padding: -10;*/
 }

@@ -18,6 +18,7 @@ package tracerfx.fxml.controller;
 import tracerfx.control.DescriptionController;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -30,13 +31,12 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
-import javafx.scene.control.ScrollToEvent;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.Pane;
 import tracerfx.control.FileContent.FileContentProperty;
 import tracerfx.control.StatusManager;
 import tracerfx.tab.manager.ManagerFactory;
@@ -48,6 +48,9 @@ import tracerfx.util.StringsFXML;
  * @author Dariusz Lelek
  */
 public class FileTabFXMLController implements Initializable {
+    private final ListProperty<Integer> searchResults = new SimpleListProperty<>();
+    private final StatusManager statusManager = ManagerFactory.getStatusManager();
+    private int searchResultsIndex = 0;
 
     @FXML
     private Label lblLines;
@@ -61,16 +64,15 @@ public class FileTabFXMLController implements Initializable {
     private TextField txtFilter;
     @FXML
     private Label lblLastSearch;
-
-    private final StatusManager statusManager = ManagerFactory.getStatusManager();
     @FXML
     private ListView<Integer> numberListView;
     @FXML
     private ListView<String> contentListView;
-    
-    private final ListProperty<Integer> searchResults = new SimpleListProperty<>();
-    private int searchResultsIndex = 0;
-    private boolean scrollBound = false;
+    @FXML
+    private Label lblLastSearchResultNum;
+    @FXML
+    private Pane numberListPlaceHolder;
+
 
     /**
      * Initializes the controller class.
@@ -79,6 +81,7 @@ public class FileTabFXMLController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         prepareProperties();
         prepareListeners();
+        bindScollWithOtherList();
     }
 
     @FXML
@@ -86,7 +89,7 @@ public class FileTabFXMLController implements Initializable {
         if(!chckFilter.isSelected()){
             txtFilter.setText("");
         }
-        applyFilter(txtFilter.getText());
+        processFilterChange(txtFilter.getText());
     }
 
 
@@ -105,10 +108,10 @@ public class FileTabFXMLController implements Initializable {
         contentListView.setItems(fcp.getContentProperty());
         numberListView.setItems(fcp.getLineNumbersProperty());
         lblLastSearch.textProperty().bind(fcp.getLastSearchProperty());
-        lblLastSearch.textProperty().bind(fcp.getLastSearchProperty());
         
         numberListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         searchResults.set(fcp.getSearchResultsProperty());
+        lblLastSearchResultNum.textProperty().bind(searchResults.sizeProperty().asString());
         
         numberListView.setMouseTransparent( true );
         numberListView.setFocusTraversable( false );
@@ -132,7 +135,8 @@ public class FileTabFXMLController implements Initializable {
             
             trySelectContent(0);
         });
-    };
+
+    }
     
     private void trySelectContent(int searchResultIndex) {
         updateSearchResultIndex(searchResultIndex);
@@ -152,28 +156,27 @@ public class FileTabFXMLController implements Initializable {
     }
 
     private void bindScollWithOtherList() {
-        if (!scrollBound) {
-            Node n1 = contentListView.lookup(".scroll-bar");
-            if (n1 instanceof ScrollBar) {
-                final ScrollBar bar1 = (ScrollBar) n1;
-                Node n2 = numberListView.lookup(".scroll-bar");
-                if (n2 instanceof ScrollBar) {
-                    final ScrollBar bar2 = (ScrollBar) n2;
+        Platform.runLater(() -> {
+            Node node1 = contentListView.lookup(".scroll-bar:vertical");
+            if (node1 instanceof ScrollBar) {
+                final ScrollBar bar1 = (ScrollBar) node1;
+                Node node2 = numberListView.lookup(".scroll-bar:vertical");
+                if (node2 instanceof ScrollBar) {
+                    final ScrollBar bar2 = (ScrollBar) node2;
                     bar2.valueProperty().bindBidirectional(bar1.valueProperty());
                 }
             }
-            scrollBound = true;
-        }
+        });
     }
     
-    private void applyFilter(String filter) {
+    private void processFilterChange(String filter) {
         if (!filter.isEmpty()) {
             statusManager.setStatus(StringsFXML.STATUS_FILTER_SET.toString() + filter);
         } else {
             statusManager.setStatus(StringsFXML.STATUS_FILTER_EMPTY.toString());
         }
         
-        ManagerFactory.getFileTabManager().getActiveItem().getFileContent().setFilter(filter);
+        ManagerFactory.getFileTabManager().getActiveItem().getFileContent().processFilterChange(filter);
     }
 
     @FXML
@@ -181,15 +184,6 @@ public class FileTabFXMLController implements Initializable {
         ManagerFactory.getFileTabManager().getActiveItem().processModified(false);
     }
 
-    @FXML
-    private void onScroll(ScrollEvent event) {
-        bindScollWithOtherList();
-    }
-
-    @FXML
-    private void onScrollTo(ScrollToEvent event) {
-        bindScollWithOtherList();
-    }
 
     @FXML
     private void onKeyPressedContent(KeyEvent event) {
@@ -211,7 +205,7 @@ public class FileTabFXMLController implements Initializable {
     @FXML
     private void onKeyPressedFilter(KeyEvent event) {
         if (event.getCode().equals(KeyCode.ENTER)) {
-            applyFilter(txtFilter.getText());
+            processFilterChange(txtFilter.getText());
             contentListView.requestFocus();
             return;
         }

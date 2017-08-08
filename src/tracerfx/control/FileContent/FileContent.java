@@ -103,24 +103,17 @@ public class FileContent {
         return searchResultsProperty;
     }
     
-    public void setFilter(String filter){
-        if(filterChanged(filter)){
-            this.filter = filter;
-            setLastSearch("");
-            updateContent(filterOriginalContent(), contentObservable);
-            updateLineNumbers();
-        }
+    public void processFilterChange(String filter) {
+        this.filter = filter;
+        
+        processSearch("", false);
+        updateContent(filterOriginalContent(), contentObservable);
+        updateLineNumbers();
     }
 
     public void processSearch(String searchString, boolean exactMatch) {
         setLastSearch(searchString);
         searchResultsProperty.set(FXCollections.observableArrayList(getSearchResultIndexes(filterOriginalContent(), searchString, exactMatch)));
-        
-//        if(searchString.isEmpty()){
-//            updateContent(filterOriginalContent(), contentObservable);
-//        }else{
-//            updateContent(getSearchResult(searchString, filterOriginalContent(), exactMatch), contentObservable);
-//        }
     } 
     
     public synchronized void processFileModified(){
@@ -132,7 +125,7 @@ public class FileContent {
     }
 
     private List<Integer> getSearchResultIndexes(List<String> filteredContent, String searchString, boolean exactMatch) {
-        return IntStream.range(0, filteredContent.size()).filter(
+        return searchString.isEmpty() ? new ArrayList() : IntStream.range(0, filteredContent.size()).filter(
                 x -> exactMatch ? filteredContent.get(x).contains(searchString) : StringUtils.containsIgnoreCase(filteredContent.get(x), searchString))
                 .boxed().collect(Collectors.toList());
     }
@@ -140,10 +133,6 @@ public class FileContent {
     private void updateLineNumbers(){   
         lineNumbersProperty.set(FXCollections.observableArrayList(IntStream.range(1, contentListProperty.size() + 1).boxed()
                 .collect(Collectors.toList())));
-    }
-    
-    private boolean filterChanged(String newFilter){
-        return !this.filter.equals(newFilter);
     }
     
     private List<String> getSearchResult(String searchString, List<String> content, boolean exactMatch){

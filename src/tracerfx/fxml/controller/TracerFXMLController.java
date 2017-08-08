@@ -134,7 +134,8 @@ public class TracerFXMLController implements Initializable {
 
     private void trySearch() {
         final String searchString = txtSearch.getText();
-
+        txtSearch.setText("");
+        
         if (fileTabManager.getActiveItem().isNotEmpty()) {
             fileTabManager.processSearch(searchString, toggleExact.isSelected());
             fileTabManager.getTxtLineDescription().setText("");

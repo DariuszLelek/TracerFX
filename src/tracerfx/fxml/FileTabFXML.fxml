@@ -16,20 +16,21 @@
                <children>
                   <StackPane alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                      <children>
-                        <ListView fx:id="numberListView" editable="true" maxWidth="100.0" minWidth="100.0">
+                        <ListView fx:id="numberListView" editable="true" maxWidth="100.0" minWidth="100.0" StackPane.alignment="CENTER_LEFT">
                            <styleClass>
-                              <String fx:value="scrollBarInvisible" />
                               <String fx:value="listView" />
                               <String fx:value="logFont" />
+                              <String fx:value="invisibleHorizontalScroll" />
                            </styleClass>
                         </ListView>
-                        <ListView fx:id="contentListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onKeyPressed="#onKeyPressedContent" onMouseClicked="#onClick" onScroll="#onScroll" onScrollTo="#onScrollTo">
+                        <ListView fx:id="contentListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onKeyPressed="#onKeyPressedContent" onMouseClicked="#onClick">
                            <StackPane.margin>
                               <Insets left="50.0" />
                            </StackPane.margin>
                            <styleClass>
                               <String fx:value="listView" />
                               <String fx:value="logFont" />
+                              <String fx:value="invisibleHorizontalScroll" />
                            </styleClass>
                         </ListView>
                      </children>
@@ -39,30 +40,38 @@
                   </StackPane>
                </children>
             </HBox>
-            <ToolBar>
+            <ToolBar nodeOrientation="LEFT_TO_RIGHT">
                <items>
-                  <Label text="Lines:" />
+                  <Label styleClass="infoFont" text="Lines" />
                   <Label fx:id="lblLines" text="0">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
+                     <padding>
+                        <Insets left="2.0" right="2.0" />
+                     </padding>
                   </Label>
-                  <Label text=", all:" />
-                  <Label fx:id="lblTotalLines" text="0" />
+                  <Label styleClass="infoFont" text="All" />
+                  <Label fx:id="lblTotalLines" text="0">
+                     <padding>
+                        <Insets left="2.0" right="2.0" />
+                     </padding></Label>
                   <Separator orientation="VERTICAL" />
-                  <HBox alignment="CENTER">
-                     <children>
-                        <Label text="Last search:" />
-                        <Label fx:id="lblLastSearch" text="Label">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="4.0" />
-                           </HBox.margin>
-                        </Label>
-                     </children>
-                  </HBox>
+                  <Label styleClass="infoFont" text="Found" />
+                  <Label fx:id="lblLastSearchResultNum" text="0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets left="2.0" right="2.0" />
+                     </padding>
+                  </Label>
+                  <Label styleClass="infoFont" text="of" />
+                  <Label fx:id="lblLastSearch" text="0">
+                     <padding>
+                        <Insets left="2.0" right="2.0" />
+                     </padding>
+                  </Label>
                   <Pane HBox.hgrow="ALWAYS" />
                   <Separator orientation="VERTICAL" />
                   <CheckBox fx:id="chckFilter" mnemonicParsing="false" onAction="#chckFilter" text="Filter" />
