@@ -26,7 +26,6 @@ import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -138,14 +137,16 @@ public class FileTabFXMLController implements Initializable {
     
     private void trySelectContent(int searchResultIndex) {
         updateSearchResultIndex(searchResultIndex);
-        
+
         if (!searchResults.isEmpty()) {
-            numberListView.scrollTo(searchResultIndex);
-            contentListView.scrollTo(searchResultIndex);
-            
-            contentListView.getSelectionModel().select(searchResults.get(this.searchResultsIndex));
-            contentListView.getFocusModel().focus(searchResults.get(this.searchResultsIndex));
+            focusIndex(searchResults.get(searchResultsIndex));
         }
+    }
+
+    private void focusIndex(int index) {
+        contentListView.getSelectionModel().select(index);
+        contentListView.getFocusModel().focus(index);
+        contentListView.scrollTo(index);
     }
     
     private void updateSearchResultIndex(int searchResultIndex){
@@ -161,7 +162,7 @@ public class FileTabFXMLController implements Initializable {
                 Node node2 = numberListView.lookup(".scroll-bar:vertical");
                 if (node2 instanceof ScrollBar) {
                     final ScrollBar bar2 = (ScrollBar) node2;
-                    bar2.valueProperty().bindBidirectional(bar1.valueProperty());
+                    bar2.valueProperty().bindBidirectional(bar1.valueProperty()); 
                 }
             }
         });

@@ -16,20 +16,22 @@
                <children>
                   <VBox maxWidth="50.0" minWidth="50.0" prefWidth="50.0">
                      <children>
-                        <ListView fx:id="numberListView" nodeOrientation="LEFT_TO_RIGHT" VBox.vgrow="ALWAYS">
+                        <ListView fx:id="numberListView" nodeOrientation="RIGHT_TO_LEFT" VBox.vgrow="ALWAYS">
                            <styleClass>
                               <String fx:value="listView" />
                               <String fx:value="logFont" />
-                              <String fx:value="invisibleScroll" />
+                              <String fx:value="invisibleScrollHorizontal" />
+                              <String fx:value="invisibleScrollVertical" />
                            </styleClass>
                         </ListView>
-                        <Pane maxHeight="14.0" minHeight="14.0" prefHeight="14.0" VBox.vgrow="NEVER" />
+                        <Pane maxHeight="0.0" minHeight="0.0" prefHeight="0.0" VBox.vgrow="NEVER" />
                      </children>
                   </VBox>
                   <ListView fx:id="contentListView" minHeight="64.0" minWidth="100.0" onKeyPressed="#onKeyPressedContent" onMouseClicked="#onClick" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                      <styleClass>
                         <String fx:value="logFont" />
                         <String fx:value="listView" />
+                        <String fx:value="invisibleScrollHorizontal" />
                      </styleClass>
                   </ListView>
                </children>

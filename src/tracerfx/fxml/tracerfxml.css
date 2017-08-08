@@ -15,7 +15,12 @@
     -fx-text-fill: #919191;
 }
 
-.invisibleScroll .scroll-bar {
-    -fx-opacity: 0;
-    -fx-padding: -10;
+.invisibleScrollHorizontal .scroll-bar:horizontal {
+   -fx-opacity: 0;
+   -fx-padding: -10;
+}
+
+.invisibleScrollVertical .scroll-bar:vertical {
+   -fx-opacity: 0;
+   -fx-padding: -10;
 }
