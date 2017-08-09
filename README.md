@@ -10,6 +10,4 @@ Features:
 - Search for string with applied filter;
 - File/Tab highlighted when file modified.
 
-Execultable jar available in /dist
-
 ![Alt text](/screen.png?raw=true "TracerFX screenshot")
