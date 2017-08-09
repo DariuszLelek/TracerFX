@@ -19,7 +19,7 @@ import java.io.File;
 import java.util.stream.Collectors;
 import javafx.beans.property.IntegerProperty;
 import javafx.scene.control.Tab;
-import javafx.scene.text.TextFlow;
+import javafx.scene.web.WebView;
 import tracerfx.tab.FileTab;
 import tracerfx.tab.ProjectTab;
 import tracerfx.control.FileContent.FileContentManager;
@@ -31,7 +31,7 @@ import tracerfx.control.FileContent.FileContentProperty;
  */
 public class FileTabManager extends Manager<FileTab>{
     private final String FXML = "tracerfx/fxml/FileTabFXML.fxml";
-    private TextFlow txtLineDescription;
+    private WebView txtLineDescription;
     private final FileContentManager fileManager = new FileContentManager();
      
     public void addNewFileToProject(File file, ProjectTab projectTab){
@@ -41,7 +41,7 @@ public class FileTabManager extends Manager<FileTab>{
         addItem(fileTab);
     }
 
-    public TextFlow getTxtLineDescription() {
+    public WebView getTxtLineDescription() {
         return txtLineDescription;
     }
     
@@ -82,7 +82,7 @@ public class FileTabManager extends Manager<FileTab>{
         });
     }
 
-    public void setTxtLineDescription(TextFlow txtLineDescription) {
+    public void setTxtLineDescription(WebView txtLineDescription) {
         this.txtLineDescription = txtLineDescription;
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
@@ -47,14 +48,10 @@
                   <Button fx:id="btnRemoveProject" mnemonicParsing="false" onAction="#removeProject" text="Remove Project" />
               </items>
             </ToolBar>
-            <SplitPane dividerPositions="0.8356164383561644" orientation="VERTICAL" VBox.vgrow="ALWAYS">
+            <SplitPane dividerPositions="0.7651663405088063" orientation="VERTICAL" VBox.vgrow="ALWAYS">
               <items>
                   <TabPane fx:id="projectTabPane" layoutX="91.0" layoutY="73.0" prefHeight="357.0" prefWidth="798.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  <TextFlow fx:id="txtLineDescription" prefHeight="200.0" prefWidth="200.0">
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </TextFlow>
+                  <WebView fx:id="txtLineDescription" prefHeight="200.0" prefWidth="200.0" />
               </items>
             </SplitPane>
             <ToolBar nodeOrientation="LEFT_TO_RIGHT" VBox.vgrow="NEVER">

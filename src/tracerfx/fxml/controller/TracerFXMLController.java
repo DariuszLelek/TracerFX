@@ -38,7 +38,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.TextFlow;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import tracerfx.tab.ProjectTab;
 import tracerfx.tab.manager.FileTabManager;
@@ -59,7 +59,7 @@ public class TracerFXMLController implements Initializable {
     @FXML
     private TextField txtSearch;
     @FXML
-    private TextFlow txtLineDescription;
+    private WebView txtLineDescription;
     @FXML
     private Button btnAddFile;
     @FXML

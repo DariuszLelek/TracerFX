@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.text.TextFlow;
 import tracerfx.tab.manager.ManagerFactory;
 
 /**
@@ -54,18 +53,12 @@ public class DescriptionController {
     }
     
     private static void setDescription(){    
-       TextFlow textFlow = ManagerFactory.getFileTabManager().getTxtLineDescription();
-       textFlow.getChildren().clear();
-       List<String> descriptionParts = getDescriptionParts();
-
-        for (int i = 0; i < descriptionParts.size(); i++) {
-            if (!descriptionParts.get(i).isEmpty()) {
-                textFlow.getChildren().add(DescriptionTextFactory.getText(descriptionParts.get(i), false));
-                if (i < descriptionParts.size() - 1) {
-                    textFlow.getChildren().add(DescriptionTextFactory.getText(lastSearchString, true));
-                }
-            }
-        }
+       ManagerFactory.getFileTabManager().getTxtLineDescription().getEngine()
+               .loadContent(String.join(getSearchtringStyled(), getDescriptionParts()));
+    }
+    
+    private static String getSearchtringStyled(){
+        return "<b><font color=\"red\">" + lastSearchString + "</font></b>";
     }
     
     private static List<String> getDescriptionParts(){
