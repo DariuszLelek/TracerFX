@@ -63,7 +63,7 @@
                      </padding>
                   </Label>
                   <Label styleClass="infoFont" text="of" />
-                  <Label fx:id="lblLastSearch" text="0">
+                  <Label fx:id="lblLastSearch" text=" ">
                      <padding>
                         <Insets left="2.0" right="2.0" />
                      </padding>

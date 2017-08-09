@@ -25,7 +25,6 @@ public class ManagerFactory {
     private static final FileTabManager fileTabManager;
     private static final ProjectTabManager projectTabManager;
     private static final StatusManager statusManager;
-    
 
     static{
         fileTabManager = new FileTabManager();

@@ -32,13 +32,13 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import tracerfx.tab.ProjectTab;
 import tracerfx.tab.manager.FileTabManager;
@@ -59,7 +59,7 @@ public class TracerFXMLController implements Initializable {
     @FXML
     private TextField txtSearch;
     @FXML
-    private TextArea txtLineDescription;
+    private TextFlow txtLineDescription;
     @FXML
     private Button btnAddFile;
     @FXML
@@ -137,7 +137,6 @@ public class TracerFXMLController implements Initializable {
         
         if (fileTabManager.getActiveItem().isNotEmpty()) {
             fileTabManager.processSearch(searchString, toggleExact.isSelected());
-            fileTabManager.getTxtLineDescription().setText("");
 
             statusManager.setStatus(searchString.isEmpty()
                     ? StringsFXML.STATUS_SEARCH_RESTORE.toString()

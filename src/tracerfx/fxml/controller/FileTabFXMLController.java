@@ -155,7 +155,6 @@ public class FileTabFXMLController implements Initializable {
 
     private void focusIndex(int index) {
         contentListView.getSelectionModel().select(index);
-        //contentListView.getFocusModel().focus(index);
         contentListView.scrollTo(index);
     }
     
@@ -197,11 +196,20 @@ public class FileTabFXMLController implements Initializable {
     private void processPlaceHolderInsert(boolean scrollVisible) {
         if (scrollVisible && !vBoxNumbers.getChildren().contains(paneNumbersPlaceHolder)) {
             vBoxNumbers.getChildren().add(paneNumbersPlaceHolder);
-            vBoxNumbers.toFront();
+            refreshNumbersVBox();
         } else if (!scrollVisible && vBoxNumbers.getChildren().contains(paneNumbersPlaceHolder)) {
             vBoxNumbers.getChildren().remove(paneNumbersPlaceHolder);
-            vBoxNumbers.toFront();
+            refreshNumbersVBox();
         }
+    }
+
+    private void refreshNumbersVBox() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                vBoxNumbers.requestLayout();
+            }
+        });
     }
 
     private void processFilterChange(String filter) {

@@ -15,8 +15,11 @@
  */
 package tracerfx.control;
 
+import java.util.Arrays;
+import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.text.TextFlow;
 import tracerfx.tab.manager.ManagerFactory;
 
 /**
@@ -24,16 +27,48 @@ import tracerfx.tab.manager.ManagerFactory;
  * @author Dariusz Lelek
  */
 public class DescriptionController {
+    private static String lastDescription = "";
+    private static String lastSearchString = "";
 
     public static final ChangeListener CHANGE_LISTENER_TAB_SWITCH = (ChangeListener) (ObservableValue observable, Object oldValue, Object newValue) -> {
-        ManagerFactory.getFileTabManager().getTxtLineDescription().setText("");
+        setDescription("");
     };
 
     public static final ChangeListener CHANGE_LISTENER_LINE_CHANGE = (ChangeListener) new ChangeListener() {
         @Override
         public void changed(ObservableValue observable, Object oldValue, Object newValue) {
             final String text = newValue != null ? newValue.toString() : "";
-            ManagerFactory.getFileTabManager().getTxtLineDescription().setText(text);
+            setDescription(text);
         }
     };
+    
+    public static void setDescription(String description) {
+        if (!lastDescription.equals(description)) {
+            lastDescription = description;
+            String lastSearch = ManagerFactory.getFileTabManager().getActiveItem().getFileContent().getLastSearchProperty().get();
+            if (!lastSearchString.equals(lastSearch)) {
+                lastSearchString = lastSearch;
+            }
+            setDescription();
+        }
+    }
+    
+    private static void setDescription(){    
+       TextFlow textFlow = ManagerFactory.getFileTabManager().getTxtLineDescription();
+       textFlow.getChildren().clear();
+       List<String> descriptionParts = getDescriptionParts();
+
+        for (int i = 0; i < descriptionParts.size(); i++) {
+            if (!descriptionParts.get(i).isEmpty()) {
+                textFlow.getChildren().add(DescriptionTextFactory.getText(descriptionParts.get(i), false));
+                if (i < descriptionParts.size() - 1) {
+                    textFlow.getChildren().add(DescriptionTextFactory.getText(lastSearchString, true));
+                }
+            }
+        }
+    }
+    
+    private static List<String> getDescriptionParts(){
+        return lastSearchString.isEmpty() ? Arrays.asList(lastDescription) : Arrays.asList(lastDescription.split(lastSearchString));
+    }
 }
