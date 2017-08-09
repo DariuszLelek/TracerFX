@@ -22,10 +22,12 @@ import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -36,6 +38,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import tracerfx.control.FileContent.FileContentProperty;
 import tracerfx.control.StatusManager;
 import tracerfx.tab.manager.ManagerFactory;
@@ -49,6 +53,7 @@ import tracerfx.util.StringsFXML;
 public class FileTabFXMLController implements Initializable {
     private final ListProperty<Integer> searchResults = new SimpleListProperty<>();
     private final StatusManager statusManager = ManagerFactory.getStatusManager();
+    private ScrollBar horizontalScrollBar;
     private int searchResultsIndex = 0;
 
     @FXML
@@ -69,6 +74,10 @@ public class FileTabFXMLController implements Initializable {
     private ListView<String> contentListView;
     @FXML
     private Label lblLastSearchResultNum;
+    @FXML
+    private VBox vBoxNumbers;
+    @FXML
+    private Pane paneNumbersPlaceHolder;
 
 
     /**
@@ -79,6 +88,7 @@ public class FileTabFXMLController implements Initializable {
         prepareProperties();
         prepareListeners();
         bindScollWithOtherList();
+        prepareNumbersPlaceHolder();
     }
 
     @FXML
@@ -145,7 +155,7 @@ public class FileTabFXMLController implements Initializable {
 
     private void focusIndex(int index) {
         contentListView.getSelectionModel().select(index);
-        contentListView.getFocusModel().focus(index);
+        //contentListView.getFocusModel().focus(index);
         contentListView.scrollTo(index);
     }
     
@@ -165,9 +175,35 @@ public class FileTabFXMLController implements Initializable {
                     bar2.valueProperty().bindBidirectional(bar1.valueProperty()); 
                 }
             }
-        });
+        });   
     }
     
+    private void prepareNumbersPlaceHolder(){
+        Platform.runLater(() -> {
+            for (Node node : contentListView.lookupAll(".scroll-bar")) {
+                if (node instanceof ScrollBar) {
+                    ScrollBar scroll = (ScrollBar) node;
+                    if (scroll.getOrientation() == Orientation.HORIZONTAL) {
+                        processPlaceHolderInsert(scroll.isVisible());
+                        scroll.visibleProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+                            processPlaceHolderInsert(newValue);
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    private void processPlaceHolderInsert(boolean scrollVisible) {
+        if (scrollVisible && !vBoxNumbers.getChildren().contains(paneNumbersPlaceHolder)) {
+            vBoxNumbers.getChildren().add(paneNumbersPlaceHolder);
+            vBoxNumbers.toFront();
+        } else if (!scrollVisible && vBoxNumbers.getChildren().contains(paneNumbersPlaceHolder)) {
+            vBoxNumbers.getChildren().remove(paneNumbersPlaceHolder);
+            vBoxNumbers.toFront();
+        }
+    }
+
     private void processFilterChange(String filter) {
         if (!filter.isEmpty()) {
             statusManager.setStatus(StringsFXML.STATUS_FILTER_SET.toString() + filter);
@@ -182,7 +218,6 @@ public class FileTabFXMLController implements Initializable {
     private void onClick(MouseEvent event) {
         ManagerFactory.getFileTabManager().getActiveItem().processModified(false);
     }
-
 
     @FXML
     private void onKeyPressedContent(KeyEvent event) {
@@ -213,5 +248,4 @@ public class FileTabFXMLController implements Initializable {
             contentListView.requestFocus();
         }
     }
-
 }
