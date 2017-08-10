@@ -16,17 +16,13 @@
 package tracerfx.control.FileContent;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import tracerfx.util.FileUtility;
 
@@ -38,13 +34,12 @@ public class FileContent {
     private String filter = "";
     
     private final File file;
-    private final List<String> originalContent = new ArrayList<>();
-    private final ObservableList<String> contentObservable = FXCollections.observableArrayList(originalContent);
-    private final ObservableList<String> originalContentObservable = FXCollections.observableArrayList(originalContent);
-    private final ListProperty<String> contentListProperty = new SimpleListProperty<>(contentObservable);
-    private final ListProperty<Integer> lineNumbersProperty = new SimpleListProperty<>();
-    private final ListProperty<Integer> searchResultsProperty = new SimpleListProperty<>();
-    private final ListProperty<String> originalContentListProperty = new SimpleListProperty<>(originalContentObservable);
+    
+    private final ObservableList<String> originalContentObservableList = FXCollections.observableArrayList();
+    private final ObservableList<String> contentObservableList = FXCollections.observableArrayList();
+    private final ObservableList<Integer> lineNumbersObservableList = FXCollections.observableArrayList();
+    private final ObservableList<Integer> searchLineNumbersObservableList = FXCollections.observableArrayList();
+      
     private final SimpleStringProperty lastSearchProperty = new SimpleStringProperty("");
     private final DateTime addTime;
     
@@ -60,9 +55,13 @@ public class FileContent {
         this.file = file;
         this.addTime = new DateTime();
         
-        readFileAndUpdate();
+        processFileModified();
     }
 
+    public void fileModified(){
+        processFileModified();
+    }
+    
     public synchronized boolean isFollowTrail() {
         return followTrail;
     }
@@ -79,94 +78,83 @@ public class FileContent {
         return lastModified;
     }
     
-    private synchronized void setLastModified(long thislastModified) {
-        this.lastModified = thislastModified;
-    }
-    
-    public ListProperty<String> getOriginalContentListProperty() {
-        return originalContentListProperty;
+    private synchronized void setLastModified(long lastModified) {
+        this.lastModified = lastModified;
     }
 
-    public ListProperty<String> getContentProperty() {
-        return contentListProperty;
+    public ObservableList<String> getOriginalContentObservableList() {
+        return originalContentObservableList;
     }
-    
+
+    public ObservableList<String> getContentObservableList() {
+        return contentObservableList;
+    }
+
+    public ObservableList<Integer> getLineNumbersObservableList() {
+        return lineNumbersObservableList;
+    }
+
+    public ObservableList<Integer> getSearchLineNumbersObservableList() {
+        return searchLineNumbersObservableList;
+    }
+
     public SimpleStringProperty getLastSearchProperty(){
         return lastSearchProperty;
     }
     
-    public ListProperty<Integer> getLineNumbersProperty() {
-        return lineNumbersProperty;
-    }
-    
-    public ListProperty<Integer> getSearchResultsProperty() {
-        return searchResultsProperty;
-    }
-    
-    public void processFilterChange(String filter) {
+    public void setFilter(String filter) {
         this.filter = filter;
-        
-        processSearch("", false);
-        updateContent(filterOriginalContent(), contentObservable);
+    }
+    
+    public void processFilterChange(String newFilter) {
+        setFilter(newFilter);       
+        displayOriginalContent();
+        clearAndAddToObservableList(getFilteredContentList(), contentObservableList);
         updateLineNumbers();
     }
 
-    public void processSearch(String searchString, boolean exactMatch) {
+    public void processSearch(String searchString) {
         setLastSearch(searchString);
-        searchResultsProperty.set(FXCollections.observableArrayList(getSearchResultIndexes(filterOriginalContent(), searchString, exactMatch)));
+        clearAndAddToObservableList(getSearchResultLineNumbers(searchString), searchLineNumbersObservableList);
     } 
     
-    public synchronized void processFileModified(){
-        readFileAndUpdate();
+    private List<Integer> getSearchResultLineNumbers(String searchString){
+        return  IntStream.range(0, contentObservableList.size()).filter(i ->  contentObservableList.get(i).contains(searchString)).boxed().collect(Collectors.toList());
+    }
+    
+    private void processFileModified(){
+        clearAndAddToObservableList(getFileContentList(), originalContentObservableList);
+        displayOriginalContent();
+        setLastModified(file.lastModified());
+        updateLineNumbers();
+    }
+    
+    private void displayOriginalContent(){
+        clearAndAddToObservableList(originalContentObservableList, contentObservableList);
     }
     
     private void setLastSearch(String lastsearch){
         lastSearchProperty.set(lastsearch);
     }
 
-    private List<Integer> getSearchResultIndexes(List<String> filteredContent, String searchString, boolean exactMatch) {
-        return searchString.isEmpty() ? new ArrayList() : IntStream.range(0, filteredContent.size()).filter(
-                x -> exactMatch ? filteredContent.get(x).contains(searchString) : StringUtils.containsIgnoreCase(filteredContent.get(x), searchString))
-                .boxed().collect(Collectors.toList());
-    }
-
     private void updateLineNumbers(){   
-        lineNumbersProperty.set(FXCollections.observableArrayList(IntStream.range(1, contentListProperty.size() + 1).boxed()
-                .collect(Collectors.toList())));
-    }
-    
-    private List<String> getSearchResult(String searchString, List<String> content, boolean exactMatch){
-        return content.stream()
-                .filter(x -> exactMatch ? x.contains(searchString) : StringUtils.containsIgnoreCase(x, searchString))
-                .collect(Collectors.toList());
+        clearAndAddToObservableList(IntStream.range(1, contentObservableList.size() + 1).boxed().collect(Collectors.toList()), lineNumbersObservableList);
     }
         
-    private List<String> filterOriginalContent(){
+    private List<String> getFilteredContentList(){
         if(!filter.isEmpty()){
-            return getSearchResult(filter, originalContent, true);
+            return originalContentObservableList.stream().filter(x -> x.contains(filter)).collect(Collectors.toList());
         }
-        return originalContent;
-    }
-
-    private void readFileAndUpdate() {
-        final List<String> newContent = FileUtility.getFileLines(file);
-        setLastModified(file.lastModified());
-        updateContents(newContent);
+        return originalContentObservableList;
     }
     
-    private void updateContents(List<String> newContent){
-        originalContent.clear();
-        originalContent.addAll(newContent);
-        
-        updateContent(filterOriginalContent(), contentObservable);
-        updateContent(newContent, originalContentObservable);
-        
-        updateLineNumbers();
+    private List<String> getFileContentList(){
+        return FileUtility.getFileLines(file);
     }
     
-    private void updateContent(List<String> newContent, ObservableList observableList){
+    private <T> void clearAndAddToObservableList(List<T> listToAdd, ObservableList observableList){
         observableList.clear();
-        observableList.addAll(newContent);
+        observableList.addAll(listToAdd);
     }
 
     @Override

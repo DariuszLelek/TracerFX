@@ -38,7 +38,7 @@ public class FileContentManager {
     private final int fileCheckDelaySeconds = 5;
 
     public FileContentManager() {
-        runUpdateContentThread();
+        runMarkTabAsModifiedCheck();
     }
 
     public IntegerProperty getMonitoredFilesIntProperty() {
@@ -68,13 +68,13 @@ public class FileContentManager {
         monitoredFilesIntProperty.set(filesContent.stream().filter(f -> f.isFollowTrail()).collect(Collectors.toList()).size());
     }
 
-    private void runUpdateContentThread() {
+    private void runMarkTabAsModifiedCheck() {
         Runnable updateRunnable = () -> {
             Platform.runLater(() -> {
                 updateMonitoredFilesIntProperty();
                 getFilesContent().stream().forEach(f -> {
                     if (f.isFollowTrail() && f.getLastModified() != f.getFile().lastModified()) {
-                        f.processFileModified();
+                        f.fileModified();
                         ManagerFactory.getFileTabManager().markTabAsModified(f.getFile());
                     }
                 });

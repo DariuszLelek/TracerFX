@@ -53,8 +53,8 @@ public class FileTabManager extends Manager<FileTab>{
         return fileManager.getFileContentProperty();
     }
     
-    public void processSearch(String searchString, boolean exactMatch){
-        getActiveItem().getFileContent().processSearch(searchString, exactMatch);
+    public void processSearch(String searchString){
+        getActiveItem().getFileContent().processSearch(searchString);
     }
     
     public void tryToRemoveFilesFromProject(ProjectTab projectTab){

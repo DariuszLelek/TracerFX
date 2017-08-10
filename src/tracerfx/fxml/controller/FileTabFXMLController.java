@@ -52,7 +52,7 @@ import tracerfx.util.StringsFXML;
  */
 public class FileTabFXMLController implements Initializable {
 
-    private final ListProperty<Integer> searchResults = new SimpleListProperty<>();
+    private final ListProperty<Integer> searchResultIndexList = new SimpleListProperty<>();
     private final StatusManager statusManager = ManagerFactory.getStatusManager();
     private int searchResultsIndex = 0;
 
@@ -86,30 +86,30 @@ public class FileTabFXMLController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         prepareProperties();
         prepareListeners();
-        bindScollWithOtherList();
-        prepareNumbersPlaceHolder();
+        bindScollWithLineNumbersList();
+        prepareLineNumbersPlaceHolder();
     }
 
     private void prepareProperties() {
-        final FileContentProperty fcp = ManagerFactory.getFileTabManager().getFileContentProperty();
+        final FileContentProperty fileContentProperty = ManagerFactory.getFileTabManager().getFileContentProperty();
+        
+        bindListSizeToText(new SimpleListProperty(fileContentProperty.getContentObservableList()), lblLines);
+        bindListSizeToText(new SimpleListProperty(fileContentProperty.getOriginalContentObservableList()), lblTotalLines);
+        bindListSizeToText(new SimpleListProperty(searchResultIndexList), lblLastSearchResultNum);
 
-        bindSizeProperty(fcp.getContentProperty(), lblLines);
-        bindSizeProperty(fcp.getOriginalContentListProperty(), lblTotalLines);
-
+        contentListView.setItems(fileContentProperty.getContentObservableList());
+        numberListView.setItems(fileContentProperty.getLineNumbersObservableList());
+        searchResultIndexList.set(fileContentProperty.getSearchLineNumbersObservableList());
+        
         txtFilter.disableProperty().bind(chckFilter.selectedProperty().not());
-        contentListView.setItems(fcp.getContentProperty());
-        numberListView.setItems(fcp.getLineNumbersProperty());
-        lblLastSearch.textProperty().bind(fcp.getLastSearchProperty());
-
+        lblLastSearch.textProperty().bind(fileContentProperty.getLastSearchProperty());
+        
         numberListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        searchResults.set(fcp.getSearchResultsProperty());
-        lblLastSearchResultNum.textProperty().bind(searchResults.sizeProperty().asString());
-
         numberListView.setMouseTransparent(true);
         numberListView.setFocusTraversable(false);
     }
 
-    private void bindSizeProperty(ListProperty listProperty, Label label) {
+    private void bindListSizeToText(ListProperty listProperty, Label label) {
         SimpleIntegerProperty listSizeProperty = new SimpleIntegerProperty();
         listSizeProperty.bind(listProperty.sizeProperty());
         label.textProperty().bind(listSizeProperty.asString());
@@ -118,23 +118,23 @@ public class FileTabFXMLController implements Initializable {
     private void prepareListeners() {
         contentListView.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_LINE_CHANGE);
 
-        searchResults.addListener((ListChangeListener.Change<? extends Integer> c) -> {
+        searchResultIndexList.addListener((ListChangeListener.Change<? extends Integer> c) -> {
             contentListView.requestFocus();
             contentListView.getSelectionModel().clearSelection();
             numberListView.getSelectionModel().clearSelection();
 
-            searchResults.stream().forEach(x -> numberListView.getSelectionModel().select(x.intValue()));
+            searchResultIndexList.stream().forEach(x -> numberListView.getSelectionModel().select(x.intValue()));
 
-            trySelectContent(0);
+            trySelectContentIndex(0);
         });
 
     }
 
-    private void trySelectContent(int searchResultIndex) {
+    private void trySelectContentIndex(int searchResultIndex) {
         updateSearchResultIndex(searchResultIndex);
 
-        if (!searchResults.isEmpty()) {
-            focusIndex(searchResults.get(searchResultsIndex));
+        if (!searchResultIndexList.isEmpty()) {
+            focusIndex(searchResultIndexList.get(searchResultsIndex));
         }
     }
 
@@ -145,11 +145,11 @@ public class FileTabFXMLController implements Initializable {
     }
 
     private void updateSearchResultIndex(int searchResultIndex) {
-        this.searchResultsIndex = searchResultIndex < 0 ? searchResults.size() - 1
-                : (searchResultIndex < searchResults.size() ? searchResultIndex : 0);
+        this.searchResultsIndex = searchResultIndex < 0 ? searchResultIndexList.size() - 1
+                : (searchResultIndex < searchResultIndexList.size() ? searchResultIndex : 0);
     }
 
-    private void bindScollWithOtherList() {
+    private void bindScollWithLineNumbersList() {
         Platform.runLater(() -> {
             Node node1 = contentListView.lookup(".scroll-bar:vertical");
             if (node1 instanceof ScrollBar) {
@@ -163,7 +163,7 @@ public class FileTabFXMLController implements Initializable {
         });
     }
 
-    private void prepareNumbersPlaceHolder() {
+    private void prepareLineNumbersPlaceHolder() {
         Platform.runLater(() -> {
             for (Node node : contentListView.lookupAll(".scroll-bar")) {
                 if (node instanceof ScrollBar) {
@@ -212,12 +212,12 @@ public class FileTabFXMLController implements Initializable {
         }
 
         if (event.isShiftDown() && event.getCode() == KeyCode.F3) {
-            trySelectContent(searchResultsIndex - 1);
+            trySelectContentIndex(searchResultsIndex - 1);
             return;
         }
 
         if (event.getCode().equals(KeyCode.F3)) {
-            trySelectContent(searchResultsIndex + 1);
+            trySelectContentIndex(searchResultsIndex + 1);
         }
     }
 

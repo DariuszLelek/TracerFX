@@ -15,8 +15,8 @@
  */
 package tracerfx.control.FileContent;
 
-import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -30,23 +30,23 @@ public class FileContentProperty {
         this.fileContent = fileContent;
     }
 
-    public ListProperty<String> getContentProperty() {
-        return fileContent.getContentProperty();
-    }
-
-    public ListProperty<String> getOriginalContentListProperty() {
-        return fileContent.getOriginalContentListProperty();
-    }
-
     public SimpleStringProperty getLastSearchProperty() {
         return fileContent.getLastSearchProperty();
     }
-    
-    public ListProperty<Integer> getLineNumbersProperty() {
-        return fileContent.getLineNumbersProperty();
+
+    public ObservableList<String> getOriginalContentObservableList() {
+        return fileContent.getOriginalContentObservableList();
     }
     
-    public ListProperty<Integer> getSearchResultsProperty() {
-        return fileContent.getSearchResultsProperty();
+    public ObservableList<String> getContentObservableList() {
+        return fileContent.getContentObservableList();
+    }
+ 
+    public ObservableList<Integer> getLineNumbersObservableList() {
+        return fileContent.getLineNumbersObservableList();
+    }
+
+    public ObservableList<Integer> getSearchLineNumbersObservableList() {
+        return fileContent.getSearchLineNumbersObservableList();
     }
 }

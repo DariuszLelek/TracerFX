@@ -34,7 +34,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -76,8 +75,6 @@ public class TracerFXMLController implements Initializable {
     private Button btnRemoveFile;
     @FXML
     private Label lblFileMonitor;
-    @FXML
-    private ToggleButton toggleExact;
 
     /**
      * Initializes the controller class.
@@ -136,7 +133,7 @@ public class TracerFXMLController implements Initializable {
         txtSearch.setText("");
         
         if (fileTabManager.getActiveItem().isNotEmpty()) {
-            fileTabManager.processSearch(searchString, toggleExact.isSelected());
+            fileTabManager.processSearch(searchString);
 
             statusManager.setStatus(searchString.isEmpty()
                     ? StringsFXML.STATUS_SEARCH_RESTORE.toString()
@@ -155,7 +152,6 @@ public class TracerFXMLController implements Initializable {
         btnRemoveProject.disableProperty().bind(anyProjectProperty);
         txtSearch.disableProperty().bind(anyFileProperty);
         btnSearch.disableProperty().bind(anyFileProperty);
-        toggleExact.disableProperty().bind(anyFileProperty);
 
         lblFileMonitor.textProperty().bind(fileTabManager.getMonitoredFilesIntProperty().asString());
     }
@@ -229,12 +225,6 @@ public class TracerFXMLController implements Initializable {
         if (event.isControlDown() && event.getCode() == KeyCode.F) {
             txtSearch.requestFocus();
             return;
-        }
-
-        if (event.isControlDown() && event.getCode() == KeyCode.E) {
-            if (!toggleExact.isDisabled()) {
-                toggleExact.setSelected(!toggleExact.isSelected());
-            }
         }
     }
 }
