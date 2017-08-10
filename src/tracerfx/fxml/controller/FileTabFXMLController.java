@@ -15,7 +15,6 @@
  */
 package tracerfx.fxml.controller;
 
-import tracerfx.control.DescriptionController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -40,6 +39,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import tracerfx.control.DescriptionController;
 import tracerfx.control.FileContent.FileContentProperty;
 import tracerfx.control.StatusManager;
 import tracerfx.tab.manager.ManagerFactory;
@@ -141,8 +141,7 @@ public class FileTabFXMLController implements Initializable {
     private void focusIndex(int index) {
         contentListView.getSelectionModel().select(index);
         contentListView.scrollTo(index);
-
-        Platform.runLater(numberListView::requestLayout);
+        numberListView.scrollTo(index);
     }
 
     private void updateSearchResultIndex(int searchResultIndex) {
