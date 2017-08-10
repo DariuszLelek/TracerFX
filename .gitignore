@@ -7,11 +7,6 @@ Desktop.ini
 
 # Netbeans
 build
-nbproject
-.nbbuild
-
-# build files
-dist/web-files
 
 # IntelliJ
 .idea/
