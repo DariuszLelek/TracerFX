@@ -30,16 +30,17 @@ import tracerfx.tab.manager.ManagerFactory;
 public class DescriptionController {
     private static String lastDescription = "";
     private static String lastSearchString = "";
-    private final static Map<Character, String> splitCharEscapeMap;
+    
+    final static Map<Character, String> SPLIT_CHAR_EXCAPE_MAP;
     
     static{
-        splitCharEscapeMap = new HashMap();
-        splitCharEscapeMap.put('-', "\\-");
-        splitCharEscapeMap.put('+', "\\+");
-        splitCharEscapeMap.put('/', "\\/");
-        splitCharEscapeMap.put('*', "\\*");
-        splitCharEscapeMap.put('^', "\\^");
-        splitCharEscapeMap.put('x', "\\x");   
+        SPLIT_CHAR_EXCAPE_MAP = new HashMap();
+        SPLIT_CHAR_EXCAPE_MAP.put('-', "\\-");
+        SPLIT_CHAR_EXCAPE_MAP.put('+', "\\+");
+        SPLIT_CHAR_EXCAPE_MAP.put('/', "\\/");
+        SPLIT_CHAR_EXCAPE_MAP.put('*', "\\*");
+        SPLIT_CHAR_EXCAPE_MAP.put('^', "\\^");
+        SPLIT_CHAR_EXCAPE_MAP.put('x', "\\x");
     }
 
     public static final ChangeListener CHANGE_LISTENER_TAB_SWITCH = (ChangeListener) (ObservableValue observable, Object oldValue, Object newValue) -> {
@@ -78,11 +79,11 @@ public class DescriptionController {
         return lastSearchString.isEmpty() ? Arrays.asList(lastDescription) : Arrays.asList(lastDescription.split(getSplitString(lastSearchString)));
     }
     
-    private static String getSplitString(String lastSearchString){
+    static String getSplitString(String lastSearchString){
         StringBuilder sb = new StringBuilder();
         
         for(char character : lastSearchString.toCharArray()){
-            sb.append(splitCharEscapeMap.containsKey(character) ? splitCharEscapeMap.get(character) : character);
+            sb.append(SPLIT_CHAR_EXCAPE_MAP.containsKey(character) ? SPLIT_CHAR_EXCAPE_MAP.get(character) : character);
         }
         
         return sb.toString();
