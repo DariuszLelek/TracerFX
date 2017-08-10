@@ -16,7 +16,9 @@
 package tracerfx.control;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import tracerfx.tab.manager.ManagerFactory;
@@ -28,6 +30,17 @@ import tracerfx.tab.manager.ManagerFactory;
 public class DescriptionController {
     private static String lastDescription = "";
     private static String lastSearchString = "";
+    private final static Map<Character, String> splitCharEscapeMap;
+    
+    static{
+        splitCharEscapeMap = new HashMap();
+        splitCharEscapeMap.put('-', "\\-");
+        splitCharEscapeMap.put('+', "\\+");
+        splitCharEscapeMap.put('/', "\\/");
+        splitCharEscapeMap.put('*', "\\*");
+        splitCharEscapeMap.put('^', "\\^");
+        splitCharEscapeMap.put('x', "\\x");
+    }
 
     public static final ChangeListener CHANGE_LISTENER_TAB_SWITCH = (ChangeListener) (ObservableValue observable, Object oldValue, Object newValue) -> {
         setDescription("");
@@ -62,6 +75,16 @@ public class DescriptionController {
     }
     
     private static List<String> getDescriptionParts(){
-        return lastSearchString.isEmpty() ? Arrays.asList(lastDescription) : Arrays.asList(lastDescription.split(lastSearchString));
+        return lastSearchString.isEmpty() ? Arrays.asList(lastDescription) : Arrays.asList(lastDescription.split(getSplitString(lastSearchString)));
+    }
+    
+    private static String getSplitString(String lastSearchString){
+        StringBuilder sb = new StringBuilder();
+        
+        for(char character : lastSearchString.toCharArray()){
+            sb.append(splitCharEscapeMap.containsKey(character) ? splitCharEscapeMap.get(character) : character);
+        }
+        
+        return sb.toString();
     }
 }

@@ -39,7 +39,7 @@ public class FileContent {
     private final ObservableList<String> originalContentObservableList = FXCollections.observableArrayList();
     private final ObservableList<String> contentObservableList = FXCollections.observableArrayList();
     private final ObservableList<Integer> lineNumbersObservableList = FXCollections.observableArrayList();
-    private final ObservableList<Integer> searchLineNumbersObservableList = FXCollections.observableArrayList();
+    private ObservableList<Integer> searchLineNumbersObservableList = FXCollections.observableArrayList();
       
     private final SimpleStringProperty lastSearchProperty = new SimpleStringProperty("");
     private final DateTime addTime;
@@ -68,9 +68,7 @@ public class FileContent {
     public FileContentProperty getFileContentProperty() {
         return fileContentProperty;
     }
-    
-    
-    
+
     public synchronized boolean isFollowTrail() {
         return followTrail;
     }
@@ -128,7 +126,9 @@ public class FileContent {
     } 
     
     private List<Integer> getSearchResultLineNumbers(String searchString){
-        return  IntStream.range(0, contentObservableList.size()).filter(i -> contentObservableList.get(i).contains(searchString)).boxed().collect(Collectors.toList());
+        
+        List<Integer> ints = IntStream.range(0, contentObservableList.size()).filter(i -> contentObservableList.get(i).contains(searchString)).boxed().collect(Collectors.toList());
+        return ints;
     }
     
     private void processFileModified(){
@@ -161,7 +161,7 @@ public class FileContent {
         return FileUtility.getFileLines(file);
     }
     
-    private <T> void clearAndAddToObservableList(List<T> listToAdd, ObservableList observableList){
+    private <T> void clearAndAddToObservableList(List<T> listToAdd, ObservableList<T> observableList){
         observableList.clear();
         observableList.addAll(listToAdd);
     }
