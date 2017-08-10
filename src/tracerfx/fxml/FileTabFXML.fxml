@@ -12,9 +12,9 @@
    <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <VBox fx:id="vBoxNumbers" maxWidth="50.0" minWidth="50.0" prefWidth="50.0">
+            <SplitPane dividerPositions="0.11228813559322035" prefHeight="159.0" prefWidth="474.0" VBox.vgrow="ALWAYS">
+               <items>
+                  <VBox fx:id="vBoxNumbers" maxWidth="70.0" prefWidth="40.0" SplitPane.resizableWithParent="false">
                      <children>
                         <ListView fx:id="numberListView" nodeOrientation="RIGHT_TO_LEFT" VBox.vgrow="ALWAYS">
                            <styleClass>
@@ -27,14 +27,14 @@
                         <Pane fx:id="paneNumbersPlaceHolder" maxHeight="14.0" minHeight="14.0" prefHeight="14.0" VBox.vgrow="NEVER" />
                      </children>
                   </VBox>
-                  <ListView fx:id="contentListView" minHeight="64.0" minWidth="100.0" onKeyPressed="#onKeyPressedContent" onMouseClicked="#onClick" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                  <ListView fx:id="contentListView" onKeyPressed="#onKeyPressedContent" onMouseClicked="#onClick" HBox.hgrow="ALWAYS">
                      <styleClass>
                         <String fx:value="logFont" />
                         <String fx:value="listView" />
                      </styleClass>
                   </ListView>
-               </children>
-            </HBox>
+               </items>
+            </SplitPane>
             <ToolBar nodeOrientation="LEFT_TO_RIGHT">
                <items>
                   <Label styleClass="infoFont" text="Lines" />
