@@ -63,11 +63,10 @@
                      </padding>
                   </Label>
                   <Label styleClass="infoFont" text="of" />
-                  <Label fx:id="lblLastSearch" text=" ">
+                  <Label fx:id="lblLastSearch" styleClass="stringSearchColor" text=" ">
                      <padding>
                         <Insets left="2.0" right="2.0" />
-                     </padding>
-                  </Label>
+                     </padding></Label>
                   <Pane HBox.hgrow="ALWAYS" />
                   <Separator orientation="VERTICAL" />
                   <CheckBox fx:id="chckFilter" mnemonicParsing="false" onAction="#chckFilter" text="Filter" />

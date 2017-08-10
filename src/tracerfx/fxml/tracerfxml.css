@@ -24,3 +24,7 @@
    -fx-opacity: 0;
    -fx-padding: -10;
 }
+
+.stringSearchColor{
+    -fx-text-fill: #cc0a0a;
+}

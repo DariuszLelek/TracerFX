@@ -162,17 +162,14 @@ public class FileTabFXMLController implements Initializable {
 
     private void prepareLineNumbersPlaceHolder() {
         Platform.runLater(() -> {
-            for (Node node : contentListView.lookupAll(".scroll-bar")) {
-                if (node instanceof ScrollBar) {
-                    ScrollBar scroll = (ScrollBar) node;
-                    if (scroll.getOrientation() == Orientation.HORIZONTAL) {
-                        processPlaceHolderInsert(scroll.isVisible());
-                        scroll.visibleProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-                            processPlaceHolderInsert(newValue);
-                        });
-                    }
-                }
-            }
+            contentListView.lookupAll(".scroll-bar").stream().filter((node) -> (node instanceof ScrollBar)).map((node) -> (ScrollBar) node).filter((scroll) -> (scroll.getOrientation() == Orientation.HORIZONTAL)).map((scroll) -> {
+                processPlaceHolderInsert(scroll.isVisible());
+                return scroll;
+            }).forEachOrdered((scroll) -> {
+                scroll.visibleProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+                    processPlaceHolderInsert(newValue);
+                });
+            });
         });
     }
 

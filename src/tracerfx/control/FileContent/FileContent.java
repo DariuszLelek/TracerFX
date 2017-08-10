@@ -16,6 +16,7 @@
 package tracerfx.control.FileContent;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -116,6 +117,7 @@ public class FileContent {
     public void processFilterChange(String newFilter) {
         setFilter(newFilter);       
         displayOriginalContent();
+        processSearch("");
         clearAndAddToObservableList(getFilteredContentList(), contentObservableList);
         updateLineNumbers();
     }
@@ -126,9 +128,10 @@ public class FileContent {
     } 
     
     private List<Integer> getSearchResultLineNumbers(String searchString){
-        
-        List<Integer> ints = IntStream.range(0, contentObservableList.size()).filter(i -> contentObservableList.get(i).contains(searchString)).boxed().collect(Collectors.toList());
-        return ints;
+        return searchString.isEmpty() ? new ArrayList<>() : 
+                IntStream.range(0, contentObservableList.size())
+                        .filter(i -> contentObservableList.get(i).contains(searchString))
+                        .boxed().collect(Collectors.toList());
     }
     
     private void processFileModified(){
