@@ -30,14 +30,13 @@ import tracerfx.task.TaskManager;
  *
  * @author Dariusz Lelek
  */
-public class FileContentManager {
-
-    private FileContentProperty fileContentProperty;
-    private final List<FileContent> filesContent = new ArrayList<>();
+public class FileContentController {
+    private FileContentProperty lastFileContentProperty;
+    private final List<FileContent> fileContentList = new ArrayList<>();
     private final IntegerProperty monitoredFilesIntProperty = new SimpleIntegerProperty(0);
     private final int fileCheckDelaySeconds = 5;
 
-    public FileContentManager() {
+    public FileContentController() {
         runMarkTabAsModifiedCheck();
     }
 
@@ -46,38 +45,36 @@ public class FileContentManager {
     }
 
     public FileContentProperty getFileContentProperty() {
-        return fileContentProperty;
+        return lastFileContentProperty;
     }
 
-    public FileContent getFileContent(final File activeFile) {
-        FileContent fileContent = new FileContent(activeFile);
-        fileContentProperty = new FileContentProperty(fileContent);
+    public FileContent getFileContent(final File file) {
+        final FileContent fileContent = new FileContent(file);
         addFileContent(fileContent);
+        this.lastFileContentProperty = fileContent.getFileContentProperty();
         return fileContent;
     }
-
-    public synchronized List<FileContent> getFilesContent() {
-        return filesContent;
+    
+    private synchronized void addFileContent(final FileContent fileContent){
+        fileContentList.add(fileContent);
     }
-
-    private synchronized void addFileContent(FileContent fileContent) {
-        filesContent.add(fileContent);
-    }
-
+    
     private void updateMonitoredFilesIntProperty() {
-        monitoredFilesIntProperty.set(filesContent.stream().filter(f -> f.isFollowTrail()).collect(Collectors.toList()).size());
+        monitoredFilesIntProperty.set(fileContentList.stream().filter(f -> f.isFollowTrail()).collect(Collectors.toList()).size());
     }
 
     private void runMarkTabAsModifiedCheck() {
         Runnable updateRunnable = () -> {
             Platform.runLater(() -> {
                 updateMonitoredFilesIntProperty();
-                getFilesContent().stream().forEach(f -> {
-                    if (f.isFollowTrail() && f.getLastModified() != f.getFile().lastModified()) {
-                        f.fileModified();
-                        ManagerFactory.getFileTabManager().markTabAsModified(f.getFile());
-                    }
-                });
+                synchronized (fileContentList) {
+                    fileContentList.stream().forEach(f -> {
+                        if (f.isFollowTrail() && f.getLastModified() != f.getFile().lastModified()) {
+                            f.fileModified();
+                            ManagerFactory.getFileTabManager().markTabAsModified(f.getFile());
+                        }
+                    });
+                }
             }
             );
         };

@@ -22,7 +22,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.web.WebView;
 import tracerfx.tab.FileTab;
 import tracerfx.tab.ProjectTab;
-import tracerfx.control.FileContent.FileContentManager;
+import tracerfx.control.FileContent.FileContentController;
 import tracerfx.control.FileContent.FileContentProperty;
 
 /**
@@ -32,7 +32,7 @@ import tracerfx.control.FileContent.FileContentProperty;
 public class FileTabManager extends Manager<FileTab>{
     private final String FXML = "tracerfx/fxml/FileTabFXML.fxml";
     private WebView txtLineDescription;
-    private final FileContentManager fileManager = new FileContentManager();
+    private final FileContentController fileManager = new FileContentController();
      
     public void addNewFileToProject(File file, ProjectTab projectTab){
         FileTab fileTab = new FileTab(fileManager.getFileContent(file), getParent(FXML), projectTab);

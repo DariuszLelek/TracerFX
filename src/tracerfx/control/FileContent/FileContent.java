@@ -34,6 +34,7 @@ public class FileContent {
     private String filter = "";
     
     private final File file;
+    private final FileContentProperty fileContentProperty;
     
     private final ObservableList<String> originalContentObservableList = FXCollections.observableArrayList();
     private final ObservableList<String> contentObservableList = FXCollections.observableArrayList();
@@ -49,11 +50,13 @@ public class FileContent {
     public FileContent(){
         this.file = null;
         this.addTime = new DateTime();
+        this.fileContentProperty = new FileContentProperty(this);
     }
 
     public FileContent(File file) {
         this.file = file;
         this.addTime = new DateTime();
+        this.fileContentProperty = new FileContentProperty(this);
         
         processFileModified();
     }
@@ -61,6 +64,12 @@ public class FileContent {
     public void fileModified(){
         processFileModified();
     }
+
+    public FileContentProperty getFileContentProperty() {
+        return fileContentProperty;
+    }
+    
+    
     
     public synchronized boolean isFollowTrail() {
         return followTrail;
@@ -119,7 +128,7 @@ public class FileContent {
     } 
     
     private List<Integer> getSearchResultLineNumbers(String searchString){
-        return  IntStream.range(0, contentObservableList.size()).filter(i ->  contentObservableList.get(i).contains(searchString)).boxed().collect(Collectors.toList());
+        return  IntStream.range(0, contentObservableList.size()).filter(i -> contentObservableList.get(i).contains(searchString)).boxed().collect(Collectors.toList());
     }
     
     private void processFileModified(){
