@@ -1,4 +1,7 @@
 s# Netbeans
+build
+dist
+nbproject
 
 # Windows shortcuts
 *.lnk
