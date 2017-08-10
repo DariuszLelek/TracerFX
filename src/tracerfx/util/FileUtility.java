@@ -24,33 +24,30 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Dariusz Lelek
  */
 public class FileUtility {
-    
-    private final static int[] excludedASCII = {0};
-    private final int lastLineLength = 1000;
-    
+
+    protected final static int[] excludedASCII = {0};
+
     public static int getFileLineNumber(File file) {
         LineNumberReader lnr = null;
-        try {
-            lnr = new LineNumberReader(new FileReader(file));
+        try (FileReader fileReader = file != null ? new FileReader(file) : new FileReader("")) {
+            lnr = new LineNumberReader(fileReader);
             lnr.skip(Long.MAX_VALUE);
         } catch (IOException ex) {
             // TODO logger
-            Logger.getLogger(FileUtility.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
-        return lnr != null ? lnr.getLineNumber() + 1 : 0;
+        return lnr != null ? lnr.getLineNumber() : -1;
     }
 
     public static List<String> getFileLines(File file) {
         List<String> content = new ArrayList<>();
-        if (file.exists()) {
+        if (file != null && file.exists()) {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "utf-8"))) {
                 for (String line = null; (line = br.readLine()) != null;) {
                     if (validLine(line)) {
@@ -58,21 +55,21 @@ public class FileUtility {
                     }
                 }
             } catch (IOException ex) {
-                Logger.getLogger(FileUtility.class.getName()).log(Level.SEVERE, null, ex);
+                // TODO
+                ex.printStackTrace();
             }
         }
         return content;
     }
 
-    private static boolean validLine(String line){      
+    static boolean validLine(String line){      
         if(line.isEmpty()){
             return false;
         }
-        
         return !(line.length() == 1 && containsExcludedASCII(line));
     }
     
-    private static boolean containsExcludedASCII(String line){
+    static boolean containsExcludedASCII(String line){
         for(int i = 0; i < excludedASCII.length; i++){
             if((int) line.charAt(0) == excludedASCII[i]){
                 return true;
