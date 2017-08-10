@@ -39,7 +39,7 @@ public class DescriptionController {
         splitCharEscapeMap.put('/', "\\/");
         splitCharEscapeMap.put('*', "\\*");
         splitCharEscapeMap.put('^', "\\^");
-        splitCharEscapeMap.put('x', "\\x");
+        splitCharEscapeMap.put('x', "\\x");   
     }
 
     public static final ChangeListener CHANGE_LISTENER_TAB_SWITCH = (ChangeListener) (ObservableValue observable, Object oldValue, Object newValue) -> {
