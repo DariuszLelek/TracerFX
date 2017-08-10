@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,9 +42,10 @@ public class FileContent {
     private final ObservableList<String> originalContentObservableList = FXCollections.observableArrayList();
     private final ObservableList<String> contentObservableList = FXCollections.observableArrayList();
     private final ObservableList<Integer> lineNumbersObservableList = FXCollections.observableArrayList();
-    private ObservableList<Integer> searchLineNumbersObservableList = FXCollections.observableArrayList();
+    private final ObservableList<Integer> searchLineNumbersObservableList = FXCollections.observableArrayList();
       
     private final SimpleStringProperty lastSearchProperty = new SimpleStringProperty("");
+    private final BooleanProperty fileModifiedProperty = new SimpleBooleanProperty(false);
     private final DateTime addTime;
     
     private long lastModified;
@@ -59,11 +62,16 @@ public class FileContent {
         this.addTime = new DateTime();
         this.fileContentProperty = new FileContentProperty(this);
         
-        processFileModified();
+        updateFileContent();
     }
 
-    public void fileModified(){
-        processFileModified();
+    public void setFileModified(){
+        // TODO add control to reload file based on option: reload on click or reload auto
+        fileModifiedProperty.set(true);
+    }
+    
+    public boolean fileModified(){
+        return fileModifiedProperty.get();
     }
 
     public FileContentProperty getFileContentProperty() {
@@ -134,12 +142,21 @@ public class FileContent {
                         .boxed().collect(Collectors.toList());
     }
     
-    private void processFileModified(){
+    public void processFileModified(){
+        if(fileModifiedProperty.get()){
+            updateFileContent();
+        }
+    }
+    
+    private void updateFileContent() {
         clearAndAddToObservableList(getFileContentList(), originalContentObservableList);
         displayOriginalContent();
-        setLastModified(file.lastModified());
         updateLineNumbers();
+        
+        setLastModified(file.lastModified());
+        fileModifiedProperty.set(false);
     }
+
     
     private void displayOriginalContent(){
         clearAndAddToObservableList(originalContentObservableList, contentObservableList);
@@ -150,14 +167,15 @@ public class FileContent {
     }
 
     private void updateLineNumbers(){   
-        clearAndAddToObservableList(IntStream.range(1, contentObservableList.size() + 1).boxed().collect(Collectors.toList()), lineNumbersObservableList);
+        clearAndAddToObservableList(IntStream.range(1, contentObservableList.size() + 1)
+                .boxed().collect(Collectors.toList()), lineNumbersObservableList);
     }
         
     private List<String> getFilteredContentList(){
-        if(!filter.isEmpty()){
-            return originalContentObservableList.stream().filter(x -> x.contains(filter)).collect(Collectors.toList());
-        }
-        return originalContentObservableList;
+
+        return filter.isEmpty() ? originalContentObservableList : 
+                originalContentObservableList.stream()
+                        .filter(x -> x.contains(filter)).collect(Collectors.toList());
     }
     
     private List<String> getFileContentList(){
@@ -172,8 +190,7 @@ public class FileContent {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 67 * hash + Objects.hashCode(this.file);
-        hash = 67 * hash + Objects.hashCode(this.addTime);
+        hash = 59 * hash + Objects.hashCode(this.addTime);
         return hash;
     }
 
@@ -189,9 +206,11 @@ public class FileContent {
             return false;
         }
         final FileContent other = (FileContent) obj;
-        if (!Objects.equals(this.file, other.file)) {
+        if (!Objects.equals(this.addTime, other.addTime)) {
             return false;
         }
-        return Objects.equals(this.addTime, other.addTime);
+        return true;
     }
+
+
 }

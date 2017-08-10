@@ -78,7 +78,7 @@ public class FileTabManager extends Manager<FileTab>{
     
     public void markTabAsModified(File file){
         getAllItems().stream().filter(x -> x.getFileContent().getFile().equals(file)).forEach(x -> {
-            x.processModified(true);
+            x.setTabModified(true);
         });
     }
 

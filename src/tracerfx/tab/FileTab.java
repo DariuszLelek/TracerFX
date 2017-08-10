@@ -71,7 +71,7 @@ public class FileTab extends CustomTab{
         tab.setStyle(this.modified ? modifiedStyle : "");
     }
     
-    public synchronized void processModified(boolean modified) {
+    public synchronized void setTabModified(boolean modified) {
         this.modified = modified;
         
         this.processModified();

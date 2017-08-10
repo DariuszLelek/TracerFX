@@ -70,7 +70,7 @@ public class FileContentController {
                 synchronized (fileContentList) {
                     fileContentList.stream().forEach(f -> {
                         if (f.isFollowTrail() && f.getLastModified() != f.getFile().lastModified()) {
-                            f.fileModified();
+                            f.setFileModified();
                             ManagerFactory.getFileTabManager().markTabAsModified(f.getFile());
                         }
                     });

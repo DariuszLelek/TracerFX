@@ -43,6 +43,7 @@ import javafx.scene.layout.VBox;
 import tracerfx.control.DescriptionController;
 import tracerfx.control.FileContent.FileContentProperty;
 import tracerfx.control.StatusManager;
+import tracerfx.tab.FileTab;
 import tracerfx.tab.manager.ManagerFactory;
 import tracerfx.util.StringsFXML;
 
@@ -195,7 +196,9 @@ public class FileTabFXMLController implements Initializable {
 
     @FXML
     private void onClick(MouseEvent event) {
-        ManagerFactory.getFileTabManager().getActiveItem().processModified(false);
+        FileTab fileTab = ManagerFactory.getFileTabManager().getActiveItem();
+        fileTab.setTabModified(false);
+        fileTab.getFileContent().processFileModified();
     }
 
     @FXML
