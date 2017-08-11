@@ -28,13 +28,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.joda.time.DateTime;
 import tracerfx.util.FileUtility;
+import tracerfx.util.Strings;
 
 /**
  *
  * @author Dariusz Lelek
  */
 public class FileContent {
-    private String filter = "";
+    private String filter = Strings.EMPTY.toString();
     
     private final File file;
     private final FileContentProperty fileContentProperty;
@@ -44,7 +45,7 @@ public class FileContent {
     private final ObservableList<Integer> lineNumbersObservableList = FXCollections.observableArrayList();
     private final ObservableList<Integer> searchLineNumbersObservableList = FXCollections.observableArrayList();
       
-    private final SimpleStringProperty lastSearchProperty = new SimpleStringProperty("");
+    private final SimpleStringProperty lastSearchProperty = new SimpleStringProperty(Strings.EMPTY.toString());
     private final BooleanProperty fileModifiedProperty = new SimpleBooleanProperty(false);
     private final DateTime addTime;
     
@@ -125,7 +126,7 @@ public class FileContent {
     public void processFilterChange(String newFilter) {
         setFilter(newFilter);       
         displayOriginalContent();
-        processSearch("");
+        processSearch(Strings.EMPTY.toString());
         clearAndAddToObservableList(getFilteredContentList(), contentObservableList);
         updateLineNumbers();
     }

@@ -20,13 +20,14 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 import tracerfx.tab.manager.ManagerFactory;
+import tracerfx.util.Strings;
 
 /**
  *
  * @author Dariusz Lelek
  */
 public class ProjectTab extends CustomTab {
-    public static final ProjectTab EMPTY = new ProjectTab("", new Pane());
+    public static final ProjectTab EMPTY = new ProjectTab(Strings.EMPTY.toString(), new Pane());
     private final TabPane fileTabPane;
     
     public ProjectTab(String title, Parent root) {
@@ -49,7 +50,7 @@ public class ProjectTab extends CustomTab {
     
     @Override
     protected void processModified(){
-        this.tab.setStyle(ManagerFactory.getProjectTabManager().hasAnyChildTabModified(this) ? modifiedStyle : "");
+        this.tab.setStyle(ManagerFactory.getProjectTabManager().hasAnyChildTabModified(this) ? modifiedStyle : Strings.EMPTY.toString());
     }
 
     private TabPane findTabPaneForNode(Parent parent) {

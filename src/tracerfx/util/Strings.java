@@ -19,7 +19,13 @@ package tracerfx.util;
  *
  * @author Dariusz Lelek
  */
-public enum StringsFXML {
+public enum Strings {
+    EMPTY(""),
+    
+    ABOUT_TITLE("About"),
+    ABOUT_HEADER("TracerFX - Version 1.0"),
+    ABOUT_CONTENT("JavaFX log tracer tool.\n\n created by: dariusz.lelek@gmail.com"),
+    
     NEW_PROJECT_DIALOG_TITLE("Project Name"),  
     NEW_PROJECT_DIALOG_HEADER("Enter new project name"),
     NEW_PROJECT_DIALOG_PROJECT_NAME("New Project"),
@@ -43,7 +49,7 @@ public enum StringsFXML {
     
     private final String value;
 
-    private StringsFXML(String value) {
+    private Strings(String value) {
         this.value = value;
     }
 

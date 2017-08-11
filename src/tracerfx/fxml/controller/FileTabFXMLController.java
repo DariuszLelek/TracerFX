@@ -45,7 +45,7 @@ import tracerfx.control.FileContent.FileContentProperty;
 import tracerfx.control.StatusManager;
 import tracerfx.tab.FileTab;
 import tracerfx.tab.manager.ManagerFactory;
-import tracerfx.util.StringsFXML;
+import tracerfx.util.Strings;
 
 /**
  * FXML Controller class
@@ -186,9 +186,9 @@ public class FileTabFXMLController implements Initializable {
 
     private void processFilterChange(String filter) {
         if (!filter.isEmpty()) {
-            statusManager.setStatus(StringsFXML.STATUS_FILTER_SET.toString() + filter);
+            statusManager.setStatus(Strings.STATUS_FILTER_SET.toString() + filter);
         } else {
-            statusManager.setStatus(StringsFXML.STATUS_FILTER_EMPTY.toString());
+            statusManager.setStatus(Strings.STATUS_FILTER_EMPTY.toString());
         }
 
         ManagerFactory.getFileTabManager().getActiveItem().getFileContent().processFilterChange(filter);
@@ -236,7 +236,7 @@ public class FileTabFXMLController implements Initializable {
     @FXML
     private void chckFilter(ActionEvent event) {
         if (!chckFilter.isSelected()) {
-            txtFilter.setText("");
+            txtFilter.setText(Strings.EMPTY.toString());
         }
         processFilterChange(txtFilter.getText());
     }

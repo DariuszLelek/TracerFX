@@ -35,7 +35,7 @@ public class FileUtility {
 
     public static int getFileLineNumber(File file) {
         LineNumberReader lnr = null;
-        try (FileReader fileReader = file != null ? new FileReader(file) : new FileReader("")) {
+        try (FileReader fileReader = file != null ? new FileReader(file) : new FileReader(Strings.EMPTY.toString())) {
             lnr = new LineNumberReader(fileReader);
             lnr.skip(Long.MAX_VALUE);
         } catch (IOException ex) {

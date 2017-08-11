@@ -21,7 +21,7 @@ import org.junit.Test;
  */
 public class FileUtilityTest {  
     private static File newFile;
-    private static String invalidLine = "";
+    private static String invalidLine = Strings.EMPTY.toString();
     
     public FileUtilityTest() {
     }

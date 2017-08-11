@@ -19,6 +19,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Label;
 import org.joda.time.DateTime;
 import tracerfx.task.ScheduledExecutor;
+import tracerfx.util.Strings;
 
 /**
  *
@@ -30,7 +31,7 @@ public class StatusManager {
     private DateTime lastUpdateTime;
     
     private final long STATUS_CLEAR_DELAY_MS = 6 * 1000;
-    private final String EMPTY_STATUS = "";
+    private final String EMPTY_STATUS = Strings.EMPTY.toString();
     
     public void setStatusLabel(Label statusLabel){
         this.statusLabel = statusLabel;       

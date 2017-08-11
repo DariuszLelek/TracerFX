@@ -22,14 +22,15 @@ import java.util.Map;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import tracerfx.tab.manager.ManagerFactory;
+import tracerfx.util.Strings;
 
 /**
  *
  * @author Dariusz Lelek
  */
 public class DescriptionController {
-    private static String lastDescription = "";
-    private static String lastSearchString = "";
+    private static String lastDescription = Strings.EMPTY.toString();
+    private static String lastSearchString = Strings.EMPTY.toString();
     
     final static Map<Character, String> SPLIT_CHAR_EXCAPE_MAP;
     
@@ -44,13 +45,13 @@ public class DescriptionController {
     }
 
     public static final ChangeListener CHANGE_LISTENER_TAB_SWITCH = (ChangeListener) (ObservableValue observable, Object oldValue, Object newValue) -> {
-        setDescription("");
+        setDescription(Strings.EMPTY.toString());
     };
 
     public static final ChangeListener CHANGE_LISTENER_LINE_CHANGE = (ChangeListener) new ChangeListener() {
         @Override
         public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-            final String text = newValue != null ? newValue.toString() : "";
+            final String text = newValue != null ? newValue.toString() : Strings.EMPTY.toString();
             setDescription(text);
         }
     };
