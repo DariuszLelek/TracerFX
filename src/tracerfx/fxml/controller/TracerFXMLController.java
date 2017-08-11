@@ -42,7 +42,6 @@ import tracerfx.tab.ProjectTab;
 import tracerfx.controller.FileTabController;
 import tracerfx.controller.ControllerFactory;
 import tracerfx.controller.ProjectTabController;
-import tracerfx.utilities.ScheduledExecutor;
 
 /**
  * FXML Controller class
@@ -50,9 +49,9 @@ import tracerfx.utilities.ScheduledExecutor;
  * @author Dariusz Lelek
  */
 public class TracerFXMLController implements Initializable {
-    private final ProjectTabController projectTabManager = ControllerFactory.getProjectTabController();
-    private final FileTabController fileTabManager = ControllerFactory.getFileTabController();
-    private final StatusController statusManager = ControllerFactory.getStatusController();
+    private final ProjectTabController projectTabController = ControllerFactory.getProjectTabController();
+    private final FileTabController fileTabControler = ControllerFactory.getFileTabController();
+    private final StatusController statusController = ControllerFactory.getStatusController();
 
     @FXML
     private TextField txtSearch;
@@ -80,7 +79,7 @@ public class TracerFXMLController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        prepareManagers();
+        prepareControllers();
         prepareBindings();
         prepareListeners();
     }
@@ -94,7 +93,7 @@ public class TracerFXMLController implements Initializable {
 
     @FXML
     private void btnAddFile(ActionEvent event) {
-        ProjectTab activeProjectTab = projectTabManager.getActiveItem();
+        ProjectTab activeProjectTab = projectTabController.getActiveItem();
         tryAddFile(activeProjectTab);
     }
 
@@ -105,25 +104,25 @@ public class TracerFXMLController implements Initializable {
 
     @FXML
     private void removeProject(ActionEvent event) {
-        if (projectTabManager.tryToRemoveActiveProject()) {
-            statusManager.setStatus(Strings.STATUS_REMOVE_PROJECT.toString());
+        if (projectTabController.tryToRemoveActiveProject()) {
+            statusController.setStatus(Strings.STATUS_REMOVE_PROJECT.toString());
         } else {
-            statusManager.setStatus(Strings.STATUS_FAILED_REMOVE_PROJECT.toString());
+            statusController.setStatus(Strings.STATUS_FAILED_REMOVE_PROJECT.toString());
         }
     }
 
     @FXML
     private void removeFile(ActionEvent event) {
-        if (fileTabManager.tryToRemoveFileFromActiveProject()) {
-            statusManager.setStatus(Strings.STATUS_REMOVE_FILE.toString());
+        if (fileTabControler.tryToRemoveFileFromActiveProject()) {
+            statusController.setStatus(Strings.STATUS_REMOVE_FILE.toString());
         } else {
-            statusManager.setStatus(Strings.STATUS_FAILED_REMOVE_FILE.toString());
+            statusController.setStatus(Strings.STATUS_FAILED_REMOVE_FILE.toString());
         }
     }
 
     @FXML
     private void closeWindow(ActionEvent event) {
-        ScheduledExecutor.stopScheduledExecutor();
+        ControllerFactory.getTaskController().stopScheduledExecutor();
         Platform.exit();
     }
 
@@ -131,20 +130,20 @@ public class TracerFXMLController implements Initializable {
         final String searchString = txtSearch.getText();
         txtSearch.setText(Strings.EMPTY.toString());
         
-        if (fileTabManager.getActiveItem().isNotEmpty()) {
-            fileTabManager.processSearch(searchString);
+        if (fileTabControler.getActiveItem().isNotEmpty()) {
+            fileTabControler.processSearch(searchString);
 
-            statusManager.setStatus(searchString.isEmpty()
+            statusController.setStatus(searchString.isEmpty()
                     ? Strings.STATUS_SEARCH_RESTORE.toString()
                     : Strings.STATUS_SEARCH_FOR.toString() + searchString);
         } else {
-            statusManager.setStatus(Strings.STATUS_SEARCH_NO_FILE.toString());
+            statusController.setStatus(Strings.STATUS_SEARCH_NO_FILE.toString());
         }
     }
 
     private void prepareBindings() {
-        final ReadOnlyBooleanProperty anyFileProperty = fileTabManager.getCollectionProperty().emptyProperty();
-        final ReadOnlyBooleanProperty anyProjectProperty = projectTabManager.getCollectionProperty().emptyProperty();
+        final ReadOnlyBooleanProperty anyFileProperty = fileTabControler.getCollectionProperty().emptyProperty();
+        final ReadOnlyBooleanProperty anyProjectProperty = projectTabController.getCollectionProperty().emptyProperty();
 
         btnAddFile.disableProperty().bind(anyProjectProperty);
         btnRemoveFile.disableProperty().bind(anyFileProperty);
@@ -152,17 +151,17 @@ public class TracerFXMLController implements Initializable {
         txtSearch.disableProperty().bind(anyFileProperty);
         btnSearch.disableProperty().bind(anyFileProperty);
 
-        lblFileMonitor.textProperty().bind(fileTabManager.getMonitoredFilesIntProperty().asString());
+        lblFileMonitor.textProperty().bind(fileTabControler.getMonitoredFilesIntProperty().asString());
     }
 
     private void prepareListeners() {
         projectTabPane.getSelectionModel().selectedItemProperty().addListener(ControllerFactory.getDescriptionController().CHANGE_LISTENER_TAB_SWITCH);
     }
 
-    private void prepareManagers() {
-        projectTabManager.setProjectTabPane(projectTabPane);
-        fileTabManager.setTxtLineDescription(txtLineDescription);
-        statusManager.setStatusLabel(txtStatus);
+    private void prepareControllers() {
+        projectTabController.setProjectTabPane(projectTabPane);
+        fileTabControler.setTxtLineDescription(txtLineDescription);
+        statusController.setStatusLabel(txtStatus);
     }
 
     private TextInputDialog getProjectNameDialog() {
@@ -180,14 +179,14 @@ public class TracerFXMLController implements Initializable {
 
     private void tryAddProject(String title) {
         if (!title.isEmpty()) {
-            if (!projectTabManager.projectExists(title)) {
-                projectTabManager.addNewProject(title);
-                statusManager.setStatus(Strings.STATUS_PROJECT_ADDED.toString());
+            if (!projectTabController.projectExists(title)) {
+                projectTabController.addNewProject(title);
+                statusController.setStatus(Strings.STATUS_PROJECT_ADDED.toString());
             } else {
-                statusManager.setStatus(Strings.STATUS_PROJECT_NAME_EXISTS.toString());
+                statusController.setStatus(Strings.STATUS_PROJECT_NAME_EXISTS.toString());
             }
         } else {
-            statusManager.setStatus(Strings.STATUS_FAILED_ADD_PROJECT.toString());
+            statusController.setStatus(Strings.STATUS_FAILED_ADD_PROJECT.toString());
         }
     }
 
@@ -195,8 +194,8 @@ public class TracerFXMLController implements Initializable {
         if (activeProjectTab.isNotEmpty()) {
             File file = getFileChooserDialog().showOpenDialog(root.getScene().getWindow());
             if (file != null) {
-                fileTabManager.addNewFileToProject(file, activeProjectTab);
-                statusManager.setStatus(Strings.STATUS_FILE_ADDED.toString());
+                fileTabControler.addNewFileToProject(file, activeProjectTab);
+                statusController.setStatus(Strings.STATUS_FILE_ADDED.toString());
             }
         }
     }

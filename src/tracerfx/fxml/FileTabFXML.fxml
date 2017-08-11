@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 
-<AnchorPane prefHeight="50.0" prefWidth="400.0" stylesheets="@tracerfxml.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tracerfx.fxml.controller.FileTabFXMLController">
+<AnchorPane prefHeight="103.0" prefWidth="400.0" stylesheets="@tracerfxml.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tracerfx.fxml.controller.FileTabFXMLController">
    <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -27,12 +27,17 @@
                         <Pane fx:id="paneNumbersPlaceHolder" maxHeight="14.0" minHeight="14.0" prefHeight="14.0" VBox.vgrow="NEVER" />
                      </children>
                   </VBox>
-                  <ListView fx:id="contentListView" onKeyPressed="#onKeyPressedContent" onMouseClicked="#onClick" HBox.hgrow="ALWAYS">
-                     <styleClass>
-                        <String fx:value="logFont" />
-                        <String fx:value="listView" />
-                     </styleClass>
-                  </ListView>
+                  <StackPane>
+                     <children>
+                        <ListView fx:id="contentListView" onKeyPressed="#onKeyPressedContent" onMouseClicked="#onClick" HBox.hgrow="ALWAYS">
+                           <styleClass>
+                              <String fx:value="logFont" />
+                              <String fx:value="listView" />
+                           </styleClass>
+                        </ListView>
+                        <ProgressIndicator fx:id="progressFileLoading" maxHeight="50.0" maxWidth="50.0" minHeight="50.0" minWidth="50.0" prefHeight="50.0" prefWidth="50.0" progress="0.0" StackPane.alignment="CENTER" />
+                     </children>
+                  </StackPane>
                </items>
             </SplitPane>
             <ToolBar nodeOrientation="LEFT_TO_RIGHT">

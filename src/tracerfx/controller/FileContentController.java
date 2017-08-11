@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tracerfx.control.FileContent;
+package tracerfx.controller;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,8 +22,9 @@ import java.util.stream.Collectors;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import tracerfx.control.FileContent.FileContent;
+import tracerfx.control.FileContent.FileContentProperty;
 import tracerfx.controller.ControllerFactory;
-import tracerfx.utilities.ScheduledExecutor;
 import tracerfx.menu.Option;
 import tracerfx.menu.Property;
 
@@ -37,7 +38,7 @@ public class FileContentController {
     private final IntegerProperty monitoredFilesIntProperty = new SimpleIntegerProperty(0);
 
     public FileContentController() {
-        ScheduledExecutor.scheduleAtFixedRateSeconds(getUpdateRunnable(), Option.getInt(Property.THREAD_FILES_MOD_CHECK_DELAY_S));
+        ControllerFactory.getTaskController().scheduleAtFixedRateSeconds(getUpdateRunnable(), Option.getInt(Property.THREAD_FILES_MOD_CHECK_DELAY_S));
     }
 
     public IntegerProperty getMonitoredFilesIntProperty() {
@@ -76,7 +77,7 @@ public class FileContentController {
                 synchronized (fileContentList) {
                     fileContentList.stream().forEach(f -> {
                         if (f.isFollowTrail() && f.getLastModified() != f.getFile().lastModified()) {
-                            f.setFileModified();
+                            f.setFileAsModified();
                             ControllerFactory.getFileTabController().markTabAsModified(f.getFile());
                             
                             if(!Option.getBoolean(Property.LOAD_ON_CONTENT_FOCUS)){

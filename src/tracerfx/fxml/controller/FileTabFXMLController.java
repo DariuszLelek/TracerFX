@@ -32,6 +32,8 @@ import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
@@ -82,6 +84,9 @@ public class FileTabFXMLController implements Initializable {
     private VBox vBoxNumbers;
     @FXML
     private Pane paneNumbersPlaceHolder;
+    @FXML
+    private ProgressIndicator progressFileLoading;
+    private ProgressBar progressBaaar;
 
     /**
      * Initializes the controller class.
@@ -96,6 +101,7 @@ public class FileTabFXMLController implements Initializable {
 
     private void prepareProperties() {
         final FileContentProperty fileContentProperty = ControllerFactory.getFileTabController().getFileContentProperty();
+        fileContentProperty.getFileContent().setProgInd(progressBaaar);
         
         bindListSizeToText(new SimpleListProperty(fileContentProperty.getContentObservableList()), lblLines);
         bindListSizeToText(new SimpleListProperty(fileContentProperty.getOriginalContentObservableList()), lblTotalLines);
@@ -105,10 +111,14 @@ public class FileTabFXMLController implements Initializable {
         numberListView.setItems(fileContentProperty.getLineNumbersObservableList());
         
         searchResultIndexList = fileContentProperty.getSearchLineNumbersObservableList();
-        
         txtFilter.disableProperty().bind(chckFilter.selectedProperty().not());
         lblLastSearch.textProperty().bind(fileContentProperty.getLastSearchProperty());
         
+        contentListView.visibleProperty().bind(fileContentProperty.getFileContentLoadingProperty().not());
+        numberListView.visibleProperty().bind(fileContentProperty.getFileContentLoadingProperty().not());
+        progressFileLoading.visibleProperty().bind(fileContentProperty.getFileContentLoadingProperty());     
+        progressFileLoading.progressProperty().bind(fileContentProperty.getFileLoadingProgressProperty());
+
         numberListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         numberListView.setMouseTransparent(true);
         numberListView.setFocusTraversable(false);

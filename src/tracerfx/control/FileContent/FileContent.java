@@ -22,12 +22,15 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ProgressIndicator;
 import org.joda.time.DateTime;
-import tracerfx.utilities.FileUtility;
+import tracerfx.controller.ControllerFactory;
 import tracerfx.utilities.Strings;
 
 /**
@@ -47,7 +50,11 @@ public class FileContent {
       
     private final SimpleStringProperty lastSearchProperty = new SimpleStringProperty(Strings.EMPTY.toString());
     private final BooleanProperty fileModifiedProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty fileContentLoadingProperty = new SimpleBooleanProperty(false);
+    private final DoubleProperty fileLoadingProgressProperty = new SimpleDoubleProperty(0.0);
     private final DateTime addTime;
+    
+    private ProgressIndicator progInd;
     
     private long lastModified;
     private boolean followTrail;
@@ -66,12 +73,24 @@ public class FileContent {
         updateFileContent();
     }
 
-    public void setFileModified(){
+    public ProgressIndicator getProgInd() {
+        return progInd;
+    }
+
+    public void setProgInd(ProgressIndicator progInd) {
+        this.progInd = progInd;
+    }
+
+    public void setFileAsModified(){
         fileModifiedProperty.set(true);
     }
-    
-    public boolean fileModified(){
-        return fileModifiedProperty.get();
+
+    public BooleanProperty getFileContentLoadingProperty() {
+        return fileContentLoadingProperty;
+    }
+
+    public DoubleProperty getFileLoadingProgressProperty() {
+        return fileLoadingProgressProperty;
     }
 
     public FileContentProperty getFileContentProperty() {
@@ -149,14 +168,23 @@ public class FileContent {
     }
     
     private void updateFileContent() {
-        clearAndAddToObservableList(getFileContentList(), originalContentObservableList);
-        displayOriginalContent();
-        updateLineNumbers();
-        
-        setLastModified(file.lastModified());
-        fileModifiedProperty.set(false);
+        if(!fileContentLoadingProperty.get()){
+            fileContentLoadingProperty.set(true);
+            fileLoadingProgressProperty.set(0.0);
+            ControllerFactory.getTaskController().runFileUpdate(this);
+        }
     }
 
+    public void processFileLoadEnd(List<String> fileContentList) {
+        clearAndAddToObservableList(fileContentList, originalContentObservableList);
+        
+        displayOriginalContent();
+        updateLineNumbers();
+
+        setLastModified(file.lastModified());
+        fileContentLoadingProperty.set(false);
+        fileModifiedProperty.set(false);
+    }
     
     private void displayOriginalContent(){
         clearAndAddToObservableList(originalContentObservableList, contentObservableList);
@@ -176,10 +204,6 @@ public class FileContent {
         return filter.isEmpty() ? originalContentObservableList : 
                 originalContentObservableList.stream()
                         .filter(x -> x.contains(filter)).collect(Collectors.toList());
-    }
-    
-    private List<String> getFileContentList(){
-        return FileUtility.getFileLines(file);
     }
     
     private <T> void clearAndAddToObservableList(List<T> listToAdd, ObservableList<T> observableList){

@@ -13,44 +13,64 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tracerfx.utilities;
+package tracerfx.controller;
 
+import tracerfx.utilities.FileLoadTask;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import tracerfx.control.FileContent.FileContent;
 
 /**
  *
  * @author Dariusz Lelek
  */
-public class ScheduledExecutor {
+public class TaskController{
 
-    private final static int SCHEDULER_THREAD_POOL = 1;
-    private final static Collection<ScheduledExecutorService> RUNNING_EXECUTORS = new ArrayList<>();
+    private final int SCHEDULER_THREAD_POOL = 1;
+    private final Collection<ScheduledExecutorService> RUNNING_EXECUTORS = new ArrayList<>();
+    private final Map<Integer, Boolean> RUNNING_THREADS = new HashMap<>();
+    private static Integer threadNum = 0;
 
-    private static void addExecutorService(ScheduledExecutorService executor) {
+    public TaskController() {
+    }    
+
+    private void addExecutorService(ScheduledExecutorService executor) {
         if (!RUNNING_EXECUTORS.contains(executor)) {
             RUNNING_EXECUTORS.add(executor);
         }
     }
 
-    private static ScheduledExecutorService getScheduledExecutorService() {
+    private ScheduledExecutorService getScheduledExecutorService() {
         return Executors.newScheduledThreadPool(SCHEDULER_THREAD_POOL);
     }
 
-    public static void stopScheduledExecutor() {
+    public void stopScheduledExecutor() {
         RUNNING_EXECUTORS.stream().forEach(x -> x.shutdownNow());
     }
 
-    public static void scheduleAtFixedRateMilliSeconds(final Runnable runnable, final long milliSecons) {
+    public void scheduleAtFixedRateMilliSeconds(final Runnable runnable, final long milliSecons) {
         scheduleAtFixedRateSeconds(runnable, milliSecons / 1000);
     }
 
-    public static void scheduleAtFixedRateSeconds(final Runnable runnable, final long secons) {
+    public void scheduleAtFixedRateSeconds(final Runnable runnable, final long secons) {
         ScheduledExecutorService executorService = getScheduledExecutorService();
         addExecutorService(executorService);
         executorService.scheduleAtFixedRate(runnable, secons, secons, TimeUnit.SECONDS);
+    }
+    
+    public void runFileUpdate(FileContent fileContent){      
+        RUNNING_THREADS.put(threadNum, Boolean.TRUE);
+        FileLoadTask fld = new FileLoadTask(fileContent, threadNum ++);
+        
+        fld.start();
+    }
+    
+    public boolean threadRunning(Integer threadNumber) {
+        return RUNNING_THREADS.containsKey(threadNumber) ? RUNNING_THREADS.get(threadNumber) : false;
     }
 }

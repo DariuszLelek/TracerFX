@@ -20,17 +20,12 @@ package tracerfx.controller;
  * @author Dariusz Lelek
  */
 public class ControllerFactory { 
-    private static final FileTabController FILE_TAB_CONTROLLER;
-    private static final ProjectTabController PROJECT_TAB_CONTROLLER;
-    private static final StatusController STATUS_CONTROLLER;
-    private static final DescriptionController DESCRIPTION_CONTROLLER;
-
-    static{
-        FILE_TAB_CONTROLLER = new FileTabController();
-        PROJECT_TAB_CONTROLLER = new ProjectTabController();
-        STATUS_CONTROLLER = new StatusController();
-        DESCRIPTION_CONTROLLER = new DescriptionController();
-    }
+    private static final FileTabController FILE_TAB_CONTROLLER = new FileTabController();
+    private static final ProjectTabController PROJECT_TAB_CONTROLLER = new ProjectTabController();
+    private static final StatusController STATUS_CONTROLLER = new StatusController();
+    private static final DescriptionController DESCRIPTION_CONTROLLER = new DescriptionController();
+    private static final TaskController TASK_CONTROLLER = new TaskController();
+    private static final FileContentController FILE_CONTENT_CONTROLLER = new FileContentController();
     
     public static StatusController getStatusController(){
         return STATUS_CONTROLLER;
@@ -46,5 +41,13 @@ public class ControllerFactory {
 
     public static DescriptionController getDescriptionController() {
         return DESCRIPTION_CONTROLLER;
+    }
+
+    public static TaskController getTaskController() {
+        return TASK_CONTROLLER;
+    }
+
+    public static FileContentController getFileContentController() {
+        return FILE_CONTENT_CONTROLLER;
     }
 }

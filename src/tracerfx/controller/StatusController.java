@@ -18,14 +18,13 @@ package tracerfx.controller;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import org.joda.time.DateTime;
-import tracerfx.utilities.ScheduledExecutor;
 import tracerfx.utilities.Strings;
 
 /**
  *
  * @author Dariusz Lelek
  */
-public class StatusController {
+public class StatusController{
     
     private Label statusLabel;
     private DateTime lastUpdateTime;
@@ -55,7 +54,7 @@ public class StatusController {
     }
 
     private void startClearingThread() {
-        ScheduledExecutor.scheduleAtFixedRateMilliSeconds(getClearingRunnable(), STATUS_CLEAR_DELAY_MS);
+        ControllerFactory.getTaskController().scheduleAtFixedRateMilliSeconds(getClearingRunnable(), STATUS_CLEAR_DELAY_MS);
     }
     
     private Runnable getClearingRunnable() {

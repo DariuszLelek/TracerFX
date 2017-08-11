@@ -23,7 +23,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import tracerfx.utilities.ScheduledExecutor;
+import tracerfx.controller.ControllerFactory;
 
 /**
  *
@@ -44,7 +44,7 @@ public class TracerFX extends Application {
         primaryStage.show();
 
         primaryStage.setOnCloseRequest(event -> {
-            ScheduledExecutor.stopScheduledExecutor();
+            ControllerFactory.getTaskController().stopScheduledExecutor();
         });
     }
 

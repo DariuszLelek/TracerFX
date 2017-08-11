@@ -27,7 +27,7 @@ import tracerfx.utilities.Strings;
  *
  * @author Dariusz Lelek
  */
-public class DescriptionController {
+public class DescriptionController{
     private final Map<Character, String> SPLIT_CHAR_ESCAPE_MAP;
     
     private String lastDescription = Strings.EMPTY.toString();

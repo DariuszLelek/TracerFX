@@ -15,6 +15,8 @@
  */
 package tracerfx.control.FileContent;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 
@@ -26,12 +28,24 @@ public class FileContentProperty {
 
     private final FileContent fileContent;
 
+    public FileContent getFileContent() {
+        return fileContent;
+    }
+
     public FileContentProperty(FileContent fileContent) {
         this.fileContent = fileContent;
     }
 
     public SimpleStringProperty getLastSearchProperty() {
         return fileContent.getLastSearchProperty();
+    }
+       
+    public BooleanProperty getFileContentLoadingProperty() {
+        return fileContent.getFileContentLoadingProperty();
+    }
+    
+    public DoubleProperty getFileLoadingProgressProperty() {
+        return fileContent.getFileLoadingProgressProperty();
     }
 
     public ObservableList<String> getOriginalContentObservableList() {

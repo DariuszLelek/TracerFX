@@ -22,21 +22,19 @@ import javafx.scene.control.Tab;
 import javafx.scene.web.WebView;
 import tracerfx.tab.FileTab;
 import tracerfx.tab.ProjectTab;
-import tracerfx.control.FileContent.FileContentController;
 import tracerfx.control.FileContent.FileContentProperty;
 
 /**
  *
  * @author Dariusz Lelek
  */
-public class FileTabController extends TabController<FileTab>{
+public class FileTabController extends TabController<FileTab>{ 
     private final String FXML = "tracerfx/fxml/FileTabFXML.fxml";
-    private final FileContentController fileContentController = new FileContentController();
     
     private WebView txtLineDescription;
      
     public void addNewFileToProject(File file, ProjectTab projectTab){
-        FileTab fileTab = new FileTab(fileContentController.getFileContent(file), getParent(FXML), projectTab);
+        FileTab fileTab = new FileTab(ControllerFactory.getFileContentController().getFileContent(file), getParent(FXML), projectTab);
         
         projectTab.getFileTabPane().getTabs().add(fileTab.getTab());
         addItem(fileTab);
@@ -47,11 +45,11 @@ public class FileTabController extends TabController<FileTab>{
     }
     
     public IntegerProperty getMonitoredFilesIntProperty() {
-        return fileContentController.getMonitoredFilesIntProperty();
+        return ControllerFactory.getFileContentController().getMonitoredFilesIntProperty();
     }
     
     public FileContentProperty getFileContentProperty(){
-        return fileContentController.getFileContentProperty();
+        return ControllerFactory.getFileContentController().getFileContentProperty();
     }
     
     public void processSearch(String searchString){
@@ -68,7 +66,7 @@ public class FileTabController extends TabController<FileTab>{
         FileTab activeFileTab = getActiveItem();
         
         if (activeFileTab.isNotEmpty()) {
-            fileContentController.removeFileContent(activeFileTab.getFileContent());
+            ControllerFactory.getFileContentController().removeFileContent(activeFileTab.getFileContent());
             ProjectTab activeProjectTab = ControllerFactory.getProjectTabController().getActiveItem();
             activeProjectTab.getFileTabPane().getTabs().remove(activeFileTab.getTab());
             removeItem(activeFileTab);
