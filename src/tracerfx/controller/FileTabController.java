@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tracerfx.tab.controller;
+package tracerfx.controller;
 
 import java.io.File;
 import java.util.stream.Collectors;

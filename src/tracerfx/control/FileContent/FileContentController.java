@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import tracerfx.tab.controller.ControllerFactory;
+import tracerfx.controller.ControllerFactory;
 import tracerfx.task.ScheduledExecutor;
 import tracerfx.menu.options.Option;
 import tracerfx.menu.options.Property;

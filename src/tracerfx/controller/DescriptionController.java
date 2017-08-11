@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tracerfx.control;
+package tracerfx.controller;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import tracerfx.tab.controller.ControllerFactory;
 import tracerfx.util.Strings;
 
 /**
@@ -29,13 +28,17 @@ import tracerfx.util.Strings;
  * @author Dariusz Lelek
  */
 public class DescriptionController {
-    private static String lastDescription = Strings.EMPTY.toString();
-    private static String lastSearchString = Strings.EMPTY.toString();
+    private final Map<Character, String> SPLIT_CHAR_ESCAPE_MAP;
     
-    final static Map<Character, String> SPLIT_CHAR_ESCAPE_MAP;
-    
-    static{
-        SPLIT_CHAR_ESCAPE_MAP = new HashMap();
+    private String lastDescription = Strings.EMPTY.toString();
+    private String lastSearchString = Strings.EMPTY.toString();
+
+    public DescriptionController() {
+        this.SPLIT_CHAR_ESCAPE_MAP = new HashMap();
+        initializeEscapeCharMap();
+    }
+
+    private void initializeEscapeCharMap() {
         SPLIT_CHAR_ESCAPE_MAP.put('-', "\\-");
         SPLIT_CHAR_ESCAPE_MAP.put('+', "\\+");
         SPLIT_CHAR_ESCAPE_MAP.put('/', "\\/");
@@ -43,19 +46,23 @@ public class DescriptionController {
         SPLIT_CHAR_ESCAPE_MAP.put('^', "\\^");
         SPLIT_CHAR_ESCAPE_MAP.put('x', "\\x");
     }
+    
+    public Map<Character, String> getSplitCharEscapeMap(){
+        return SPLIT_CHAR_ESCAPE_MAP;
+    }
 
-    public static final ChangeListener CHANGE_LISTENER_TAB_SWITCH = (ChangeListener) (ObservableValue observable, Object oldValue, Object newValue) -> {
+    public final ChangeListener CHANGE_LISTENER_TAB_SWITCH = (ChangeListener) (ObservableValue observable, Object oldValue, Object newValue) -> {
         descriptionTextChanged(Strings.EMPTY.toString());
     };
 
-    public static final ChangeListener CHANGE_LISTENER_LINE_CHANGE = (ChangeListener) new ChangeListener() {
+    public final ChangeListener CHANGE_LISTENER_LINE_CHANGE = (ChangeListener) new ChangeListener() {
         @Override
         public void changed(ObservableValue observable, Object oldValue, Object newValue) {
             descriptionTextChanged(newValue != null ? newValue.toString() : Strings.EMPTY.toString());
         }
     };
     
-    public static void descriptionTextChanged(String newDescription) {
+    public void descriptionTextChanged(String newDescription) {
         if (!lastDescription.equals(newDescription)) {
             lastDescription = newDescription;
             String lastSearch = ControllerFactory.getFileTabController().getActiveItem().getFileContent().getLastSearchProperty().get();
@@ -66,23 +73,23 @@ public class DescriptionController {
         }
     }
     
-    private static void setDescription(){    
+    private void setDescription(){    
        ControllerFactory.getFileTabController().getTxtLineDescription().getEngine().loadContent(getDescription());
     }
     
-    private static String getDescription(){
+    private String getDescription(){
         return getDescriptionParts().isEmpty() ? getSearchtringStyled() : String.join(getSearchtringStyled(), getDescriptionParts());
     }
     
-    private static String getSearchtringStyled(){
+    private String getSearchtringStyled(){
         return "<b><font color=\"red\">" + lastSearchString + "</font></b>";
     }
     
-    private static List<String> getDescriptionParts(){
+    private List<String> getDescriptionParts(){
         return lastSearchString.isEmpty() ? Arrays.asList(lastDescription) : Arrays.asList(lastDescription.split(getSplitString(lastSearchString)));
     }
     
-    static String getSplitString(String lastSearchString){
+    protected String getSplitString(String lastSearchString){
         StringBuilder sb = new StringBuilder();
         
         for(char character : lastSearchString.toCharArray()){

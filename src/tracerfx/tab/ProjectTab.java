@@ -21,7 +21,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 import tracerfx.menu.options.Option;
 import tracerfx.menu.options.Property;
-import tracerfx.tab.controller.ControllerFactory;
+import tracerfx.controller.ControllerFactory;
 import tracerfx.util.Strings;
 
 /**

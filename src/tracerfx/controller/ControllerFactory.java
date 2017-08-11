@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tracerfx.tab.controller;
-
-import tracerfx.control.StatusController;
+package tracerfx.controller;
 
 /**
  *
@@ -25,11 +23,13 @@ public class ControllerFactory {
     private static final FileTabController FILE_TAB_CONTROLLER;
     private static final ProjectTabController PROJECT_TAB_CONTROLLER;
     private static final StatusController STATUS_CONTROLLER;
+    private static final DescriptionController DESCRIPTION_CONTROLLER;
 
     static{
         FILE_TAB_CONTROLLER = new FileTabController();
         PROJECT_TAB_CONTROLLER = new ProjectTabController();
         STATUS_CONTROLLER = new StatusController();
+        DESCRIPTION_CONTROLLER = new DescriptionController();
     }
     
     public static StatusController getStatusController(){
@@ -42,5 +42,9 @@ public class ControllerFactory {
 
     public static ProjectTabController getProjectTabController() {
         return PROJECT_TAB_CONTROLLER;
+    }
+
+    public static DescriptionController getDescriptionController() {
+        return DESCRIPTION_CONTROLLER;
     }
 }

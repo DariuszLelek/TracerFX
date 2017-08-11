@@ -40,11 +40,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import tracerfx.control.DescriptionController;
 import tracerfx.control.FileContent.FileContentProperty;
-import tracerfx.control.StatusController;
+import tracerfx.controller.StatusController;
 import tracerfx.tab.FileTab;
-import tracerfx.tab.controller.ControllerFactory;
+import tracerfx.controller.ControllerFactory;
 import tracerfx.menu.options.Option;
 import tracerfx.menu.options.Property;
 import tracerfx.util.Strings;
@@ -122,7 +121,7 @@ public class FileTabFXMLController implements Initializable {
     }
 
     private void prepareListeners() {
-        contentListView.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_LINE_CHANGE);
+        contentListView.getSelectionModel().selectedItemProperty().addListener(ControllerFactory.getDescriptionController().CHANGE_LISTENER_LINE_CHANGE);
 
         searchResultIndexList.addListener((ListChangeListener.Change<? extends Integer> c) -> {
             contentListView.requestFocus();

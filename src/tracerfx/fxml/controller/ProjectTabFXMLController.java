@@ -15,12 +15,12 @@
  */
 package tracerfx.fxml.controller;
 
-import tracerfx.control.DescriptionController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TabPane;
+import tracerfx.controller.ControllerFactory;
 
 /**
  * FXML Controller class
@@ -37,6 +37,6 @@ public class ProjectTabFXMLController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        fileTabPane.getSelectionModel().selectedItemProperty().addListener(DescriptionController.CHANGE_LISTENER_TAB_SWITCH);
+        fileTabPane.getSelectionModel().selectedItemProperty().addListener(ControllerFactory.getDescriptionController().CHANGE_LISTENER_TAB_SWITCH);
     }
 }
