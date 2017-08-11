@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import tracerfx.tab.FileTab;
-import tracerfx.tab.ProjectTab;
+import tracerfx.component.FileTab;
+import tracerfx.component.ProjectTab;
 
 /**
  *

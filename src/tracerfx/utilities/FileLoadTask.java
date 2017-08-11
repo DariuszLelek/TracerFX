@@ -16,8 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
-import tracerfx.control.FileContent.FileContent;
-import tracerfx.utilities.Strings;
+import tracerfx.component.FileContent;
 
 /**
  *
@@ -25,16 +24,17 @@ import tracerfx.utilities.Strings;
  */
 public class FileLoadTask extends Thread{
     private final FileContent fileContent;
-    private final int threadNumber;
-    private boolean running = true;
-    private static int EXCLUDED_ASCII[] = {0};
+    private boolean running;
+    private final int EXCLUDED_ASCII[] = {0};
 
-    public FileLoadTask(FileContent fileContent, int threadNumber) {
+    public FileLoadTask(FileContent fileContent) {
         this.fileContent = fileContent;
-        this.threadNumber = threadNumber;
         this.running = true;
     }
     
+    public void stopTask(){
+        running = false;
+    }
     
     @Override
     public void run() {
@@ -42,17 +42,21 @@ public class FileLoadTask extends Thread{
             List<String> fileLines = getFileLines(fileContent);
             setFileLinesToContent(fileContent, fileLines);
         } catch (InterruptedException ex) {
-
-            
+            // TODO
+            ex.printStackTrace();
         }
     }
 
     
-    private static void setFileLinesToContent(FileContent fileContent, List<String> fileLines) {
-        Platform.runLater(() -> {fileContent.processFileLoadEnd(fileLines);});
+    private void setFileLinesToContent(FileContent fileContent, List<String> fileLines) {
+        if (running) {
+            Platform.runLater(() -> {
+                fileContent.processFileLoadEnd(fileLines);
+            });
+        }
     }
 
-    private static int getFileLineNumber(File file) {
+    private int getFileLineNumber(File file) {
         LineNumberReader lnr = null;
         try (FileReader fileReader = file != null ? new FileReader(file) : new FileReader(Strings.EMPTY.toString())) {
             lnr = new LineNumberReader(fileReader);
@@ -64,7 +68,7 @@ public class FileLoadTask extends Thread{
         return lnr != null ? lnr.getLineNumber() : -1;
     }
 
-    private static List<String> getFileLines(FileContent fileContent) throws InterruptedException {
+    private List<String> getFileLines(FileContent fileContent) throws InterruptedException {
         List<String> content = new ArrayList<>();
         long fileLinesNum = getFileLineNumber(fileContent.getFile());
         long updateEveryLine = fileLinesNum/100 > 0 ? fileLinesNum/20 : 1;
@@ -73,7 +77,7 @@ public class FileLoadTask extends Thread{
         
         if (fileContent.getFile() != null && fileContent.getFile().exists()) {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileContent.getFile()), "utf-8"))) {
-                for (String line = null; (line = br.readLine()) != null;) {
+                for (String line = null; running && (line = br.readLine()) != null;) {
                     if(++currentLine % updateEveryLine == 0){
                         updateProgressProperty(progressProeperty, (double)currentLine/fileLinesNum);
                     }
@@ -89,18 +93,15 @@ public class FileLoadTask extends Thread{
         return content;
     }
     
-    private static void updateProgressProperty(final DoubleProperty progressProeperty, final double value) {
+    private void updateProgressProperty(final DoubleProperty progressProeperty, final double value) {
         Platform.runLater(() -> {progressProeperty.set(value);});
     }
 
-    static boolean validLine(String line) {
-        if (line.isEmpty()) {
-            return false;
-        }
-        return !(line.length() == 1 && containsExcludedASCII(line));
+    private boolean validLine(String line) {
+        return line.isEmpty() ? false : !(line.length() == 1 && containsExcludedASCII(line));
     }
 
-    static boolean containsExcludedASCII(String line) {
+    private boolean containsExcludedASCII(String line) {
         for (int i = 0; i < EXCLUDED_ASCII.length; i++) {
             if ((int) line.charAt(0) == EXCLUDED_ASCII[i]) {
                 return true;

@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tracerfx.tab;
+package tracerfx.component;
 
 import javafx.scene.Node;
-import tracerfx.control.FileContent.FileContent;
 import tracerfx.menu.Option;
 import tracerfx.menu.Property;
 import tracerfx.utilities.Strings;

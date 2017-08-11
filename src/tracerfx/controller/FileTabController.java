@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 import javafx.beans.property.IntegerProperty;
 import javafx.scene.control.Tab;
 import javafx.scene.web.WebView;
-import tracerfx.tab.FileTab;
-import tracerfx.tab.ProjectTab;
-import tracerfx.control.FileContent.FileContentProperty;
+import tracerfx.component.FileTab;
+import tracerfx.component.ProjectTab;
+import tracerfx.component.FileContentProperty;
 
 /**
  *

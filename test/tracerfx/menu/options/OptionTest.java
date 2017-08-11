@@ -37,7 +37,7 @@ public class OptionTest {
     public void testGetInt() {
         System.out.println("getInt");
         assertEquals(Integer.MAX_VALUE ,Option.getInt(null));
-        assertNotEquals(Integer.MAX_VALUE, Option.getInt(Property.THREAD_FILES_MOD_CHECK_DELAY_S));
+        assertNotEquals(Integer.MAX_VALUE, Option.getInt(Property.THREAD_FILES_MOD_CHECK_DELAY_MS));
         
     }
 

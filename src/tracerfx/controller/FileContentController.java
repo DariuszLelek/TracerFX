@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import tracerfx.control.FileContent.FileContent;
-import tracerfx.control.FileContent.FileContentProperty;
+import tracerfx.component.FileContent;
+import tracerfx.component.FileContentProperty;
 import tracerfx.controller.ControllerFactory;
 import tracerfx.menu.Option;
 import tracerfx.menu.Property;
@@ -38,7 +38,7 @@ public class FileContentController {
     private final IntegerProperty monitoredFilesIntProperty = new SimpleIntegerProperty(0);
 
     public FileContentController() {
-        ControllerFactory.getTaskController().scheduleAtFixedRateSeconds(getUpdateRunnable(), Option.getInt(Property.THREAD_FILES_MOD_CHECK_DELAY_S));
+        ControllerFactory.getTaskController().scheduleAtFixedRateMilliSeconds(getUpdateRunnable(), Option.getInt(Property.THREAD_FILES_MOD_CHECK_DELAY_MS));
     }
 
     public IntegerProperty getMonitoredFilesIntProperty() {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tracerfx.fxml.controller;
+package tracerfx.controller.fxml;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -42,9 +42,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import tracerfx.control.FileContent.FileContentProperty;
+import tracerfx.component.FileContentProperty;
 import tracerfx.controller.StatusController;
-import tracerfx.tab.FileTab;
+import tracerfx.component.FileTab;
 import tracerfx.controller.ControllerFactory;
 import tracerfx.menu.Option;
 import tracerfx.menu.Property;

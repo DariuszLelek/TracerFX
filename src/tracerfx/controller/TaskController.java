@@ -15,62 +15,47 @@
  */
 package tracerfx.controller;
 
-import tracerfx.utilities.FileLoadTask;
 import java.util.ArrayList;
+import tracerfx.utilities.FileLoadTask;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import tracerfx.control.FileContent.FileContent;
+import tracerfx.component.FileContent;
 
 /**
  *
  * @author Dariusz Lelek
  */
 public class TaskController{
-
-    private final int SCHEDULER_THREAD_POOL = 1;
     private final Collection<ScheduledExecutorService> RUNNING_EXECUTORS = new ArrayList<>();
-    private final Map<Integer, Boolean> RUNNING_THREADS = new HashMap<>();
-    private static Integer threadNum = 0;
+    private final Collection<FileLoadTask> RUNNING_TASKS = new ArrayList<>();
 
     public TaskController() {
     }    
 
     private void addExecutorService(ScheduledExecutorService executor) {
-        if (!RUNNING_EXECUTORS.contains(executor)) {
-            RUNNING_EXECUTORS.add(executor);
-        }
+        RUNNING_EXECUTORS.add(executor);
     }
 
-    private ScheduledExecutorService getScheduledExecutorService() {
-        return Executors.newScheduledThreadPool(SCHEDULER_THREAD_POOL);
+    private void addFileLoadTask(FileLoadTask task) {
+        RUNNING_TASKS.add(task);
     }
 
-    public void stopScheduledExecutor() {
+    public void stopTaskController() {
         RUNNING_EXECUTORS.stream().forEach(x -> x.shutdownNow());
+        RUNNING_TASKS.stream().forEach(x -> x.stopTask());
     }
 
     public void scheduleAtFixedRateMilliSeconds(final Runnable runnable, final long milliSecons) {
-        scheduleAtFixedRateSeconds(runnable, milliSecons / 1000);
-    }
-
-    public void scheduleAtFixedRateSeconds(final Runnable runnable, final long secons) {
-        ScheduledExecutorService executorService = getScheduledExecutorService();
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
         addExecutorService(executorService);
-        executorService.scheduleAtFixedRate(runnable, secons, secons, TimeUnit.SECONDS);
+        executorService.scheduleAtFixedRate(runnable, milliSecons, milliSecons, TimeUnit.MILLISECONDS);
     }
     
-    public void runFileUpdate(FileContent fileContent){      
-        RUNNING_THREADS.put(threadNum, Boolean.TRUE);
-        FileLoadTask fld = new FileLoadTask(fileContent, threadNum ++);
-        
-        fld.start();
-    }
-    
-    public boolean threadRunning(Integer threadNumber) {
-        return RUNNING_THREADS.containsKey(threadNumber) ? RUNNING_THREADS.get(threadNumber) : false;
+    public void runFileLoadTask(FileContent fileContent){      
+        FileLoadTask fileLoadTask = new FileLoadTask(fileContent);
+        addFileLoadTask(fileLoadTask);
+        fileLoadTask.start();
     }
 }

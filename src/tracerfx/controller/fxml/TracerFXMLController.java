@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tracerfx.fxml.controller;
+package tracerfx.controller.fxml;
 
 import tracerfx.controller.StatusController;
 import tracerfx.utilities.Strings;
@@ -38,7 +38,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
-import tracerfx.tab.ProjectTab;
+import tracerfx.component.ProjectTab;
 import tracerfx.controller.FileTabController;
 import tracerfx.controller.ControllerFactory;
 import tracerfx.controller.ProjectTabController;
@@ -122,7 +122,7 @@ public class TracerFXMLController implements Initializable {
 
     @FXML
     private void closeWindow(ActionEvent event) {
-        ControllerFactory.getTaskController().stopScheduledExecutor();
+        ControllerFactory.getTaskController().stopTaskController();
         Platform.exit();
     }
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tracerfx.control.FileContent;
+package tracerfx.component;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -171,7 +171,7 @@ public class FileContent {
         if(!fileContentLoadingProperty.get()){
             fileContentLoadingProperty.set(true);
             fileLoadingProgressProperty.set(0.0);
-            ControllerFactory.getTaskController().runFileUpdate(this);
+            ControllerFactory.getTaskController().runFileLoadTask(this);
         }
     }
 

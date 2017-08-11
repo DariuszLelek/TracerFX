@@ -44,7 +44,7 @@ public class TracerFX extends Application {
         primaryStage.show();
 
         primaryStage.setOnCloseRequest(event -> {
-            ControllerFactory.getTaskController().stopScheduledExecutor();
+            ControllerFactory.getTaskController().stopTaskController();
         });
     }
 

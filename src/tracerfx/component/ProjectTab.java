@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tracerfx.tab;
+package tracerfx.component;
 
 import javafx.scene.Parent;
 import javafx.scene.control.Tab;
