@@ -49,17 +49,21 @@
             </ToolBar>
             <SplitPane dividerPositions="0.7651663405088063" orientation="VERTICAL" VBox.vgrow="ALWAYS">
               <items>
-                  <TabPane fx:id="projectTabPane" layoutX="91.0" layoutY="73.0" prefHeight="357.0" prefWidth="798.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  <WebView fx:id="txtLineDescription" prefHeight="200.0" prefWidth="200.0" />
+                  <TabPane fx:id="projectTabPane" layoutX="91.0" layoutY="73.0" minHeight="100.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <WebView fx:id="txtLineDescription" minHeight="20.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" />
               </items>
             </SplitPane>
             <ToolBar nodeOrientation="LEFT_TO_RIGHT" VBox.vgrow="NEVER">
                <items>
                   <Label fx:id="txtStatus" HBox.hgrow="ALWAYS" />
                   <Pane HBox.hgrow="ALWAYS" />
-                  <Separator orientation="VERTICAL" />
                   <Label text="File monitor:" />
-                  <Label fx:id="lblFileMonitor" text="0" />
+                  <Label fx:id="lblFileMonitor" text="0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Separator orientation="VERTICAL" />
+                  <ProgressBar prefWidth="100.0" progress="0.0" />
                </items>
             </ToolBar>
          </children>

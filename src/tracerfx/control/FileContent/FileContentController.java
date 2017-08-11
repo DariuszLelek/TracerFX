@@ -18,13 +18,12 @@ package tracerfx.control.FileContent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import tracerfx.tab.manager.ManagerFactory;
-import tracerfx.task.TaskManager;
+import tracerfx.task.ScheduledExecutor;
 
 /**
  *
@@ -37,7 +36,7 @@ public class FileContentController {
     private final int fileCheckDelaySeconds = 5;
 
     public FileContentController() {
-        runMarkTabAsModifiedCheck();
+        ScheduledExecutor.scheduleAtFixedRateSeconds(getUpdateRunnable(), fileCheckDelaySeconds);
     }
 
     public IntegerProperty getMonitoredFilesIntProperty() {
@@ -63,8 +62,8 @@ public class FileContentController {
         monitoredFilesIntProperty.set(fileContentList.stream().filter(f -> f.isFollowTrail()).collect(Collectors.toList()).size());
     }
 
-    private void runMarkTabAsModifiedCheck() {
-        Runnable updateRunnable = () -> {
+    private Runnable getUpdateRunnable() {
+        return () -> {
             Platform.runLater(() -> {
                 updateMonitoredFilesIntProperty();
                 synchronized (fileContentList) {
@@ -78,7 +77,5 @@ public class FileContentController {
             }
             );
         };
-
-        TaskManager.getScheduledExecutor().scheduleAtFixedRate(updateRunnable, fileCheckDelaySeconds, fileCheckDelaySeconds, TimeUnit.SECONDS);
     }
 }

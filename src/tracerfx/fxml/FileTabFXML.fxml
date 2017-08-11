@@ -8,11 +8,11 @@
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 
-<AnchorPane stylesheets="@tracerfxml.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tracerfx.fxml.controller.FileTabFXMLController">
+<AnchorPane prefHeight="50.0" prefWidth="400.0" stylesheets="@tracerfxml.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tracerfx.fxml.controller.FileTabFXMLController">
    <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <SplitPane dividerPositions="0.11228813559322035" prefHeight="159.0" prefWidth="474.0" VBox.vgrow="ALWAYS">
+            <SplitPane dividerPositions="0.07203389830508475" VBox.vgrow="ALWAYS">
                <items>
                   <VBox fx:id="vBoxNumbers" maxWidth="70.0" prefWidth="40.0" SplitPane.resizableWithParent="false">
                      <children>

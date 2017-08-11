@@ -43,7 +43,7 @@ import tracerfx.tab.ProjectTab;
 import tracerfx.tab.manager.FileTabManager;
 import tracerfx.tab.manager.ManagerFactory;
 import tracerfx.tab.manager.ProjectTabManager;
-import tracerfx.task.TaskManager;
+import tracerfx.task.ScheduledExecutor;
 
 /**
  * FXML Controller class
@@ -124,7 +124,7 @@ public class TracerFXMLController implements Initializable {
 
     @FXML
     private void closeWindow(ActionEvent event) {
-        TaskManager.stopTaskManager();
+        ScheduledExecutor.stopScheduledExecutor();
         Platform.exit();
     }
 

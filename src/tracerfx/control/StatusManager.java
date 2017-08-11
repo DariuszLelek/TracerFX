@@ -15,13 +15,10 @@
  */
 package tracerfx.control;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import org.joda.time.DateTime;
-import tracerfx.task.TaskManager;
+import tracerfx.task.ScheduledExecutor;
 
 /**
  *
@@ -33,9 +30,7 @@ public class StatusManager {
     private DateTime lastUpdateTime;
     
     private final long STATUS_CLEAR_DELAY_MS = 6 * 1000;
-    private final int threadPool = 1;
     private final String EMPTY_STATUS = "";
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(threadPool);
     
     public void setStatusLabel(Label statusLabel){
         this.statusLabel = statusLabel;       
@@ -54,16 +49,12 @@ public class StatusManager {
         return statusLabel;
     }
     
-    public void shutDown(){
-        scheduler.shutdown();
-    }
-    
     private boolean hasStatus(){
         return !statusLabel.getText().isEmpty();
     }
 
     private void startClearingThread() {
-        TaskManager.getScheduledExecutor().scheduleAtFixedRate(getClearingRunnable(), 1, 1, TimeUnit.SECONDS);      
+        ScheduledExecutor.scheduleAtFixedRateMilliSeconds(getClearingRunnable(), STATUS_CLEAR_DELAY_MS);
     }
     
     private Runnable getClearingRunnable() {

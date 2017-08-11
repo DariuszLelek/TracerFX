@@ -19,22 +19,38 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
  * @author Dariusz Lelek
  */
-public class TaskManager {
+public class ScheduledExecutor {
+
     private final static int SCHEDULER_THREAD_POOL = 1;
     private final static Collection<ScheduledExecutorService> RUNNING_EXECUTORS = new ArrayList<>();
-    
-    public static ScheduledExecutorService getScheduledExecutor(){
-        final ScheduledExecutorService executor = Executors.newScheduledThreadPool(SCHEDULER_THREAD_POOL);
-        RUNNING_EXECUTORS.add(executor);
-        return executor;
+
+    private static void addExecutorService(ScheduledExecutorService executor) {
+        if (RUNNING_EXECUTORS.contains(executor)) {
+            RUNNING_EXECUTORS.add(executor);
+        }
     }
-    
-    public static void stopTaskManager(){
+
+    private static ScheduledExecutorService getScheduledExecutorService() {
+        return Executors.newScheduledThreadPool(SCHEDULER_THREAD_POOL);
+    }
+
+    public static void stopScheduledExecutor() {
         RUNNING_EXECUTORS.stream().forEach(x -> x.shutdownNow());
+    }
+
+    public static void scheduleAtFixedRateMilliSeconds(final Runnable runnable, final long milliSecons) {
+        scheduleAtFixedRateSeconds(runnable, milliSecons / 1000);
+    }
+
+    public static void scheduleAtFixedRateSeconds(final Runnable runnable, final long secons) {
+        ScheduledExecutorService executorService = getScheduledExecutorService();
+        addExecutorService(executorService);
+        executorService.scheduleAtFixedRate(runnable, secons, secons, TimeUnit.SECONDS);
     }
 }
