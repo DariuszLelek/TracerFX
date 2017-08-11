@@ -16,7 +16,7 @@
 package tracerfx.fxml.controller;
 
 import tracerfx.controller.StatusController;
-import tracerfx.util.Strings;
+import tracerfx.utilities.Strings;
 import java.io.File;
 import java.net.URL;
 import java.util.Optional;
@@ -42,7 +42,7 @@ import tracerfx.tab.ProjectTab;
 import tracerfx.controller.FileTabController;
 import tracerfx.controller.ControllerFactory;
 import tracerfx.controller.ProjectTabController;
-import tracerfx.task.ScheduledExecutor;
+import tracerfx.utilities.ScheduledExecutor;
 
 /**
  * FXML Controller class

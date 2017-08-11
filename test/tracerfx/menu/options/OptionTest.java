@@ -5,11 +5,13 @@
  */
 package tracerfx.menu.options;
 
+import tracerfx.menu.Property;
+import tracerfx.menu.Option;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import tracerfx.util.Strings;
+import tracerfx.utilities.Strings;
 
 /**
  *

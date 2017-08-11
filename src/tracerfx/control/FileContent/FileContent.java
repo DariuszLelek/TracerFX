@@ -27,8 +27,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.joda.time.DateTime;
-import tracerfx.util.FileUtility;
-import tracerfx.util.Strings;
+import tracerfx.utilities.FileUtility;
+import tracerfx.utilities.Strings;
 
 /**
  *

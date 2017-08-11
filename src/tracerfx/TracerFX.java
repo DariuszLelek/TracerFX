@@ -23,7 +23,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import tracerfx.task.ScheduledExecutor;
+import tracerfx.utilities.ScheduledExecutor;
 
 /**
  *

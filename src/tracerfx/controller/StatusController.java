@@ -18,8 +18,8 @@ package tracerfx.controller;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import org.joda.time.DateTime;
-import tracerfx.task.ScheduledExecutor;
-import tracerfx.util.Strings;
+import tracerfx.utilities.ScheduledExecutor;
+import tracerfx.utilities.Strings;
 
 /**
  *

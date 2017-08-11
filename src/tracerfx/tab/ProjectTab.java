@@ -19,10 +19,10 @@ import javafx.scene.Parent;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
-import tracerfx.menu.options.Option;
-import tracerfx.menu.options.Property;
+import tracerfx.menu.Option;
+import tracerfx.menu.Property;
 import tracerfx.controller.ControllerFactory;
-import tracerfx.util.Strings;
+import tracerfx.utilities.Strings;
 
 /**
  *

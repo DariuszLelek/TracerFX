@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package tracerfx.util;
+package tracerfx.utilities;
 
+import tracerfx.utilities.Strings;
+import tracerfx.utilities.FileUtility;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;

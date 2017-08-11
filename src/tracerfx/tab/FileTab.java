@@ -17,9 +17,9 @@ package tracerfx.tab;
 
 import javafx.scene.Node;
 import tracerfx.control.FileContent.FileContent;
-import tracerfx.menu.options.Option;
-import tracerfx.menu.options.Property;
-import tracerfx.util.Strings;
+import tracerfx.menu.Option;
+import tracerfx.menu.Property;
+import tracerfx.utilities.Strings;
 
 /**
  *

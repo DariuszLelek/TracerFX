@@ -23,9 +23,9 @@ import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import tracerfx.controller.ControllerFactory;
-import tracerfx.task.ScheduledExecutor;
-import tracerfx.menu.options.Option;
-import tracerfx.menu.options.Property;
+import tracerfx.utilities.ScheduledExecutor;
+import tracerfx.menu.Option;
+import tracerfx.menu.Property;
 
 /**
  *

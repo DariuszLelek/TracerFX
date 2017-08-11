@@ -44,9 +44,9 @@ import tracerfx.control.FileContent.FileContentProperty;
 import tracerfx.controller.StatusController;
 import tracerfx.tab.FileTab;
 import tracerfx.controller.ControllerFactory;
-import tracerfx.menu.options.Option;
-import tracerfx.menu.options.Property;
-import tracerfx.util.Strings;
+import tracerfx.menu.Option;
+import tracerfx.menu.Property;
+import tracerfx.utilities.Strings;
 
 /**
  * FXML Controller class

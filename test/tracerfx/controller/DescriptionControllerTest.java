@@ -10,7 +10,7 @@ import tracerfx.controller.ControllerFactory;
 import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import tracerfx.util.Strings;
+import tracerfx.utilities.Strings;
 
 /**
  *

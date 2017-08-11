@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import tracerfx.util.Strings;
+import tracerfx.utilities.Strings;
 
 /**
  *
