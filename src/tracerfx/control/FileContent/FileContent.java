@@ -67,7 +67,6 @@ public class FileContent {
     }
 
     public void setFileModified(){
-        // TODO add control to reload file based on option: reload on click or reload auto
         fileModifiedProperty.set(true);
     }
     

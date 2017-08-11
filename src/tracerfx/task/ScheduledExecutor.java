@@ -31,7 +31,7 @@ public class ScheduledExecutor {
     private final static Collection<ScheduledExecutorService> RUNNING_EXECUTORS = new ArrayList<>();
 
     private static void addExecutorService(ScheduledExecutorService executor) {
-        if (RUNNING_EXECUTORS.contains(executor)) {
+        if (!RUNNING_EXECUTORS.contains(executor)) {
             RUNNING_EXECUTORS.add(executor);
         }
     }

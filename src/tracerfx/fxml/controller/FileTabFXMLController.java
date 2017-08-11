@@ -45,6 +45,8 @@ import tracerfx.control.FileContent.FileContentProperty;
 import tracerfx.control.StatusManager;
 import tracerfx.tab.FileTab;
 import tracerfx.tab.manager.ManagerFactory;
+import tracerfx.menu.options.Option;
+import tracerfx.menu.options.Property;
 import tracerfx.util.Strings;
 
 /**
@@ -198,7 +200,10 @@ public class FileTabFXMLController implements Initializable {
     private void onClick(MouseEvent event) {
         FileTab fileTab = ManagerFactory.getFileTabManager().getActiveItem();
         fileTab.setTabModified(false);
-        fileTab.getFileContent().processFileModified();
+        
+        if(Option.getBoolean(Property.LOAD_ON_CONTENT_FOCUS)){
+            fileTab.getFileContent().processFileModified();
+        }
     }
 
     @FXML

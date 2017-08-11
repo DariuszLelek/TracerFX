@@ -24,6 +24,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import tracerfx.tab.manager.ManagerFactory;
 import tracerfx.task.ScheduledExecutor;
+import tracerfx.menu.options.Option;
+import tracerfx.menu.options.Property;
 
 /**
  *
@@ -77,6 +79,10 @@ public class FileContentController {
                         if (f.isFollowTrail() && f.getLastModified() != f.getFile().lastModified()) {
                             f.setFileModified();
                             ManagerFactory.getFileTabManager().markTabAsModified(f.getFile());
+                            
+                            if(!Option.getBoolean(Property.LOAD_ON_CONTENT_FOCUS)){
+                                f.processFileModified();
+                            }
                         }
                     });
                 }
