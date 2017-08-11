@@ -40,9 +40,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import tracerfx.tab.ProjectTab;
-import tracerfx.tab.manager.FileTabManager;
+import tracerfx.tab.manager.FileTabController;
 import tracerfx.tab.manager.ManagerFactory;
-import tracerfx.tab.manager.ProjectTabManager;
+import tracerfx.tab.manager.ProjectTabController;
 import tracerfx.task.ScheduledExecutor;
 
 /**
@@ -51,8 +51,8 @@ import tracerfx.task.ScheduledExecutor;
  * @author Dariusz Lelek
  */
 public class TracerFXMLController implements Initializable {
-    private final ProjectTabManager projectTabManager = ManagerFactory.getProjectTabManager();
-    private final FileTabManager fileTabManager = ManagerFactory.getFileTabManager();
+    private final ProjectTabController projectTabManager = ManagerFactory.getProjectTabManager();
+    private final FileTabController fileTabManager = ManagerFactory.getFileTabManager();
     private final StatusManager statusManager = ManagerFactory.getStatusManager();
 
     @FXML

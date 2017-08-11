@@ -22,13 +22,13 @@ import tracerfx.control.StatusManager;
  * @author Dariusz Lelek
  */
 public class ManagerFactory { 
-    private static final FileTabManager fileTabManager;
-    private static final ProjectTabManager projectTabManager;
+    private static final FileTabController fileTabManager;
+    private static final ProjectTabController projectTabManager;
     private static final StatusManager statusManager;
 
     static{
-        fileTabManager = new FileTabManager();
-        projectTabManager = new ProjectTabManager();
+        fileTabManager = new FileTabController();
+        projectTabManager = new ProjectTabController();
         statusManager = new StatusManager();
     }
     
@@ -36,11 +36,11 @@ public class ManagerFactory {
         return statusManager;
     }
 
-    public static FileTabManager getFileTabManager() {
+    public static FileTabController getFileTabManager() {
         return fileTabManager;
     }
 
-    public static ProjectTabManager getProjectTabManager() {
+    public static ProjectTabController getProjectTabManager() {
         return projectTabManager;
     }
 }

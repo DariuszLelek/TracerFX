@@ -29,7 +29,7 @@ import tracerfx.control.FileContent.FileContentProperty;
  *
  * @author Dariusz Lelek
  */
-public class FileTabManager extends Manager<FileTab>{
+public class FileTabController extends TabController<FileTab>{
     private final String FXML = "tracerfx/fxml/FileTabFXML.fxml";
     private WebView txtLineDescription;
     private final FileContentController fileManager = new FileContentController();
@@ -66,11 +66,11 @@ public class FileTabManager extends Manager<FileTab>{
     public boolean tryToRemoveFileFromActiveProject() {
         FileTab activeFileTab = getActiveItem();
         
-        // In situation when project has no files - getActiveItem will return dummy if other project have files
         if (activeFileTab.isNotEmpty()) {
             ProjectTab activeProjectTab = ManagerFactory.getProjectTabManager().getActiveItem();
             activeProjectTab.getFileTabPane().getTabs().remove(activeFileTab.getTab());
             removeItem(activeFileTab);
+            
             return true;
         }
         return false;

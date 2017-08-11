@@ -26,7 +26,7 @@ import tracerfx.tab.ProjectTab;
  *
  * @author Dariusz Lelek
  */
-public class ProjectTabManager extends Manager<ProjectTab>{
+public class ProjectTabController extends TabController<ProjectTab>{
     private final String FXML = "tracerfx/fxml/ProjectTabFXML.fxml";
     private TabPane projectTabPane;
 

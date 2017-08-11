@@ -27,12 +27,12 @@ import javafx.scene.Parent;
  *
  * @author Dariusz Lelek
  */
-public abstract class Manager<T>{
+public abstract class TabController<T>{
     protected final ObservableList<T> itemList; 
     protected final SimpleListProperty<T> itemListProperty; 
     protected T activeItem;
 
-    public Manager() {
+    public TabController() {
         itemList = FXCollections.observableArrayList();
         itemListProperty = new SimpleListProperty<>(itemList);
     } 
