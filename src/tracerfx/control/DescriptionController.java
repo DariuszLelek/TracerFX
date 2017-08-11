@@ -32,33 +32,32 @@ public class DescriptionController {
     private static String lastDescription = Strings.EMPTY.toString();
     private static String lastSearchString = Strings.EMPTY.toString();
     
-    final static Map<Character, String> SPLIT_CHAR_EXCAPE_MAP;
+    final static Map<Character, String> SPLIT_CHAR_ESCAPE_MAP;
     
     static{
-        SPLIT_CHAR_EXCAPE_MAP = new HashMap();
-        SPLIT_CHAR_EXCAPE_MAP.put('-', "\\-");
-        SPLIT_CHAR_EXCAPE_MAP.put('+', "\\+");
-        SPLIT_CHAR_EXCAPE_MAP.put('/', "\\/");
-        SPLIT_CHAR_EXCAPE_MAP.put('*', "\\*");
-        SPLIT_CHAR_EXCAPE_MAP.put('^', "\\^");
-        SPLIT_CHAR_EXCAPE_MAP.put('x', "\\x");
+        SPLIT_CHAR_ESCAPE_MAP = new HashMap();
+        SPLIT_CHAR_ESCAPE_MAP.put('-', "\\-");
+        SPLIT_CHAR_ESCAPE_MAP.put('+', "\\+");
+        SPLIT_CHAR_ESCAPE_MAP.put('/', "\\/");
+        SPLIT_CHAR_ESCAPE_MAP.put('*', "\\*");
+        SPLIT_CHAR_ESCAPE_MAP.put('^', "\\^");
+        SPLIT_CHAR_ESCAPE_MAP.put('x', "\\x");
     }
 
     public static final ChangeListener CHANGE_LISTENER_TAB_SWITCH = (ChangeListener) (ObservableValue observable, Object oldValue, Object newValue) -> {
-        setDescription(Strings.EMPTY.toString());
+        descriptionTextChanged(Strings.EMPTY.toString());
     };
 
     public static final ChangeListener CHANGE_LISTENER_LINE_CHANGE = (ChangeListener) new ChangeListener() {
         @Override
         public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-            final String text = newValue != null ? newValue.toString() : Strings.EMPTY.toString();
-            setDescription(text);
+            descriptionTextChanged(newValue != null ? newValue.toString() : Strings.EMPTY.toString());
         }
     };
     
-    public static void setDescription(String description) {
-        if (!lastDescription.equals(description)) {
-            lastDescription = description;
+    public static void descriptionTextChanged(String newDescription) {
+        if (!lastDescription.equals(newDescription)) {
+            lastDescription = newDescription;
             String lastSearch = ManagerFactory.getFileTabManager().getActiveItem().getFileContent().getLastSearchProperty().get();
             if (!lastSearchString.equals(lastSearch)) {
                 lastSearchString = lastSearch;
@@ -68,8 +67,11 @@ public class DescriptionController {
     }
     
     private static void setDescription(){    
-       ManagerFactory.getFileTabManager().getTxtLineDescription().getEngine()
-               .loadContent(String.join(getSearchtringStyled(), getDescriptionParts()));
+       ManagerFactory.getFileTabManager().getTxtLineDescription().getEngine().loadContent(getDescription());
+    }
+    
+    private static String getDescription(){
+        return getDescriptionParts().isEmpty() ? getSearchtringStyled() : String.join(getSearchtringStyled(), getDescriptionParts());
     }
     
     private static String getSearchtringStyled(){
@@ -84,7 +86,7 @@ public class DescriptionController {
         StringBuilder sb = new StringBuilder();
         
         for(char character : lastSearchString.toCharArray()){
-            sb.append(SPLIT_CHAR_EXCAPE_MAP.containsKey(character) ? SPLIT_CHAR_EXCAPE_MAP.get(character) : character);
+            sb.append(SPLIT_CHAR_ESCAPE_MAP.containsKey(character) ? SPLIT_CHAR_ESCAPE_MAP.get(character) : character);
         }
         
         return sb.toString();

@@ -22,10 +22,10 @@ public class DescriptionControllerTest {
     public void testGetSplitString() {
         System.out.println("getSplitString");
         
-        String lastSearchString = DescriptionController.SPLIT_CHAR_EXCAPE_MAP.entrySet().stream()
+        String lastSearchString = DescriptionController.SPLIT_CHAR_ESCAPE_MAP.entrySet().stream()
             .map(entry -> String.valueOf(entry.getKey())).collect(Collectors.joining(Strings.EMPTY.toString()));
         
-        String expResult = DescriptionController.SPLIT_CHAR_EXCAPE_MAP.entrySet().stream()
+        String expResult = DescriptionController.SPLIT_CHAR_ESCAPE_MAP.entrySet().stream()
             .map(entry -> entry.getValue()).collect(Collectors.joining(Strings.EMPTY.toString()));
         
         String result = DescriptionController.getSplitString(lastSearchString);
