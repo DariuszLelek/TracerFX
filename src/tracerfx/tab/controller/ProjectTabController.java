@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tracerfx.tab.manager;
+package tracerfx.tab.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,7 +50,7 @@ public class ProjectTabController extends TabController<ProjectTab>{
         if(activeProjectTab.isNotEmpty()){
             projectTabPane.getTabs().remove(activeProjectTab.getTab());
             removeItem(activeProjectTab);
-            ManagerFactory.getFileTabManager().tryToRemoveFilesFromProject(activeProjectTab);
+            ControllerFactory.getFileTabController().tryToRemoveFilesFromProject(activeProjectTab);
             return true;
         }
         return false;
@@ -61,7 +61,7 @@ public class ProjectTabController extends TabController<ProjectTab>{
     }
     
     public List<FileTab> getAllFileTabs(ProjectTab projectTab){
-        return ManagerFactory.getFileTabManager().getAllItems()
+        return ControllerFactory.getFileTabController().getAllItems()
                 .stream().filter(x -> x.getProjectTab().equals(projectTab))
                 .collect(Collectors.toList());
     }

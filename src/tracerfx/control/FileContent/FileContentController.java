@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import tracerfx.tab.manager.ManagerFactory;
+import tracerfx.tab.controller.ControllerFactory;
 import tracerfx.task.ScheduledExecutor;
 import tracerfx.menu.options.Option;
 import tracerfx.menu.options.Property;
@@ -35,10 +35,9 @@ public class FileContentController {
     private FileContentProperty lastFileContentProperty;
     private final List<FileContent> fileContentList = new ArrayList<>();
     private final IntegerProperty monitoredFilesIntProperty = new SimpleIntegerProperty(0);
-    private final int fileCheckDelaySeconds = 5;
 
     public FileContentController() {
-        ScheduledExecutor.scheduleAtFixedRateSeconds(getUpdateRunnable(), fileCheckDelaySeconds);
+        ScheduledExecutor.scheduleAtFixedRateSeconds(getUpdateRunnable(), Option.getInt(Property.THREAD_FILES_MOD_CHECK_DELAY_S));
     }
 
     public IntegerProperty getMonitoredFilesIntProperty() {
@@ -78,7 +77,7 @@ public class FileContentController {
                     fileContentList.stream().forEach(f -> {
                         if (f.isFollowTrail() && f.getLastModified() != f.getFile().lastModified()) {
                             f.setFileModified();
-                            ManagerFactory.getFileTabManager().markTabAsModified(f.getFile());
+                            ControllerFactory.getFileTabController().markTabAsModified(f.getFile());
                             
                             if(!Option.getBoolean(Property.LOAD_ON_CONTENT_FOCUS)){
                                 f.processFileModified();

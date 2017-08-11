@@ -17,6 +17,8 @@ package tracerfx.tab;
 
 import javafx.scene.Node;
 import tracerfx.control.FileContent.FileContent;
+import tracerfx.menu.options.Option;
+import tracerfx.menu.options.Property;
 import tracerfx.util.Strings;
 
 /**
@@ -69,7 +71,7 @@ public class FileTab extends CustomTab{
     
     @Override
     protected void processModified(){
-        tab.setStyle(this.modified ? modifiedStyle : Strings.EMPTY.toString());
+        tab.setStyle(this.modified ? Strings.FX_BACK_COLOR.toString() + Option.getString(Property.MODIFIED_TAB_COLOR) : Strings.EMPTY.toString());
     }
     
     public synchronized void setTabModified(boolean modified) {

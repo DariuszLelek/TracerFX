@@ -16,7 +16,7 @@
 package tracerfx.fxml.controller;
 
 import tracerfx.control.DescriptionController;
-import tracerfx.control.StatusManager;
+import tracerfx.control.StatusController;
 import tracerfx.util.Strings;
 import java.io.File;
 import java.net.URL;
@@ -40,9 +40,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import tracerfx.tab.ProjectTab;
-import tracerfx.tab.manager.FileTabController;
-import tracerfx.tab.manager.ManagerFactory;
-import tracerfx.tab.manager.ProjectTabController;
+import tracerfx.tab.controller.FileTabController;
+import tracerfx.tab.controller.ControllerFactory;
+import tracerfx.tab.controller.ProjectTabController;
 import tracerfx.task.ScheduledExecutor;
 
 /**
@@ -51,9 +51,9 @@ import tracerfx.task.ScheduledExecutor;
  * @author Dariusz Lelek
  */
 public class TracerFXMLController implements Initializable {
-    private final ProjectTabController projectTabManager = ManagerFactory.getProjectTabManager();
-    private final FileTabController fileTabManager = ManagerFactory.getFileTabManager();
-    private final StatusManager statusManager = ManagerFactory.getStatusManager();
+    private final ProjectTabController projectTabManager = ControllerFactory.getProjectTabController();
+    private final FileTabController fileTabManager = ControllerFactory.getFileTabController();
+    private final StatusController statusManager = ControllerFactory.getStatusController();
 
     @FXML
     private TextField txtSearch;

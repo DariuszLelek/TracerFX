@@ -19,7 +19,9 @@ import javafx.scene.Parent;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
-import tracerfx.tab.manager.ManagerFactory;
+import tracerfx.menu.options.Option;
+import tracerfx.menu.options.Property;
+import tracerfx.tab.controller.ControllerFactory;
 import tracerfx.util.Strings;
 
 /**
@@ -50,7 +52,8 @@ public class ProjectTab extends CustomTab {
     
     @Override
     protected void processModified(){
-        this.tab.setStyle(ManagerFactory.getProjectTabManager().hasAnyChildTabModified(this) ? modifiedStyle : Strings.EMPTY.toString());
+        this.tab.setStyle(ControllerFactory.getProjectTabController().hasAnyChildTabModified(this) ?
+                Strings.FX_BACK_COLOR.toString() + Option.getString(Property.MODIFIED_TAB_COLOR) : Strings.EMPTY.toString());
     }
 
     private TabPane findTabPaneForNode(Parent parent) {

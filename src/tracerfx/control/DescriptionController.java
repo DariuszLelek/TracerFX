@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import tracerfx.tab.manager.ManagerFactory;
+import tracerfx.tab.controller.ControllerFactory;
 import tracerfx.util.Strings;
 
 /**
@@ -58,7 +58,7 @@ public class DescriptionController {
     public static void descriptionTextChanged(String newDescription) {
         if (!lastDescription.equals(newDescription)) {
             lastDescription = newDescription;
-            String lastSearch = ManagerFactory.getFileTabManager().getActiveItem().getFileContent().getLastSearchProperty().get();
+            String lastSearch = ControllerFactory.getFileTabController().getActiveItem().getFileContent().getLastSearchProperty().get();
             if (!lastSearchString.equals(lastSearch)) {
                 lastSearchString = lastSearch;
             }
@@ -67,7 +67,7 @@ public class DescriptionController {
     }
     
     private static void setDescription(){    
-       ManagerFactory.getFileTabManager().getTxtLineDescription().getEngine().loadContent(getDescription());
+       ControllerFactory.getFileTabController().getTxtLineDescription().getEngine().loadContent(getDescription());
     }
     
     private static String getDescription(){

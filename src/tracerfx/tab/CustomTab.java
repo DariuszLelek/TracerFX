@@ -26,8 +26,6 @@ public abstract class CustomTab {
     protected String title;
     protected final Tab tab;
     
-    protected final String modifiedStyle = "-fx-background-color: #b3f984;";
-
     public CustomTab() {
         this.tab = new Tab();
     }

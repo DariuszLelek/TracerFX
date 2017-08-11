@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tracerfx.tab.manager;
+package tracerfx.tab.controller;
 
 import java.io.File;
 import java.util.stream.Collectors;
@@ -31,8 +31,9 @@ import tracerfx.control.FileContent.FileContentProperty;
  */
 public class FileTabController extends TabController<FileTab>{
     private final String FXML = "tracerfx/fxml/FileTabFXML.fxml";
-    private WebView txtLineDescription;
     private final FileContentController fileContentController = new FileContentController();
+    
+    private WebView txtLineDescription;
      
     public void addNewFileToProject(File file, ProjectTab projectTab){
         FileTab fileTab = new FileTab(fileContentController.getFileContent(file), getParent(FXML), projectTab);
@@ -68,7 +69,7 @@ public class FileTabController extends TabController<FileTab>{
         
         if (activeFileTab.isNotEmpty()) {
             fileContentController.removeFileContent(activeFileTab.getFileContent());
-            ProjectTab activeProjectTab = ManagerFactory.getProjectTabManager().getActiveItem();
+            ProjectTab activeProjectTab = ControllerFactory.getProjectTabController().getActiveItem();
             activeProjectTab.getFileTabPane().getTabs().remove(activeFileTab.getTab());
             removeItem(activeFileTab);
             return true;
@@ -88,7 +89,7 @@ public class FileTabController extends TabController<FileTab>{
 
     @Override
     public FileTab getActiveItem() {
-        final Tab selectedTab = ManagerFactory.getProjectTabManager().getActiveItem().getActiveFileTab();
+        final Tab selectedTab = ControllerFactory.getProjectTabController().getActiveItem().getActiveFileTab();
         return getAllItems().stream().filter(x -> x.getTab().equals(selectedTab)).findFirst().orElse(FileTab.EMPTY);  
     }
 

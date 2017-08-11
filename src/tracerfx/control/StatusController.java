@@ -25,7 +25,7 @@ import tracerfx.util.Strings;
  *
  * @author Dariusz Lelek
  */
-public class StatusManager {
+public class StatusController {
     
     private Label statusLabel;
     private DateTime lastUpdateTime;

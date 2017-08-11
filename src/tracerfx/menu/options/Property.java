@@ -11,7 +11,8 @@ package tracerfx.menu.options;
  */
 public enum Property {
     LOAD_ON_CONTENT_FOCUS("load_on_content_focus", "false"),
-    THREAD_FILES_MOD_CHECK_DELAY_S("thread_file_check_delay", "5");
+    THREAD_FILES_MOD_CHECK_DELAY_S("thread_file_check_delay", "5"),
+    MODIFIED_TAB_COLOR("modified_tab_color", "#b3f984");
     
     private final String key, defaultValue;
 

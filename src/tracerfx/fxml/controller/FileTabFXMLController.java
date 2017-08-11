@@ -42,9 +42,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import tracerfx.control.DescriptionController;
 import tracerfx.control.FileContent.FileContentProperty;
-import tracerfx.control.StatusManager;
+import tracerfx.control.StatusController;
 import tracerfx.tab.FileTab;
-import tracerfx.tab.manager.ManagerFactory;
+import tracerfx.tab.controller.ControllerFactory;
 import tracerfx.menu.options.Option;
 import tracerfx.menu.options.Property;
 import tracerfx.util.Strings;
@@ -58,7 +58,7 @@ public class FileTabFXMLController implements Initializable {
 
     private ObservableList<Integer> searchResultIndexList;
     
-    private final StatusManager statusManager = ManagerFactory.getStatusManager();
+    private final StatusController statusManager = ControllerFactory.getStatusController();
     private int searchResultsIndex = 0;
 
     @FXML
@@ -96,7 +96,7 @@ public class FileTabFXMLController implements Initializable {
     }
 
     private void prepareProperties() {
-        final FileContentProperty fileContentProperty = ManagerFactory.getFileTabManager().getFileContentProperty();
+        final FileContentProperty fileContentProperty = ControllerFactory.getFileTabController().getFileContentProperty();
         
         bindListSizeToText(new SimpleListProperty(fileContentProperty.getContentObservableList()), lblLines);
         bindListSizeToText(new SimpleListProperty(fileContentProperty.getOriginalContentObservableList()), lblTotalLines);
@@ -193,12 +193,12 @@ public class FileTabFXMLController implements Initializable {
             statusManager.setStatus(Strings.STATUS_FILTER_EMPTY.toString());
         }
 
-        ManagerFactory.getFileTabManager().getActiveItem().getFileContent().processFilterChange(filter);
+        ControllerFactory.getFileTabController().getActiveItem().getFileContent().processFilterChange(filter);
     }
 
     @FXML
     private void onClick(MouseEvent event) {
-        FileTab fileTab = ManagerFactory.getFileTabManager().getActiveItem();
+        FileTab fileTab = ControllerFactory.getFileTabController().getActiveItem();
         fileTab.setTabModified(false);
         
         if(Option.getBoolean(Property.LOAD_ON_CONTENT_FOCUS)){
@@ -248,6 +248,6 @@ public class FileTabFXMLController implements Initializable {
 
     @FXML
     private void chckFollowTrail(ActionEvent event) {
-        ManagerFactory.getFileTabManager().getActiveItem().setFollowTrail(chckFollowTrail.isSelected());
+        ControllerFactory.getFileTabController().getActiveItem().setFollowTrail(chckFollowTrail.isSelected());
     }
 }

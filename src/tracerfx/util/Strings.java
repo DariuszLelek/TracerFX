@@ -44,6 +44,8 @@ public enum Strings {
     STATUS_SEARCH_FOR("Search for: "),
     STATUS_SEARCH_RESTORE("No search string entered, restoring original view."),
     
+    FX_BACK_COLOR("-fx-background-color: "),
+    
     STATUS_FILTER_SET("Applying filter: "),
     STATUS_FILTER_EMPTY("Filter is empty.");
     
