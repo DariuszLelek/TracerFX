@@ -57,6 +57,12 @@ public class FileContentController {
     private synchronized void addFileContent(final FileContent fileContent){
         fileContentList.add(fileContent);
     }
+         
+    public synchronized void removeFileContent(final FileContent fileContent){
+        if(fileContentList.contains(fileContent)){
+            fileContentList.remove(fileContent);
+        }
+    }
     
     private void updateMonitoredFilesIntProperty() {
         monitoredFilesIntProperty.set(fileContentList.stream().filter(f -> f.isFollowTrail()).collect(Collectors.toList()).size());

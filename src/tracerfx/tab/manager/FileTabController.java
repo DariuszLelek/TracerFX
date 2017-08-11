@@ -32,10 +32,10 @@ import tracerfx.control.FileContent.FileContentProperty;
 public class FileTabController extends TabController<FileTab>{
     private final String FXML = "tracerfx/fxml/FileTabFXML.fxml";
     private WebView txtLineDescription;
-    private final FileContentController fileManager = new FileContentController();
+    private final FileContentController fileContentController = new FileContentController();
      
     public void addNewFileToProject(File file, ProjectTab projectTab){
-        FileTab fileTab = new FileTab(fileManager.getFileContent(file), getParent(FXML), projectTab);
+        FileTab fileTab = new FileTab(fileContentController.getFileContent(file), getParent(FXML), projectTab);
         
         projectTab.getFileTabPane().getTabs().add(fileTab.getTab());
         addItem(fileTab);
@@ -46,11 +46,11 @@ public class FileTabController extends TabController<FileTab>{
     }
     
     public IntegerProperty getMonitoredFilesIntProperty() {
-        return fileManager.getMonitoredFilesIntProperty();
+        return fileContentController.getMonitoredFilesIntProperty();
     }
     
     public FileContentProperty getFileContentProperty(){
-        return fileManager.getFileContentProperty();
+        return fileContentController.getFileContentProperty();
     }
     
     public void processSearch(String searchString){
@@ -67,10 +67,10 @@ public class FileTabController extends TabController<FileTab>{
         FileTab activeFileTab = getActiveItem();
         
         if (activeFileTab.isNotEmpty()) {
+            fileContentController.removeFileContent(activeFileTab.getFileContent());
             ProjectTab activeProjectTab = ManagerFactory.getProjectTabManager().getActiveItem();
             activeProjectTab.getFileTabPane().getTabs().remove(activeFileTab.getTab());
             removeItem(activeFileTab);
-            
             return true;
         }
         return false;
